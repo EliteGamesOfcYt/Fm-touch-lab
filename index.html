@@ -54,6 +54,16 @@ header{position:sticky;top:0;z-index:60;background:rgba(10,15,28,.92);backdrop-f
 .rcard{position:relative;cursor:pointer}
 .rcard[data-go]:hover{border-color:var(--neon)}
 .dstars{color:var(--warn);letter-spacing:2px;font-size:13px}
+/* raio-x */
+#slots{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.uslot{border:1.5px dashed var(--line);border-radius:12px;padding:12px;text-align:center;cursor:pointer;color:var(--sub);font-size:12.5px;font-weight:700;position:relative;overflow:hidden;background:#0d1526}
+.uslot img{width:100%;border-radius:8px;display:block;margin-top:8px;max-height:140px;object-fit:cover}
+.uslot.done{border-color:var(--neon);color:var(--neon)}
+.uslot input{display:none}
+.priv{font-size:12px;color:var(--sub);margin-top:12px;display:flex;gap:8px;align-items:flex-start;background:#2eff8f0a;border:1px solid #2eff8f22;border-radius:10px;padding:10px 12px}
+#ocrOut{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.srcard{grid-column:1/-1}
+.srcard a{font-size:12.5px}
 .page{display:none;max-width:1100px;margin:0 auto;padding:22px 16px 10px}
 .page.on{display:block}
 .page.on{display:block}
@@ -187,22 +197,23 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
     <h1>Domine o <em>FM Touch 21</em> no Android</h1>
     <p>Escolha uma ferramenta no menu abaixo — cada uma abre em sua própria tela, sem rolagem infinita. 👇</p>
     <div class="stats">
-      <span class="stat"><b>8</b> ferramentas</span>
-      <span class="stat"><b>29</b> atletas no radar</span>
+      <span class="stat"><b>9</b> ferramentas</span>
+      <span class="stat"><b>160+</b> atletas no radar</span>
       <span class="stat"><b>31</b> papéis explicados</span>
       <span class="stat"><b>30+</b> conflitos detectáveis</span>
     </div>
   </div>
 
   <div class="mgrid">
-    <button class="mcard" data-go="quiz"><span class="ic">🎭</span><b>Quiz de Estilo<span class="novo">NOVO</span></b><span>6 perguntas pra descobrir sua alma tática — e saí com instruções prontas pro Analisador.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="analisador" data-print="1"><span class="ic">📸</span><b>Raio-X por Print<span class="novo">NOVO</span></b><span>Envie os prints da sua tática e a IA lê tudo sozinha, apontando o que não bate.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="quiz"><span class="ic">🎭</span><b>Quiz de Estilo</b><span>6 perguntas pra descobrir sua alma tática — e saí com instruções prontas pro Analisador.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="analisador"><span class="ic">🧪</span><b>Analisador</b><span>Monte sua tática e descubra o que não bate — com nota de coerência e correções.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="taticas"><span class="ic">📤</span><b>Táticas</b><span>Galeria .fmf da comunidade separada por estilo: posse, contra-ataque, gegenpress...</span><span class="go">Abrir →</span></button>
-    <button class="mcard" data-go="scout"><span class="ic">💎</span><b>Scout</b><span>Bons e baratos atualizados pra base 2026: idades, clubes e preços atuais.</span><span class="go">Abrir →</span></button>
-    <button class="mcard" data-go="papeis"><span class="ic">📚</span><b>Papéis<span class="novo">NOVO</span></b><span>31 funções do FM Touch explicadas: atributos-chave, combina e NÃO combina com quê.</span><span class="go">Abrir →</span></button>
-    <button class="mcard" data-go="desafios"><span class="ic">💪</span><b>Desafios<span class="novo">NOVO</span></b><span>Saves pra zerar o jogo: do XI de €1 mi à dinastia do interior.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="scout"><span class="ic">💎</span><b>Scout</b><span>Database com 165 atletas base 2026: busque por papel, preço, idade e tipo de achado.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="papeis"><span class="ic">📚</span><b>Papéis</b><span>31 funções do FM Touch explicadas: atributos-chave, combina e NÃO combina com quê.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="desafios"><span class="ic">💪</span><b>Desafios</b><span>Saves pra zerar o jogo: do XI de €1 mi à dinastia do interior.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="guias"><span class="ic">📖</span><b>Guias</b><span>Como instalar .fmf no Android, dicionário de termos do FM e dicas rápidas.</span><span class="go">Abrir →</span></button>
-    <button class="mcard" data-go="ideias"><span class="ic">🚀</span><b>Novidades</b><span>O que vem por aí: análise por print com IA, tática da semana e mais.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="ideias"><span class="ic">🚀</span><b>Novidades</b><span>O que vem por aí: tática da semana, comunidade e IA visual completa.</span><span class="go">Abrir →</span></button>
   </div>
 </main>
 
@@ -229,6 +240,30 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
   <button class="crumb" data-go="home">← Menu</button>
   <div class="h2"><span class="dot"></span> Analisador de Tática</div>
   <p class="lead">Monte sua tática do jeito que está no jogo e o Lab aponta <b>o que não combina</b>, o que pode dar problema e como corrigir. Comece por um exemplo:</p>
+
+  <div class="chips" style="margin-bottom:12px">
+    <button class="chip blue on" id="mManual" onclick="setMode('manual')">🎛️ Preencher manual</button>
+    <button class="chip blue" id="mPrint" onclick="setMode('print')">📸 IA lê meu print</button>
+  </div>
+
+  <div class="card" id="printPanel" style="display:none;margin-bottom:16px">
+    <b>📸 Raio-X por Print</b>
+    <p style="font-size:13px;color:var(--sub);margin:6px 0 4px">Envie os prints das telas de tática do jogo (quanto mais, melhor a leitura). A IA identifica formação, mentalidade, instruções e papéis — e já preenche o formulário pra você conferir.</p>
+    <p style="font-size:12px;color:var(--warn)">💡 Dica: prints nítidos, sem brilho na tela e com o texto completo aparecendo.</p>
+    <div id="slots">
+      <label class="uslot" data-slot="form">🧩 Formação / Equipe<input type="file" accept="image/*"></label>
+      <label class="uslot" data-slot="bola">⚽ Com a bola<input type="file" accept="image/*"></label>
+      <label class="uslot" data-slot="trans">🔄 Em transição<input type="file" accept="image/*"></label>
+      <label class="uslot" data-slot="sembola">🛡️ Sem a bola<input type="file" accept="image/*"></label>
+    </div>
+    <div class="priv">🔒 <span><b>Privacidade total:</b> a leitura acontece aqui mesmo, no seu aparelho. Suas imagens NÃO são enviadas para nenhum servidor.</span></div>
+    <div style="margin-top:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <button class="btn p" id="btnRead" disabled onclick="readPrints()">🤖 Ler prints com IA</button>
+      <span class="slab" id="ocrMsg">Selecione pelo menos 1 print</span>
+    </div>
+    <div class="qbar" id="ocrBarWrap" style="display:none"><i id="ocrBar" style="width:0%"></i></div>
+    <div id="ocrOut"></div>
+  </div>
 
   <div class="presets">
     <span style="font-size:12px;font-weight:700;color:var(--sub)">Carregar exemplo:</span>
@@ -314,7 +349,12 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
 <main class="page" id="scout">
   <button class="crumb" data-go="home">← Menu</button>
   <div class="h2"><span class="dot"></span> Scout: Bons e Baratos 2026</div>
-  <p class="lead">Radar atualizado pra <b>base 2026</b>: idades, clubes e valores de hoje. Custos são <b>estimativas</b> — podem variar conforme sua atualização e o save.</p>
+  <p class="lead">Database com <b>165 atletas</b> atualizados pra base 2026. Busque por <b>papel</b> (Construtor, Trinco, Mezzala, Falso 9...), tipo de achado, preço e idade. Valores são <b>estimativas da comunidade</b>.</p>
+
+  <label class="lab">🎭 Buscar por papel</label>
+  <div class="chips" id="roleChips"></div>
+  <label class="lab">💎 Tipo de achado</label>
+  <div class="chips" id="tierChips"></div>
 
   <div class="filters">
     <input type="search" id="sSearch" placeholder="🔎 Buscar jogador ou clube...">
@@ -450,7 +490,8 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
     <div class="card rcard" data-go="quiz"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Ferramenta</div><h3>🎭 Quiz de Estilo</h3><p>Descubra sua alma tática em 6 perguntas e saia com instruções prontas. Já disponível!</p></div>
     <div class="card rcard" data-go="papeis"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Conteúdo</div><h3>📚 Guia de Papéis</h3><p>31 funções explicadas com atributos-chave e combinações. Já disponível!</p></div>
     <div class="card rcard" data-go="desafios"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Conteúdo</div><h3>💪 Saves Desafio</h3><p>Seis desafios com nível de dificuldade pra zerar o jogo. Já disponível!</p></div>
-    <div class="card rcard soon"><span class="pill">Em breve</span><div class="num">Fase 2</div><h3>🤖 Análise de tática por prints</h3><p>Envie só os prints da sua tática e a IA lê formação, papéis e instruções automaticamente, apontando os conflitos. Por enquanto, use o Analisador manual — mesma lógica!</p></div>
+    <div class="card rcard" data-go="analisador"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Fase 2A</div><h3>📸 Raio-X por Print</h3><p>A IA já lê seus prints de tática direto no aparelho — sem cadastro, sem chave, sem custo! Está dentro do Analisador, aba "📸 IA lê meu print".</p></div>
+    <div class="card rcard soon"><span class="pill">Em breve</span><div class="num">Fase 2B</div><h3>🤖 IA visual completa</h3><p>Uma IA que literalmente ENXERGA o print (posições, setas e papéis desenhados) e dá conselhos em texto. Essa precisa de um servidorzinho — chega em breve.</p></div>
     <div class="card rcard"><div class="num">Comunidade</div><h3>🏆 Tática da semana</h3><p>Votação aberta na melhor tática enviada, com destaque na página inicial e badge pro autor.</p></div>
     <div class="card rcard"><div class="num">Comunidade</div><h3>💬 Grupo da comunidade</h3><p>Espaço pra trocar save, tática e dica — comentários nas táticas e grupo no WhatsApp/Discord.</p></div>
   </div>
@@ -502,7 +543,7 @@ function go(id){
 }
 document.addEventListener('click',e=>{
   const g=e.target.closest('[data-go]');
-  if(g){e.preventDefault(); go(g.dataset.go);}
+  if(g){e.preventDefault(); go(g.dataset.go); if(g.dataset.print) setTimeout(()=>setMode('print'),60);}
 });
 menuBtn.addEventListener('click',e=>{
   e.stopPropagation();
@@ -818,8 +859,155 @@ const SCOUT=[
  {n:'Rayan',i:20,c:'Vasco · BRA',p:['ATA'],r:['Finalizador','Avançado'],v:4,d:'O novo 9 da Colina: potência e faro de gol direto da base vascaína.'},
  {n:'Eli Júnior Kroupi',i:20,c:'Bournemouth · ING',p:['ATA'],r:['Avançado','Finalizador'],v:8,d:'Feio pro zagueiro, lindo pro bolso: máquina de gols no futebol francês.'},
  {n:'Adam Hložek',i:23,c:'Leverkusen · ALE',p:['ATA'],r:['Avançado','Meia-Atacante'],v:15,d:'A lenda tcheca do FM21 já entrega futebol de elite. Vale cada euro do investimento.'},
- {n:'Neymar',i:34,c:'Santos · BRA',p:['ATA'],r:['Meia-Atacante','Extremo Invertido'],v:0,d:'LIVRE ou quase: o retorno do ídolo ao Peixe. Contrato curto = sua chance de um ano mágico.'}
+ {n:'Neymar',i:34,c:'Santos · BRA',p:['ATA'],r:['Meia-Atacante','Extremo Invertido'],v:0,d:'LIVRE ou quase: o retorno do ídolo ao Peixe. Contrato curto = sua chance de um ano mágico.'},
+ /* EXPANSÃO DATABASE */
+ {n:'Lucas Perri',i:28,c:'Leeds · ING',p:['GOL'],r:['Goleiro'],v:10,d:'Gigante brasileiro voando na Inglaterra. Nível de seleção em preço justo.'},
+ {n:'Anatoliy Trubin',i:24,c:'Benfica · POR',p:['GOL'],r:['Goleiro','Goleiro-Líbero'],v:18,d:'2 metros de goleiro moderno. Já fecha o gol de time grande.'},
+ {n:'Zion Suzuki',i:23,c:'Parma · ITA',p:['GOL'],r:['Goleiro'],v:8,d:'Reflexos absurdos na Serie A. O Japão tem muro pra 3 Copas.'},
+ {n:'Mycael',i:22,c:'Athletico-PR · BRA',p:['GOL'],r:['Goleiro'],v:3,d:'Alta evolução no Athletico. Baratíssimo pra projeto de goleiro da casa.'},
+ {n:'Yerson Mosquera',i:25,c:'Wolves · ING',p:['DEF'],r:['Zagueiro'],v:8,d:'O baratinho de 2021 segue firme na Premier. Forte, rápido e acessível.'},
+ {n:'Santiago Bueno',i:27,c:'Wolves · ING',p:['DEF'],r:['Zagueiro'],v:8,d:'Uruguaio confiável de Premier. Pra quem precisa de zaga pronta.'},
+ {n:'Vitão',i:25,c:'Internacional · BRA',p:['DEF'],r:['Zagueiro'],v:6,d:'Canhoto, forte e com saída de bola. Aqueça o motor do mercado BR.'},
+ {n:'Alan Matturro',i:21,c:'Genoa · ITA',p:['DEF'],r:['Zagueiro','Volante'],v:5,d:'Zagueiro que cai de trinco: dupla função com potência uruguaia.'},
+ {n:'Joane Gadou',i:19,c:'RB Salzburg · AUT',p:['DEF'],r:['Zagueiro'],v:3,d:'1,95m e frieza aos 19. Próxima venda milionária do Salzburg. ANOTA.'},
+ {n:'Abdelhamid Ait Boudlal',i:20,c:'Rennes · FRA',p:['DEF'],r:['Zagueiro'],v:2,d:'Aposta marroquina barata com teto alto. Scout raiz de achadinho.'},
+ {n:'Vinicius Tobias',i:22,c:'Real Madrid · ESP',p:['DEF'],r:['Lateral Direito','Ala Direito'],v:4,d:'Brasileiro esquecido no Castilla: negocie que ele resolve seu corredor direito.'},
+ {n:'Iván Fresneda',i:21,c:'Sporting · POR',p:['DEF'],r:['Lateral Direito'],v:10,d:'Portugal engorda lateral pra revender. Compre antes do ápice.'},
+ {n:'Julio Soler',i:21,c:'Bournemouth · ING',p:['DEF'],r:['Lateral Esquerdo'],v:8,d:'Argentino elegante saído do Lanús, agora na Premier.'},
+ {n:'Quentin Merlin',i:24,c:'Marseille · FRA',p:['DEF'],r:['Lateral Esquerdo','Ala Esquerdo'],v:9,d:'Cruza com carinho: ala esquerdo de produção imediata.'},
+ {n:'Soufian El Karouani',i:25,c:'Utrecht · HOL',p:['DEF'],r:['Lateral Esquerdo'],v:4,d:'Líder de assistências na Eredivisie. Lateral barato que decide.'},
+ {n:'Dário Essugo',i:20,c:'Chelsea · ING',p:['MEIO'],r:['Volante','Trinco'],v:6,d:'Trinco português fortíssimo. Sem espaço no Chelsea: vale o assédio.'},
+ {n:'Lesley Ugochukwu',i:21,c:'Southampton · ING',p:['MEIO'],r:['Volante','Box-to-Box'],v:5,d:'Físico de elite em time rebaixado = desconto na janela.'},
+ {n:'Zé Lucas',i:18,c:'Sport Recife · BRA',p:['MEIO'],r:['Volante','Trinco'],v:2,d:'A joia da Ilha: trinco moderno já no radar da Europa.'},
+ {n:'Marc Casadó',i:21,c:'Barcelona · ESP',p:['MEIO'],r:['Volante','Construtor'],v:10,d:'Cria de La Masia: posicionamento cirúrgico à frente da zaga.'},
+ {n:'Mandela Keita',i:24,c:'Parma · ITA',p:['MEIO'],r:['Volante','Box-to-Box'],v:6,d:'Motor belga invisível: cobre dois setores sem descanso.'},
+ {n:'Aleksandar Stanković',i:20,c:'Club Brugge · BÉL',p:['MEIO'],r:['Volante','Construtor'],v:6,d:'Filho do Dejan: regista sérvio de corte clássico.'},
+ {n:'Juan Sforza',i:24,c:'Vasco · BRA',p:['MEIO'],r:['Volante','Construtor'],v:4,d:'Regista argentino no mercado nacional: o passe vertical é a marca.'},
+ {n:'Noah Darvich',i:19,c:'Stuttgart · ALE',p:['MEIO'],r:['Meia-Atacante','Armador'],v:6,d:'O 10 da nova geração alemã. Stuttgart lapida craques.'},
+ {n:'Tom Bischof',i:20,c:'Bayern · ALE',p:['MEIO'],r:['Meia','Mezzala'],v:8,d:'Meia elegante que o Bayern pegou de graça. No seu save, dispute você.'},
+ {n:'Claudio Echeverri',i:19,c:'Leverkusen · ALE',p:['MEIO'],r:['Meia-Atacante','Armador'],v:0.1,tipo:'emp',d:'"El Diablito": sem espaço na Europa, o empréstimo é o caminho.'},
+ {n:'Matheus França',i:21,c:'Crystal Palace · ING',p:['MEIO'],r:['Meia-Atacante','Extremo Invertido'],v:8,d:'Talento do Flamengo esperando minutos na Inglaterra. Ataque o mercado.'},
+ {n:'Gabriel Mec',i:17,c:'Grêmio · BRA',p:['MEIO'],r:['Meia-Atacante','Armador'],v:2,d:'O 10 clássico gaúcho em construção. Compre antes da Europa.'},
+ {n:'Rayan Lucas',i:20,c:'Sporting · POR',p:['MEIO'],r:['Meia','Box-to-Box'],v:4,d:'Ex-Flamengo lapidado em Lisboa: meia completo e barato.'},
+ {n:'Kees Smit',i:19,c:'AZ Alkmaar · HOL',p:['MEIO'],r:['Meia-Atacante','Mezzala'],v:5,d:'Cérebro holandês: visão e chegada à área nível elite jovem.'},
+ {n:'Gilberto Mora',i:17,c:'Tijuana · MEX',p:['MEIO'],r:['Meia-Atacante','Armador'],v:3,d:'Titular no México com 16. Projeto de top-10 mundial.'},
+ {n:'Ibrahim Maza',i:20,c:'Leverkusen · ALE',p:['MEIO'],r:['Meia-Atacante','Armador'],v:12,d:'Argelino de técnica sedosa, já decidindo na Bundesliga.'},
+ {n:'Brajan Gruda',i:21,c:'Brighton · ING',p:['MEIO'],r:['Meia-Atacante','Extremo Invertido'],v:15,d:'Versátil: joga de 10 ou pela ponta. Investimento maduro.'},
+ {n:'Oscar Gloukh',i:21,c:'RB Salzburg · AUT',p:['MEIO'],r:['Meia-Atacante','Armador'],v:18,d:'Israelense criativo em alta. O Salzburg vende caro, mas vale.'},
+ {n:'Kamaldeen Sulemana',i:24,c:'Atalanta · ITA',p:['ATA'],r:['Extremo'],v:15,d:'AQUELE veloz de 2021, agora na máquina ofensiva de Bérgamo.'},
+ {n:'Roony Bardghji',i:20,c:'Barcelona · ESP',p:['ATA'],r:['Extremo Invertido'],v:6,d:'Custou troco por causa da lesão: talento de €40 mi com desconto.'},
+ {n:'Keny Arroyo',i:19,c:'Besiktas · TUR',p:['ATA'],r:['Extremo'],v:5,d:'Equatoriano ousado do IDV: 1x1 constante pela esquerda.'},
+ {n:'Abdul Fatawu',i:22,c:'Leicester · ING',p:['ATA'],r:['Extremo'],v:10,d:'Ganês explosivo: drible e força no mesmo pacote.'},
+ {n:'Samuel Lino',i:26,c:'Flamengo · BRA',p:['ATA'],r:['Extremo','Avançado Interior'],v:15,d:'Voltou voando pro Brasil. Decide partida grande.'},
+ {n:'Luighi',i:19,c:'Palmeiras · BRA',p:['ATA'],r:['Extremo','Avançado'],v:4,d:'Da base direto pro radar europeu. Até pensando duas vezes já valorizou.'},
+ {n:'Luís Guilherme',i:19,c:'West Ham · ING',p:['ATA'],r:['Extremo','Meia-Atacante'],v:8,d:'Ex-Palmeiras no limbo inglês: ataque na janela certa.'},
+ {n:'Antonio Nusa',i:21,c:'RB Leipzig · ALE',p:['ATA'],r:['Extremo Invertido','Meia-Atacante'],v:20,d:'Norueguês elétrico da Bundesliga. Caro, mas é pré-craque.'},
+ {n:'Igor Paixão',i:26,c:'Marseille · FRA',p:['ATA'],r:['Extremo Invertido','Avançado'],v:15,d:'Brasileiro em fase absurda na França: corta pra dentro e decide.'},
+ {n:'Igor Jesus',i:25,c:'Nottingham Forest · ING',p:['ATA'],r:['Avançado','Atacante de Pressão'],v:15,d:'9 da seleção: pressiona, briga e marca. Pronto pra vestir 9.'},
+ {n:'Vitor Roque',i:20,c:'Palmeiras · BRA',p:['ATA'],r:['Avançado','Atacante de Pressão'],v:20,d:'Tigrinho de volta: titular absoluto. Caro, mas entrega muito.'},
+ {n:'Deivid Washington',i:20,c:'Santos · BRA',p:['ATA'],r:['Avançado'],v:0.1,tipo:'emp',d:'O Chelsea empresta fácil: potencial de 9 moderno, quase de graça.'},
+ {n:'Álvaro Rodríguez',i:22,c:'Elche · ESP',p:['ATA'],r:['Referência','Avançado'],v:0.1,tipo:'emp',d:'1,93m uruguaio do Real Madrid: o empréstimo anual já é tradição.'},
+ {n:'Semih Kılıçsoy',i:20,c:'Beşiktaş · TUR',p:['ATA'],r:['Avançado','Finalizador'],v:8,d:'Turco matador: finaliza com as duas pernas e ainda pressiona.'},
+ {n:'Santiago Castro',i:21,c:'Bologna · ITA',p:['ATA'],r:['Avançado','Atacante de Pressão'],v:12,d:'Argentino incansável: corre como volante e finaliza como 9.'},
+ {n:'Evan Ferguson',i:21,c:'Roma · ITA',p:['ATA'],r:['Avançado','Referência'],v:0.1,tipo:'emp',d:'O irlandês que a Europa inteira já quis. No empréstimo, é barato.'},
+ {n:'Francesco Camarda',i:18,c:'Lecce · ITA',p:['ATA'],r:['Avançado'],v:0.1,tipo:'emp',d:'A grande esperança da Itália. O Milan empresta, você desenvolve.'},
+ {n:'James Rodríguez',i:34,c:'León · MEX',p:['MEIO'],r:['Armador','Meia-Atacante'],v:1.5,d:'Últimas cartas do maestro colombiano: qualidade imediata por nada.'},
+ {n:'Arturo Vidal',i:39,c:'Colo-Colo · CHI',p:['MEIO'],r:['Volante','Trinco','Box-to-Box'],v:0.5,d:'O Rei Artur em casa: raça e liderança por preço simbólico.'},
+ {n:'Dani Parejo',i:37,c:'Villarreal · ESP',p:['MEIO'],r:['Armador','Construtor'],v:1,d:'Metrônomo de graça: ditador de ritmo pra time de posse.'}
 ];
+
+/* DATABASE FM26 via FMInside (dados públicos) */
+const DB_FMI = [
+ {n:"Lamine Yamal",i:18,c:"FC Barcelona · ESP",p:['ATA'],r:["Extremo", "Extremo Invertido"],v:250.0,d:"Wonderkid FM26 de elite — a pedida é alta (€250-469 mi), mas vale monitorar/empréstimo.",l:'2000256231-lamine-yamal'},
+ {n:"João Neves",i:21,c:"PSG · POR",p:['MEIO'],r:["Volante", "Meia"],v:243.0,d:"Wonderkid FM26 de elite — a pedida é alta (€243-455 mi), mas vale monitorar/empréstimo.",l:'2000030130-joao-neves'},
+ {n:"Désiré Doué",i:20,c:"PSG · FRA",p:['MEIO'],r:["Meia-Atacante", "Extremo Invertido"],v:130.0,d:"Wonderkid FM26 de elite — a pedida é alta (€130-244 mi), mas vale monitorar/empréstimo.",l:'2000115202-desire-doue'},
+ {n:"Kenan Yıldız",i:20,c:"Juventus · TUR",p:['MEIO'],r:["Meia-Atacante", "Extremo Invertido"],v:109.0,d:"Wonderkid FM26 de elite — a pedida é alta (€109-205 mi), mas vale monitorar/empréstimo.",l:'2000138835-kenan-yldz'},
+ {n:"Gavi",i:21,c:"FC Barcelona · ESP",p:['MEIO'],r:["Volante", "Meia-Atacante"],v:80.0,d:"Wonderkid FM26 de elite — a pedida é alta (€80-150 mi), mas vale monitorar/empréstimo.",l:'2000049413-gavi'},
+ {n:"Warren Zaïre-Emery",i:19,c:"PSG · FRA",p:['MEIO'],r:["Volante", "Meia"],v:73.0,d:"Wonderkid FM26 de elite — a pedida é alta (€73-136 mi), mas vale monitorar/empréstimo.",l:'2000179712-warren-zaire-emery'},
+ {n:"Pau Cubarsí",i:18,c:"FC Barcelona · ESP",p:['DEF'],r:["Zagueiro"],v:80.0,d:"Wonderkid FM26 de elite — a pedida é alta (€80-150 mi), mas vale monitorar/empréstimo.",l:'2000296497-pau-cubarsi'},
+ {n:"Nico Paz",i:21,c:"Como · ARG",p:['MEIO'],r:["Meia-Atacante"],v:83.0,d:"Wonderkid FM26 de elite — a pedida é alta (€83-155 mi), mas vale monitorar/empréstimo.",l:'2000163799-nico-paz'},
+ {n:"Savinho",i:21,c:"Manchester City · BRA",p:['ATA'],r:["Extremo Invertido"],v:64.0,d:"Wonderkid FM26 de elite — a pedida é alta (€64-120 mi), mas vale monitorar/empréstimo.",l:'2000011972-savinho'},
+ {n:"Abdukodir Khusanov",i:21,c:"Manchester City · UZB",p:['DEF'],r:["Zagueiro"],v:63.0,d:"Wonderkid FM26 de elite — a pedida é alta (€63-119 mi), mas vale monitorar/empréstimo.",l:'2000168014-abdukodir-khusanov'},
+ {n:"Nico O'Reilly",i:20,c:"Manchester City · ING",p:['DEF'],r:["Lateral Esquerdo", "Meia"],v:55.0,d:"Wonderkid FM26 de elite — a pedida é alta (€55-103 mi), mas vale monitorar/empréstimo.",l:'2000101285-nico-oreilly'},
+ {n:"Yan Diomandé",i:19,c:"RB Leipzig · CIV",p:['ATA'],r:["Extremo Invertido"],v:78.0,d:"Wonderkid FM26 de elite — a pedida é alta (€78-146 mi), mas vale monitorar/empréstimo.",l:'2000311833-yan-diomande'},
+ {n:"Victor Froholdt",i:19,c:"FC Porto · DIN",p:['MEIO'],r:["Volante", "Meia"],v:68.0,d:"Wonderkid FM26 de elite — a pedida é alta (€68-128 mi), mas vale monitorar/empréstimo.",l:'2000202295-victor-froholdt'},
+ {n:"Kobbie Mainoo",i:20,c:"Manchester United · ING",p:['MEIO'],r:["Volante","Meia"],v:59.0,d:"Wonderkid FM26 de elite — a pedida é alta (€59-110 mi), mas vale monitorar/empréstimo.",l:'2000123586-kobbie-mainoo'},
+ {n:"Giorgio Scalvini",i:21,c:"Atalanta · ITA",p:['DEF'],r:["Zagueiro"],v:62.0,d:"Wonderkid FM26 de elite — a pedida é alta (€62-117 mi), mas vale monitorar/empréstimo.",l:'43500755-giorgio-scalvini'},
+ {n:"Alejandro Garnacho",i:21,c:"Chelsea · ARG",p:['ATA'],r:["Extremo","Extremo Invertido"],v:65.0,d:"Wonderkid FM26 de elite — a pedida é alta (€65-121 mi), mas vale monitorar/empréstimo.",l:'2000035036-alejandro-garnacho'},
+ {n:"Cristhian Mosquera",i:21,c:"Arsenal · ESP",p:['DEF'],r:["Zagueiro"],v:38.0,d:"Wonderkid FM26 de elite — a pedida é alta (€38-71 mi), mas vale monitorar/empréstimo.",l:'2000030816-cristhian-mosquera'},
+ {n:"Yankuba Minteh",i:21,c:"Brighton & Hove Albion · GÂM",p:['ATA'],r:["Extremo"],v:60.0,d:"Wonderkid FM26 de elite — a pedida é alta (€60-112 mi), mas vale monitorar/empréstimo.",l:'2000195626-yankuba-minteh'},
+ {n:"Myles Lewis-Skelly",i:19,c:"Arsenal · ING",p:['DEF'],r:["Ala Esquerdo","Volante"],v:44.0,d:"Wonderkid FM26 de elite — a pedida é alta (€44-82 mi), mas vale monitorar/empréstimo.",l:'2000283274-myles-lewis-skelly'},
+ {n:"Arda Güler",i:20,c:"Real Madrid · TUR",p:['MEIO'],r:["Meia-Atacante", "Extremo Invertido"],v:89.0,d:"Wonderkid FM26 de elite — a pedida é alta (€89-167 mi), mas vale monitorar/empréstimo.",l:'2000077193-arda-guler'},
+ {n:"Carlos Baleba",i:21,c:"Brighton & Hove Albion · CAM",p:['MEIO'],r:["Volante", "Meia"],v:57.0,d:"Wonderkid FM26 de elite — a pedida é alta (€57-108 mi), mas vale monitorar/empréstimo.",l:'2000166563-carlos-baleba'},
+ {n:"Lewis Hall",i:21,c:"Newcastle United · ING",p:['DEF'],r:["Lateral Esquerdo", "Ala Esquerdo"],v:43.0,d:"Wonderkid FM26 de elite — a pedida é alta (€43-80 mi), mas vale monitorar/empréstimo.",l:'2000108691-lewis-hall'},
+ {n:"Michael Kayode",i:21,c:"Brentford · ITA",p:['DEF'],r:["Lateral Direito", "Ala Direito"],v:49.0,d:"Wonderkid FM26 de elite — a pedida é alta (€49-93 mi), mas vale monitorar/empréstimo.",l:'2000023588-michael-kayode'},
+ {n:"Leny Yoro",i:20,c:"Manchester United · FRA",p:['DEF'],r:["Zagueiro"],v:58.0,d:"Wonderkid FM26 de elite — a pedida é alta (€58-108 mi), mas vale monitorar/empréstimo.",l:'2000182819-leny-yoro'},
+ {n:"Endrick",i:19,c:"Real Madrid · BRA",p:['ATA'],r:["Avançado"],v:89.0,d:"Wonderkid FM26 de elite — a pedida é alta (€89-167 mi), mas vale monitorar/empréstimo.",l:'2000220941-endrick'},
+ {n:"Bilal El Khannouss",i:21,c:"Leicester City · MAR",p:['MEIO'],r:["Meia-Atacante"],v:23.0,d:"Wonderkid FM26 de elite — a pedida é alta (€23-43 mi), mas vale monitorar/empréstimo.",l:'2000055184-bilal-el-khannouss'},
+ {n:"Jorrel Hato",i:19,c:"Chelsea · HOL",p:['DEF'],r:["Zagueiro", "Lateral Esquerdo"],v:57.0,d:"Wonderkid FM26 de elite — a pedida é alta (€57-108 mi), mas vale monitorar/empréstimo.",l:'2000105654-jorrel-hato'},
+ {n:"Yehor Yarmoliuk",i:21,c:"Brentford · UCR",p:['MEIO'],r:["Volante", "Meia"],v:47.0,d:"Wonderkid FM26 de elite — a pedida é alta (€47-89 mi), mas vale monitorar/empréstimo.",l:'71110357-yehor-yarmoliuk'},
+ {n:"Assane Diao",i:20,c:"Como · SEN",p:['ATA'],r:["Extremo Invertido"],v:63.0,d:"Wonderkid FM26 de elite — a pedida é alta (€63-119 mi), mas vale monitorar/empréstimo.",l:'2000210791-assane-diao'},
+ {n:"Lewis Miley",i:19,c:"Newcastle United · ING",p:['MEIO'],r:["Meia"],v:28.0,d:"Wonderkid FM26 de elite — a pedida é alta (€28-52 mi), mas vale monitorar/empréstimo.",l:'2000189871-lewis-miley'},
+ {n:"Dean Huijsen",i:20,c:"Real Madrid · ESP",p:['DEF'],r:["Zagueiro"],v:70.0,d:"Wonderkid FM26 de elite — a pedida é alta (€70-130 mi), mas vale monitorar/empréstimo.",l:'2000109240-dean-huijsen'},
+ {n:"Jamie Gittens",i:21,c:"Chelsea · ING",p:['ATA'],r:["Extremo"],v:57.0,d:"Wonderkid FM26 de elite — a pedida é alta (€57-106 mi), mas vale monitorar/empréstimo.",l:'2000015300-jamie-gittens'},
+ {n:"Ethan Nwaneri",i:18,c:"Arsenal · ING",p:['MEIO'],r:["Meia-Atacante", "Extremo Invertido"],v:45.0,d:"Wonderkid FM26 de elite — a pedida é alta (€45-84 mi), mas vale monitorar/empréstimo.",l:'2000283271-ethan-nwaneri'},
+ {n:"Luka Vušković",i:18,c:"Tottenham Hotspur · CRO",p:['DEF'],r:["Zagueiro"],v:48.0,d:"Wonderkid FM26 de elite — a pedida é alta (€48-91 mi), mas vale monitorar/empréstimo.",l:'2000262919-luka-vukovi'},
+ {n:"Mateus Fernandes",i:21,c:"West Ham United · POR",p:['MEIO'],r:["Meia-Atacante"],v:52.0,d:"Wonderkid FM26 de elite — a pedida é alta (€52-97 mi), mas vale monitorar/empréstimo.",l:'83320124-mateus-fernandes'},
+ {n:"Álex Jiménez",i:20,c:"Bournemouth · ESP",p:['DEF'],r:["Lateral Esquerdo", "Lateral Direito"],v:38.0,d:"Wonderkid FM26 de elite — a pedida é alta (€38-72 mi), mas vale monitorar/empréstimo.",l:'2000211997-alex-jimenez'}, {n:"Ibrahim Mbaye",i:18,c:"PSG · FRA",p:['ATA'],r:["Extremo","Extremo Invertido"],v:35,d:'⭐ Revelação da Copa 2026! Gol histórico pela seleção de Senegal. O PSG protege, mas o empréstimo salva.'},
+  {n:"Ayyoub Bouaddi",i:18,c:"Lille · FRA",p:['MEIO'],r:["Volante","Construtor"],v:50,d:'Regista marroquino que dominou o meio do Brasil na Copa. O Lille já fala em €50 mi — empréstimo agora é ouro.'}
+];
+
+/* DATABASE extra: pechinchas via sortitoutsi.net + guia de wonderkids Recharge (dados públicos FM26) */
+const DB_SOSI = [
+ {n:"Ferran Quetglàs",i:20,c:"Real Madrid · ESP",p:['GOL'],r:["Goleiro"],v:2,d:"A referência dos goleiros jovens do FM26. Se o contrato minguar, a compensação sai baratíssima."},
+ {n:"Mike Penders",i:20,c:"Strasbourg (Chelsea) · BÉL",p:['GOL'],r:["Goleiro"],v:5,d:"1,97m comandando a área. O Chelsea empresta pra lapidar — mas vende se você apressar."},
+ {n:"Dennis Seimen",i:19,c:"Stuttgart · ALE",p:['GOL'],r:["Goleiro"],v:3,d:"Alemão confiável e consistente: zero modinha, titular de save longo."},
+ {n:"Julian Eyestone",i:19,c:"Brentford · EUA",p:['GOL'],r:["Goleiro"],v:3,d:"1,98m de alcance aéreo. O gigante americano domina qualquer bola alçada."},
+ {n:"Kerem Matışlı",i:21,c:"Bursaspor · TUR",p:['GOL'],r:["Goleiro"],v:1,d:"Opção baratíssima da Turquia: evolui rápido e cabe em qualquer orçamento."},
+ {n:"Willy Kambwala",i:20,c:"Villarreal · FRA",p:['DEF'],r:["Zagueiro"],v:8,d:"Rápido e fisicamente imponente: o ex-Man Utd renasceu bonito na Espanha."},
+ {n:"Matteo Palma",i:17,c:"Udinese · ALE",p:['DEF'],r:["Zagueiro"],v:3,d:"Alemão fora do radar com potencial alto. Quem acha primeiro, leva por troco."},
+ {n:"Davinchi",i:18,c:"Getafe · BRA",p:['DEF'],r:["Lateral Esquerdo"],v:3,d:"Nome único, estilo BR: lateral ofensivo de bom cruzamento lapidando no Getafe."},
+ {n:"Saba Kharebashvili",i:17,c:"Dinamo Tbilisi · GEO",p:['DEF'],r:["Lateral Esquerdo","Lateral Direito"],v:2.5,d:"A pechincha oficial do FM26: joga nas DUAS laterais e custa menos de €3 mi. Corre!"},
+ {n:"Perr Schuurs",i:25,c:"Sem clube · HOL",p:['DEF'],r:["Zagueiro"],v:0,d:"LIVRE! Zagueirão holandês de seleção esperando oferta. Só alinhar o salário."},
+ {n:"Martin Cedidla",i:23,c:"Jablonec · TCH",p:['DEF'],r:["Zagueiro","Lateral Direito"],v:0.3,d:"Vale ~€3 mi e sai por troco: zagueiro que ainda cobre a lateral direita."},
+ {n:"Ryuya Nishio",i:24,c:"Omiya Ardija · JAP",p:['DEF'],r:["Zagueiro"],v:0.2,d:"Zagueiro titular por ~€200 mil no Japão. O mercado japonês é um outlet."},
+ {n:"Justin de Haas",i:25,c:"Famalicão · HOL",p:['DEF'],r:["Zagueiro","Lateral Esquerdo"],v:0.6,d:"Canhoto valendo ~€6 mi e custando 10x menos em Portugal. Versatilidade pura."},
+ {n:"Dinis Pinto",i:24,c:"Moreirense · POR",p:['DEF'],r:["Lateral Direito","Ala Direito"],v:0.5,d:"Valendo ~€5 mi por ~€500 mil: a Liga Portugal segue presenteando quem olha."},
+ {n:"Archie Gray",i:19,c:"Tottenham · ING",p:['MEIO'],r:["Volante","Meia"],v:30,d:"Híbrido lateral/volante/meia de luxo no Spurs. Caro, mas é âncora pra 10 anos de save."},
+ {n:"Lucas Bergvall",i:19,c:"Tottenham · SUE",p:['MEIO'],r:["Meia","Meia-Atacante"],v:25,d:"Armador sueco de potencial fixo alto. O Tottenham pagou — tente tirar por empréstimo."},
+ {n:"Kennet Eichhorn",i:16,c:"Hertha BSC · ALE",p:['MEIO'],r:["Volante"],v:1,d:"16 ANOS. Antes de assinar como profissional sai por ~€1 mi. O assalto do século."},
+ {n:"Nathan De Cat",i:17,c:"Anderlecht · BÉL",p:['MEIO'],r:["Volante","Construtor"],v:1.5,d:"Belga acessível e completíssimo: o Anderlecht negocia cedo. Escolteie já."},
+ {n:"Abdellah Ouzane",i:16,c:"Ajax · HOL",p:['MEIO'],r:["Meia-Atacante","Armador"],v:1.5,d:"DNA Ajax puro: técnica e visão. A fábrica segue aberta e barata."},
+ {n:"Franco Mastantuono",i:18,c:"Real Madrid · ARG",p:['MEIO'],r:["Meia-Atacante","Armador"],v:40,d:"O 10 argentino que o Real tirou do River. Caro — no empréstimo, quem sabe?"},
+ {n:"Max Bird",i:24,c:"Bristol City · ING",p:['MEIO'],r:["Volante","Meia-Atacante"],v:1,d:"🚨 ROUBO: vale ~€11 mi e custa ~€1 mi. Talvez o melhor custo-benefício da Inglaterra."},
+ {n:"Jason Knight",i:24,c:"Bristol City · IRL",p:['MEIO'],r:["Meia","Box-to-Box"],v:1,d:"Parceiro de roubo do Bird: vale ~€10 mi e sai por ~€1 mi na Championship."},
+ {n:"Jordan Holsgrove",i:25,c:"Estoril · ESC",p:['MEIO'],r:["Volante","Construtor"],v:0.8,d:"Vale ~€8 mi e negocia por ~€800 mil. Regista escocês subestimado em Portugal."},
+ {n:"Isma Ruiz",i:24,c:"Córdoba · ESP",p:['MEIO'],r:["Volante"],v:0.6,d:"Volante espanhol de ~€6 mi custando ~€600 mil. Segunda divisão, primeira oportunidade."},
+ {n:"Stije Resink",i:22,c:"Groningen · HOL",p:['MEIO'],r:["Volante","Meia"],v:0.5,d:"Vale ~€5 mi, sai por ~€500 mil. Motor holandês que nunca para."},
+ {n:"Hernán López",i:24,c:"Argentinos Jrs · ARG",p:['MEIO'],r:["Meia-Atacante","Extremo"],v:0.4,d:"~€4 mi de talento por ~€400 mil direto do semillero argentino."},
+ {n:"Álex Calatrava",i:25,c:"Castellón · ESP",p:['MEIO'],r:["Meia-Atacante"],v:0.4,d:"Criador valendo ~€4 mi por ~€400 mil na Segunda da Espanha."},
+ {n:"Guilherme Castilho",i:25,c:"Juárez · BRA",p:['MEIO'],r:["Volante"],v:0.2,d:"Segurança barata na frente da zaga: ~€200 mil no futebol mexicano."},
+ {n:"Riki",i:27,c:"Deportivo · ESP",p:['MEIO'],r:["Meia-Atacante","Extremo"],v:0.5,d:"~€6 mi de valor por ~€500 mil no Dépor. Criação barata direto da Galícia."},
+ {n:"Piotr Zieliński",i:31,c:"Inter · POL",p:['MEIO'],r:["Meia-Atacante","Meia"],v:8,d:"Vale ~€16 mi e a Inter negocia por metade. Maestro polonês entrega na hora."},
+ {n:"Aaron Ramsey",i:34,c:"Sem clube · GAL",p:['MEIO'],r:["Meia","Box-to-Box"],v:0,d:"LIVRE e sem clube: o galês dos gols importantes assina hoje. Veterano de luxo de graça."},
+ {n:"Curro",i:29,c:"Burgos · ESP",p:['MEIO'],r:["Meia-Atacante","Extremo"],v:0.6,d:"Veterano-artista valendo ~€7 mi por ~€600 mil. A Segunda espanhola esconde ouro."},
+ {n:"Mathys Tel",i:20,c:"Tottenham · FRA",p:['ATA'],r:["Avançado","Extremo"],v:30,d:"Finalizador clínico que o Spurs tirou do Bayern de vez. Caro, mas é gol garantido."},
+ {n:"Estêvão",i:18,c:"Chelsea · BRA",p:['ATA'],r:["Extremo Invertido","Meia-Atacante"],v:55,d:"Messinho já tá mastigando a Premier. Caríssimo — reza por um empréstimo milagroso."},
+ {n:"Julien Duranville",i:19,c:"Dortmund · BÉL",p:['ATA'],r:["Extremo"],v:15,d:"Velocista belga acessível pro nível que entrega. Dortmund lapida, você lucra."},
+ {n:"Ben Doak",i:19,c:"Bournemouth · ESC",p:['ATA'],r:["Extremo"],v:18,d:"Aceleração brutal: o Liverpool deixou escapar. 1x1 incansável pela direita."},
+ {n:"Rio Ngumoha",i:16,c:"Liverpool · ING",p:['ATA'],r:["Extremo"],v:20,d:"16 anos e já assombra defesas inglesas. Projeto puro pra 5+ temporadas."},
+ {n:"Dastan Satpayev",i:17,c:"Kairat · CAZ",p:['ATA'],r:["Avançado"],v:2,d:"Foguete cazaque por menos de €3 mi que aceita liga pequena. Pechincha nível Saba."},
+ {n:"Daulet Orynbasar",i:16,c:"Kairat · CAZ",p:['ATA'],r:["Avançado","Meia-Atacante"],v:0.5,d:"O outro achado do Kairat: 16 anos, troco de pinga, potencial de seleção."},
+ {n:"Marcelo Ryan",i:23,c:"FC Tokyo · BRA",p:['ATA'],r:["Avançado"],v:0.1,d:"BR no Japão por ~€100 MIL. Centroavante de €1 mi+ pelo preço de um churrasco. 🍖"},
+ {n:"Kein Sato",i:24,c:"FC Tokyo · JAP",p:['ATA'],r:["Extremo","Avançado"],v:0.6,d:"Vale ~€6 mi e custa ~€600 mil: extremo veloz escondido na J-League."},
+ {n:"Osman Bukari",i:26,c:"Widzew Łódź · GAN",p:['ATA'],r:["Extremo"],v:0.2,d:"Internacional ganês valendo ~€2 mi por ~€200 mil na Polônia. Sim, é sério."},
+ {n:"Jeon Jin-Woo",i:25,c:"Oxford Utd · COR",p:['ATA'],r:["Extremo"],v:0.3,d:"Ponta coreano de ~€3 mi por ~€300 mil na Championship. Corre, cruza e finaliza."},
+ {n:"Riku Yamane",i:21,c:"Yokohama Marinos · JAP",p:['MEIO'],r:["Volante","Ala Direito"],v:0.7,d:"Vale ~€7 mi e sai por ~€700 mil: o melhor achado do futebol japonês."},
+ {n:"Santi García",i:23,c:"Gil Vicente · ESP",p:['MEIO'],r:["Meia-Atacante","Construtor"],v:1,d:"🚨 O meia de ~€9 mi que sai por ~€1 mi. O Gil Vicente não sabe o tesouro que tem."},
+ {n:"Robert Lewandowski",i:36,c:"Barcelona · POL",p:['ATA'],r:["Avançado","Referência"],v:2,d:"Contrato acabando em 2026: O LEWA por ~€2 mi. Um ano de gols + professor do elenco."}
+];
+
+const SCOUT_ALL = SCOUT.concat(DB_FMI, DB_SOSI);
 function sCat(p){
   if(p.includes('GOL'))return'GOL';
   if(p.includes('DEF'))return'DEF';
@@ -831,18 +1019,72 @@ function fmtPrice(p){
   if(p.v===0)return'Livre';
   return'~€'+String(p.v).replace('.',',')+' mi';
 }
+/* --- busca por papel --- */
+const ROLECHIPS=[['all','Todos'],['goleiro','Goleiro'],['zagueiro','Zagueiro'],['lateral','Lateral / Ala'],['trinco','Trinco / Volante'],['construtor','Construtor de Jogo'],['area','Área-a-Área'],['mezzala','Mezzala'],['armador','Armador Criativo'],['extremo','Extremo'],['ei','Extremo Invertido / AI'],['avancado','Atacante (9)'],['finalizador','Finalizador'],['referencia','Referência'],['falso9','Falso 9'],['nove','Nove e Meio']];
+function roleTags(p){
+  const t=new Set();
+  p.r.concat(p.p).forEach(s=>{
+    const n=s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+    if(n.includes('goleiro'))t.add('goleiro');
+    if(n.includes('zagueiro'))t.add('zagueiro');
+    if(n.includes('lateral')||n.includes('ala'))t.add('lateral');
+    if(n.includes('volante')||n.includes('trinco'))t.add('trinco');
+    if(n.includes('regista')||n.includes('construtor'))t.add('construtor');
+    if(n.includes('box-to-box')||n.includes('area a area'))t.add('area');
+    if(n.includes('mezzala'))t.add('mezzala');
+    if(n.includes('meia-atacante')||n.includes('armador')||n.includes('enganche')||n.includes('sombra'))t.add('armador');
+    if(n.includes('extremo invertido')||n.includes('avancado interior'))t.add('ei');
+    if(n.includes('extremo'))t.add('extremo');
+    if(n.includes('nove e meio')){t.add('nove');}
+    if(n.includes('falso')){t.add('falso9');}
+    if(n.includes('finalizador'))t.add('finalizador');
+    if(n.includes('referencia'))t.add('referencia');
+    if(n.includes('avancado')&&!n.includes('interior'))t.add('avancado');
+  });
+  return t;
+}
+/* --- tipo de achado --- */
+const TIERCHIPS=[['all','Todos'],['d','💎 Tesouro escondido'],['b','💰 Bom e barato'],['w','👶 Wonderkid sub-21'],['s','⭐ Estrela acessível'],['f','🆓 Livre / Empréstimo']];
+function tierOf(p){
+  if(p.tipo==='emp'||p.v===0)return 'f';
+  if(p.i<=21&&p.v<=5)return 'd';
+  if(p.i<=21)return 'w';
+  if(p.v<=5)return 'b';
+  return 's';
+}
+let roleSel='all', tierSel='all';
+function buildChips(contId, list, onPick){
+  const c=document.getElementById(contId);
+  c.innerHTML=list.map(([k,l])=>`<button class="chip" data-v="${k}">${l}</button>`).join('');
+  c.addEventListener('click',e=>{
+    const b=e.target.closest('[data-v]'); if(!b)return;
+    c.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); onPick(b.dataset.v); renderScout();
+  });
+  c.querySelector('.chip').classList.add('on');
+}
+buildChips('roleChips',ROLECHIPS,v=>roleSel=v);
+buildChips('tierChips',TIERCHIPS,v=>tierSel=v);
 function renderScout(){
   const q=(document.getElementById('sSearch').value||'').toLowerCase();
   const pos=document.getElementById('sPos').value;
   const max=+document.getElementById('sPreco').value;
   const idade=+(document.getElementById('sIdade')?document.getElementById('sIdade').value:99);
   const ord=document.getElementById('sOrd').value;
-  let arr=SCOUT.filter(p=>{
+  let arr=SCOUT_ALL.filter(p=>{
     if(q && !(p.n.toLowerCase().includes(q)||p.c.toLowerCase().includes(q)))return false;
     if(pos==='LIVRE'){ if(!(p.v===0||p.tipo==='emp'))return false; }
     else if(pos!=='all' && sCat(p.p)!==pos)return false;
     if(p.tipo!=='emp' && p.v>max)return false;
     if(p.i>idade)return false;
+    if(roleSel!=='all' && !roleTags(p).has(roleSel))return false;
+    if(tierSel!=='all'){
+      if(tierSel==='d'){if(!(p.i<=21&&p.v<=5&&p.tipo!=='emp'))return false;}
+      else if(tierSel==='b'){if(!(p.v<=5))return false;}
+      else if(tierSel==='w'){if(!(p.i<=21&&p.tipo!=='emp'&&p.v>0))return false;}
+      else if(tierSel==='s'){if(!(p.v>5))return false;}
+      else if(tierSel==='f'){if(!(p.v===0||p.tipo==='emp'))return false;}
+    }
     return true;
   });
   arr.sort((a,b)=> ord==='preco'?a.v-b.v : ord==='idade'?a.i-b.i : a.n.localeCompare(b.n));
@@ -856,15 +1098,23 @@ function renderScout(){
    <div class="card tcard scard">
      <div class="top"><h3>${p.n} <span style="color:var(--sub);font-weight:600;font-size:13px">· ${p.i} anos</span></h3>
        <span class="price ${p.v>3?'b':''}">${fmtPrice(p)}</span></div>
+     <div style="margin:-2px 0 6px"><span style="font-size:10.5px;font-weight:800;letter-spacing:.5px;color:var(--neon2)">${tierOf(p)==='d'?'💎 TESOURO':tierOf(p)==='w'?'👶 WONDERKID':tierOf(p)==='b'?'💰 BARATO':tierOf(p)==='f'?'🆓 LIVRE/EMPRÉSTIMO':'⭐ ESTRELA'}</span></div>
      <div class="club">${p.c} · ${p.p.join('/')}</div>
      <div class="tags" style="margin:4px 0 0">${p.r.map(r=>`<span class="tag">${r}</span>`).join('')}</div>
      <p class="note">${p.d}</p>
-     <div class="row"><button class="btn g" style="flex:1;justify-content:center" onclick="copyPlayer(${SCOUT.indexOf(p)})">📋 Copiar ficha</button></div>
+     <div class="row"><button class="btn g" style="flex:1;justify-content:center" onclick="copyPlayer(${SCOUT_ALL.indexOf(p)})">📋 Copiar ficha</button>${p.l?`<a class="btn g" style="justify-content:center;padding:10px 12px" href="https://fminside.net/players/7-fm-26/${p.l}" target="_blank" rel="noopener" title="Ver no FMInside">↗</a>`:''}</div>
    </div>`).join('');
+  html+=`<div class="card srcard" style="color:var(--sub);font-size:12.5px">
+    🔎 <b style="color:var(--txt)">Fontes e créditos:</b> valores, clubes e idades são estimativas da comunidade + dados públicos do <a href="https://fminside.net/players/wonderkids" target="_blank" rel="noopener"><b>FMInside</b></a>, do <a href="https://sortitoutsi.net/football-manager-2026-bargain-players" target="_blank" rel="noopener"><b>sortitoutsi (barganhas FM26)</b></a> e do <a href="https://www.recharge.com/blog/en-ca/ca/fm26-wonderkids-ultimate-shortlist-best-buys-cheap-gems" target="_blank" rel="noopener"><b>guia de wonderkids da Recharge</b></a>. Pra consultar atributos exatos e elencos completos no jogo, vale a pena cruzar com:
+    <a href="https://sortitoutsi.net" target="_blank" rel="noopener">sortitoutsi.net</a> ·
+    <a href="https://www.fmscout.com" target="_blank" rel="noopener">FM Scout</a> ·
+    <a href="https://fminside.net" target="_blank" rel="noopener">FMInside</a> ·
+    <a href="https://fmmvibe.com" target="_blank" rel="noopener">FMM Vibe</a>
+  </div>`;
   g.innerHTML=html;
 }
 function copyPlayer(idx){
-  const p=SCOUT[idx];
+  const p=SCOUT_ALL[idx];
   copyText(`⚽ ${p.n} (${p.i}) — ${p.c}\n📍 ${p.p.join('/')} | Papéis: ${p.r.join(', ')}\n💰 ${fmtPrice(p)}\n📝 ${p.d}\nvia FM Touch Lab (base 2026)`);
 }
 window.copyPlayer=copyPlayer;
@@ -1028,10 +1278,159 @@ document.getElementById('quizBox').innerHTML=`
     <button class="btn p" style="margin-top:12px" onclick="quizStart()">▶️ Começar o quiz</button>
   </div>`;
 
+/* ============ RAIO-X POR PRINT (IA / OCR local) ============ */
+const printFiles={form:null,bola:null,trans:null,sembola:null};
+function setMode(m){
+  const pp=document.getElementById('printPanel');
+  const isPrint=m==='print';
+  pp.style.display=isPrint?'block':'none';
+  document.getElementById('mManual').classList.toggle('on',!isPrint);
+  document.getElementById('mPrint').classList.toggle('on',isPrint);
+  if(isPrint) pp.scrollIntoView({behavior:'smooth',block:'start'});
+}
+window.setMode=setMode;
+document.querySelectorAll('.uslot input').forEach(inp=>{
+  inp.addEventListener('change',()=>{
+    const f=inp.files[0]; if(!f)return;
+    const slot=inp.closest('.uslot');
+    printFiles[slot.dataset.slot]=f;
+    const url=URL.createObjectURL(f);
+    let img=slot.querySelector('img');
+    if(!img){img=document.createElement('img');slot.appendChild(img);}
+    img.src=url; slot.classList.add('done');
+    const any=Object.values(printFiles).some(Boolean);
+    document.getElementById('btnRead').disabled=!any;
+    if(any)document.getElementById('ocrMsg').textContent='Pronto pra ler! 🤖';
+  });
+});
+function loadAILib(){
+  if(window.Tesseract)return Promise.resolve();
+  return new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+    s.onload=res; s.onerror=rej;
+    document.head.append(s);
+  });
+}
+const noAcc=s=>(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[–—]/g,'-').replace(/\s+/g,' ');
+function firstCand(txt,cands){for(const c of cands){if(txt.includes(c[0]))return c;}return null;}
+function firstCandPos(txt,cands){
+  let best=null,bi=1e9;
+  for(const c of cands){const i=txt.indexOf(c[0]);if(i>=0&&i<bi){bi=i;best=c;}}
+  return best;
+}
+function findNear(txt,anchors,cands){
+  txt=' '+txt+' ';
+  for(const a of anchors){
+    const ai=txt.indexOf(a);
+    if(ai>=0){const hit=firstCandPos(txt.slice(ai,ai+140),cands);if(hit)return hit;}
+  }
+  return firstCand(txt,cands);
+}
+const FPATS=[['4-1-2-1-2','41212'],['4-2-3-1','4231'],['4-4-1-1','4411'],['4-1-4-1','4141'],['4-3-1-2','4312'],['3-4-2-1','3421'],['5-3-2','532'],['5-2-3','523'],['3-5-2','352'],['3-4-3','343'],['4-2-4','424'],['4-3-3','433'],['4-4-2','442']];
+async function readPrints(){
+  const btn=document.getElementById('btnRead'),msg=document.getElementById('ocrMsg'),
+        bar=document.getElementById('ocrBar'),barWrap=document.getElementById('ocrBarWrap');
+  btn.disabled=true; barWrap.style.display='block'; bar.style.width='2%';
+  msg.textContent='Carregando IA (1ª vez baixa ~10 MB)...';
+  try{await loadAILib();}
+  catch(e){
+    msg.textContent='😅 Sem internet pra carregar a IA agora. Confere a conexão e tenta de novo — ou use o modo manual.';
+    btn.disabled=false; return;
+  }
+  const slots=[['form','Formação'],['bola','Com a bola'],['trans','Em transição'],['sembola','Sem a bola']];
+  const active=slots.filter(([k])=>printFiles[k]);
+  let allText='',done=0,failed=0;
+  for(const [k,label] of active){
+    try{
+      const r=await Tesseract.recognize(printFiles[k],'por',{logger:m=>{
+        if(m.status==='recognizing text'){
+          const p=((done+m.progress)/active.length)*100;
+          bar.style.width=p+'%';
+          msg.textContent=`Lendo: ${label}… ${Math.round(m.progress*100)}%`;
+        }
+      }});
+      allText+='\n'+r.data.text;
+    }catch(e){failed++;}
+    done++;
+  }
+  bar.style.width='100%';
+  if(!allText.trim()){
+    msg.textContent='Não consegui ler os prints 😕 Tenta imagens mais nítidas, sem cortes no texto.';
+    btn.disabled=false; return;
+  }
+  parsePrintData(noAcc(allText));
+  msg.textContent=failed?`Leitura feita (1 print falhou). Confere o que a IA encontrou ⤵`:'Leitura concluída! Confere o que a IA encontrou ⤵';
+  btn.disabled=false;
+}
+window.readPrints=readPrints;
+function parsePrintData(t){
+  const got=[],miss=[];
+  const set=(id,val,label)=>{document.getElementById(id).value=val;got.push(label);};
+  /* formação */
+  let fKey=null;
+  for(const [pat,key] of FPATS){
+    const rx=new RegExp(pat.replace(/-/g,'\\s*-\\s*'));
+    if(rx.test(t)){fKey=key;break;}
+  }
+  if((t.includes('losango')||t.includes('diamant'))&&fKey==='442') fKey='41212';
+  if(fKey){set('f_form',fKey,'🧩 Formação: '+FORMS[fKey].label);document.getElementById('pitchBox').innerHTML=pitchSVG(fKey,true);}
+  else miss.push('formação');
+  /* mentalidade */
+  const ment=findNear(t,['mentalidade'],[['muito defensiva',0],['defensiva',1],['cautelosa',2],['equilibrada',3],['muito ofensiva',6],['ofensiva',5],['positiva',4]]);
+  if(ment)set('f_ment',ment[1],'🧠 Mentalidade: '+['Muito Defensiva','Defensiva','Cautelosa','Equilibrada','Positiva','Ofensiva','Muito Ofensiva'][ment[1]]);
+  else miss.push('mentalidade');
+  /* com bola */
+  const larg=findNear(t,['largura'],[['muito estreita',0],['estreita',1],['muito ampla',4],['ampla',3],['equilibrada',2]]);
+  if(larg)set('f_larg',larg[1],'📐 Largura detectada');
+  const tempo=findNear(t,['tempo'],[['muito lento',0],['lento',1],['muito rapido',4],['rapido',3],['equilibrado',2]]);
+  if(tempo)set('f_tempo',tempo[1],'⏱️ Tempo detectado');
+  const passe=findNear(t,['passe','profundidade'],[['muito curto',0],['muito direto',4],['curto',1],['direto',3],['equilibrado',2]]);
+  if(passe)set('f_passe',passe[1],'🎯 Profundidade de passe detectada');
+  const cruz=findNear(t,['cruzamento'],[['muito menos',0],['menos',1],['muito mais',4],['mais',3],['equilibrad',2]]);
+  if(cruz)set('f_cruz',cruz[1],'🥏 Cruzamentos detectados');
+  if(t.includes('jogar a partir da defesa'))set('f_saida','sim','🏗️ Joga a partir da defesa');
+  const foco=findNear(t,['concentr'],[['esquerda','pontas'],['direita','pontas'],['meio','meio'],[ 'alas','pontas']]);
+  if(foco)set('f_foco',foco[1],'🧭 Foco de jogada detectado');
+  /* sem bola */
+  const ldef=findNear(t,['linha defensiva'],[['muito atras',0],['muito adiantada',4],['atras',1],['adiantada',3],['equilibrada',2]]);
+  if(ldef)set('f_linhadef',ldef[1],'🛡️ Linha defensiva detectada');
+  const bloco=findNear(t,['confronto','bloco'],[['muito baixo',0],['muito alto',4],['baixo',1],['alto',3],['medio',2]]);
+  if(bloco)set('f_bloco',bloco[1],'🧱 Linha de confronto detectada');
+  const press=findNear(t,['intensidade','pressao'],[['pouco intensa',0],['muito intensa',3],['intensa',2],['equilibrada',1]]);
+  if(press)set('f_press',press[1],'💨 Pressão detectada');
+  if(t.includes('impedir')&&t.includes('goleiro'))set('f_pressgr','sim','🚫 Aperta a saída do goleiro');
+  /* transição */
+  if(t.includes('contra-pressao'))set('f_perda','cp','🔥 Contra-pressão');
+  else if(t.includes('recuar para campo')||t.includes('recuar'))set('f_perda','recuar','↩️ Recua após perda');
+  if(t.includes('contra-atacar')||t.includes('contra ataque')||t.includes('contra-ataque'))set('f_rec','contra','⚡ Contra-ataca');
+  if(t.includes('segurar a bola'))set('f_rec','segurar','🧊 Segura a bola');
+  if(t.includes('distribuir rapidamente'))set('f_rap','sim','⚡ Reposição rápida');
+  if(t.includes('lancamento')||t.includes('distribuicao longa'))set('f_dist','longa','🚀 Distribuição longa');
+  /* papéis */
+  if(t.includes('falso nove')||t.includes('falso 9'))set('f_ca','falso9','🎭 Atacante: Falso 9');
+  else if(t.includes('nove e meio'))set('f_ca','nove','🎭 Atacante: Nove e Meio');
+  else if(t.includes('atacante de pressao'))set('f_ca','pressing','🎭 Atacante: Pressão');
+  else if(t.includes('referencia'))set('f_ca','referencia','🎭 Atacante: Referência');
+  else if(t.includes('poacher')||t.includes('finalizador'))set('f_ca','artilheiro','🎭 Atacante: Finalizador');
+  else if(t.includes('avancado'))set('f_ca','avancado','🎭 Atacante: Avançado');
+  if(t.includes('extremo invertido')||t.includes('avancado interior'))set('f_pontas','corta','💨 Pontas cortam pra dentro');
+  else if(t.includes('extremo'))set('f_pontas','cruza','💨 Pontas cruzam');
+  if(!larg||!tempo||!passe)miss.push('algumas instruções com bola');
+  if(!ldef||!bloco)miss.push('algumas instruções sem bola');
+
+  document.getElementById('ocrOut').innerHTML=
+    got.map(g=>`<span class="tag g">✅ ${g}</span>`).join('')+
+    (miss.length?`<span class="tag" style="background:#ffb64818;color:var(--warn);border-color:#ffb64833">❓ Não li: ${[...new Set(miss)].join(', ')} (confere no formulário)</span>`:'')+
+    `<span class="tag" style="background:#2eff8f14;color:var(--neon);border-color:#2eff8f33">👇 Tudo preenchido! Confere e toca em "Analisar tática"</span>`;
+  toast('📸 Print lido! Confere as instruções');
+  analisar(true);
+}
+
 /* init */
 renderTactics();
 renderScout();
 renderRoles();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a272dd471aa36d67',t:'MTc4NjA2OTg3OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2738a7c6f24f63b',t:'MTc4NjA3Njk3Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
