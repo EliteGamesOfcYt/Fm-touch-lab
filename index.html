@@ -584,12 +584,24 @@ const FORMS = {
    pts:[[50,6,'GR'],[18,22,'LD'],[38,20,'ZAG'],[62,20,'ZAG'],[82,22,'LE'],[38,44,'MC'],[62,44,'MC'],[20,66,'PE'],[80,66,'PD'],[38,86,'ATA'],[62,86,'ATA']]}
 };
 const PX = x => 6 + x*0.88, PY = y => 112 - y*1.04;
+/* numeração clássica por posição (camisa 1 pro GR, 9 pro ATA...) */
+const KITNUM={GR:[1],LD:[2],LE:[6],ZAG:[3,4,5,13],ALD:[7],ALE:[11],VOL:[5,8,6],MC:[8,10,6,14],MD:[7],ME:[11],PE:[11],PD:[7],MEI:[10,8],SA:[10,7],ATA:[9,11,10]};
 function pitchSVG(formKey, labels, color){
   const f = FORMS[formKey]; color = color || '#2eff8f';
+  const m=color.match(/^#?([0-9a-f]{6})$/i);
+  let numCol='#ffffff';
+  if(m){const r=parseInt(m[1].substr(0,2),16),g=parseInt(m[1].substr(2,2),16),b=parseInt(m[1].substr(4,2),16);if((r*.299+g*.587+b*.114)/255>0.58)numCol='#1a2430';}
+  const seen={};
   let dots = '';
   f.pts.forEach(p=>{
-    dots += `<circle cx="${PX(p[0]).toFixed(1)}" cy="${PY(p[1]).toFixed(1)}" r="3.2" fill="${color}" stroke="#04160c" stroke-width="1"/>`;
-    if(labels) dots += `<text x="${PX(p[0]).toFixed(1)}" y="${(PY(p[1])-5.5).toFixed(1)}" font-size="4.4" font-weight="700" fill="#cfe8d8" text-anchor="middle">${p[2]}</text>`;
+    seen[p[2]]=seen[p[2]]||0;
+    const nums=KITNUM[p[2]]||[seen[p[2]]+1];
+    const num=nums[Math.min(seen[p[2]],nums.length-1)];
+    seen[p[2]]++;
+    dots += `<g transform="translate(${PX(p[0]).toFixed(1)},${PY(p[1]).toFixed(1)})">`
+      + (labels?`<text y="-6.6" font-size="4.2" font-weight="700" fill="#cfe8d8" text-anchor="middle">${p[2]}</text>`:'')
+      + `<path d="M-3.4,-2.6 L-1.6,-4.3 Q-1.1,-4.8 -0.5,-4.5 Q0,-4.2 0.5,-4.5 Q1.1,-4.8 1.6,-4.3 L3.4,-2.6 L2.3,-0.7 L1.7,-1.2 L1.7,3.5 L-1.7,3.5 L-1.7,-1.2 L-2.3,-0.7 Z" fill="${color}" stroke="#00000055" stroke-width=".55"/>`
+      + `<text y="1.9" font-size="4" font-weight="800" text-anchor="middle" fill="${numCol}">${num}</text></g>`;
   });
   return `<svg viewBox="0 0 100 120" style="width:100%;display:block">
     <rect x="6" y="8" width="88" height="104" rx="2" fill="none" stroke="#ffffff22" stroke-width=".8"/>
@@ -619,17 +631,17 @@ function copyText(txt, ok){
 /* ============ GALERIA DE TÁTICAS ============ */
 /* 📬 TÁTICAS DA COMUNIDADE entram aqui dentro da lista TACTICS abaixo */
 const TACTICS = [
- {t:'Tática do Gigante', form:'4231', estilos:['Gegenpress','Posse de Bola'], autor:'Sr.manager', comunidade:true,
+ {t:'Tática do Gigante', form:'4231', estilos:['Gegenpress','Posse de Bola'], autor:'Sr.manager', comunidade:true, kit:'#8f2235',
   nota:'4-2-3-1 de Gegenpress personalizado com extremos cortando pra dentro: sai jogando curto desde a defesa, sufoca na perda com contra-pressão e marcação apertada, e decide com os pés trocados. Mentalidade Atacar — o Gigante não dá espaço. 🔥',
   inst:['Mentalidade Atacar','Contra-pressão','Marcação apertada','Passes curtos','Jogar da defesa','Foco pelo meio'],
   link:'https://drive.google.com/file/d/1H1sUaRuqXuEk1k7lS3Lnyz5gkhN83d9Q/view?usp=drivesdk'},
- {t:'Sufoco Total', form:'4231', estilos:['Gegenpress'], autor:'FM Touch Lab',
+ {t:'Sufoco Total', form:'4231', estilos:['Gegenpress'], autor:'FM Touch Lab', kit:'#d6242b',
   nota:'Pressão alta, contra-pressão e transição em velocidade. Feita pra elencos jovens com Resistência alta — o sufoco é o plano de jogo.',
   inst:['Linha adiantada','Bloco alto','Contra-pressão','Pressão intensa','Reposição rápida'], link:'#'},
- {t:'Tiki-Taka da Quebrada', form:'433', estilos:['Posse de Bola'], autor:'FM Touch Lab',
+ {t:'Tiki-Taka da Quebrada', form:'433', estilos:['Posse de Bola'], autor:'FM Touch Lab', kit:'#1c4f9c',
   nota:'Posse paciente saindo desde a defesa, muitos graus de Apoio e paciência pra abrir o espaço. Pra quem gosta do jogo nos pés.',
   inst:['Tempo lento','Passes curtos','Jogar da defesa','Segurar a bola'], link:'#'},
- {t:'Raio Catimbeiro', form:'523', estilos:['Contra-Ataque','Retranca'], autor:'FM Touch Lab',
+ {t:'Raio Catimbeiro', form:'523', estilos:['Contra-Ataque','Retranca'], autor:'FM Touch Lab', kit:'#f2c200',
   nota:'Cinco atrás, bloco baixo e três flechas na frente. Sofre pouco, castiga muito. Pedal de coisa feia nos 90 minutos incluso.',
   inst:['Linha atrás','Bloco baixo','Contra-atacar','Distribuição longa'], link:'#'}
 ];
@@ -655,7 +667,7 @@ function renderTactics(){
       <h3>${tc.t}</h3>
       ${tc.comunidade?'<span class="tag g" style="margin-bottom:4px">🌟 COMUNIDADE</span>':''}
       <div class="by">${FORMS[tc.form].label} · por <b style="color:var(--txt)">${tc.autor}</b></div>
-      <div class="pitch">${pitchSVG(tc.form,false)}</div>
+      <div class="pitch">${pitchSVG(tc.form,false,tc.kit)}</div>
       <p style="font-size:13.5px;color:var(--sub)">${tc.nota}</p>
       <div class="tags">${tags}</div>
       <div class="row">
@@ -691,8 +703,8 @@ document.getElementById('tSearch').addEventListener('input',renderTactics);
     const s=document.getElementById(id);
     for(let i=0;i<=10;i++) s.innerHTML+=`<option value="${i}" ${i===def?'selected':''}>${i}</option>`;
   });
-  fs.addEventListener('change',()=>{document.getElementById('pitchBox').innerHTML=pitchSVG(fs.value,true);});
-  document.getElementById('pitchBox').innerHTML=pitchSVG('4231',true);
+  fs.addEventListener('change',()=>{document.getElementById('pitchBox').innerHTML=pitchSVG(fs.value,true,'#f2f5fa');});
+  document.getElementById('pitchBox').innerHTML=pitchSVG('4231',true,'#f2f5fa');
 })();
 
 const PRESETS={
@@ -710,7 +722,7 @@ function applyPreset(key){
   set('f_linhadef',p.linhadef);set('f_bloco',p.bloco);set('f_press',p.press);set('f_pressgr',p.pressgr);
   set('f_perda',p.perda);set('f_rec',p.rec);set('f_dist',p.dist);set('f_rap',p.rap);
   set('f_ga',p.ga);set('f_gs',p.gs);set('f_gd',p.gd);set('f_ca',p.ca);set('f_pontas',p.pontas);
-  document.getElementById('pitchBox').innerHTML=pitchSVG(p.form,true);
+  document.getElementById('pitchBox').innerHTML=pitchSVG(p.form,true,'#f2f5fa');
   analisar(true);
 }
 window.applyPreset=applyPreset;
@@ -799,6 +811,35 @@ function analisar(scroll){
     retranca:'Time fechado vive de <b>Força, Marcação e Concentração</b> na zaga + um 9 forte pra segurar lançamento. Bola parada vira arma principal.',
     misto:'Sua tática não tem identidade clara. Defina o plano: pressionar alto, esperar e sair no raio, ou dominar a posse.'
   };
+  /* papéis e ajustes de jogadores por estilo — a análise além das instruções de equipe */
+  const PAPTIPS={
+    posse:[
+     '🧠 <b>Construtor/Regista</b> regendo o ritmo + <b>Goleiro-Líbero</b> pra saída limpa — sem eles, a posse morre no goleiro.',
+     '🎭 <b>Falso 9</b> com pontas em grau Ataque cortando pra dentro (<b>Extremo Invertido/AI</b>): o 9 sai da área e abre o corredor.',
+     '⚙️ Pelo menos uma <b>Mezzala</b> ou meia em grau Ataque infiltrando: posse parada sem chegada vira chute de 30 metros.',
+     '↔️ Se os laterais cortam pra dentro (Invertidos), os pontas precisam dar amplitude — senão o meio vira engarrafamento.'],
+    contra:[
+     '⚡ <b>Avançado ou Finalizador</b> com Velocidade 15+ é inegociável: contra-ataque com 9 lento é passeio.',
+     '🎯 Pontas em grau <b>Ataque</b> (Extremo ou Avançado Interior): são eles que recebem a bola do raio.',
+     '🛡️ Trinco/<b>Segundo Volante</b> segurando + zaga que não sobe: o contra raramente sai sem alguém cobrindo.',
+     '🚀 Nos detalhes do Atacante, <b>"corre em profundidade"</b> e finalização simples. Nada de firula no último terço.'],
+    gegen:[
+     '🔥 <b>Contra-pressão pede pisantes</b>: Resistência e Esforço nos 2 meias da frente. Jogador lento marca saída de campo.',
+     '⚔️ <b>Atacante de Pressão</b> como primeiro zagueiro + meias Box-to-Box/Mezzala cercando. O enganche descansa… fora de campo.',
+     '🧤 Goleiro que <b>sai do gol</b> (Líbero) varre as bolas nas costas da linha adiantada. Sem ele: contra-gol contra você.',
+     '📋 Detalhe matador: <b>marcação individual nos meias criativos</b> deles + impedimento se a zaga for rápida.'],
+    direto:[
+     '🎯 <b>Referência</b> com Força/Impulsão/Jogo Aéreo segurando de costas + um 9 veloz (<b>Avançado</b>) dobrando nele.',
+     '🥏 <b>Extremos clássicos</b> cruzando: a bola precisa chegar na área de QUALQUER jeito, não bonito.',
+     '⚙️ Um meia <b>Box-to-Box</b> catando segunda bola — o pivô perde alguns, alguém tem que estar lá.',
+     '📋 Detalhe: laterais com instrução de <b>cruzar da intermediária</b> (sem chegar na linha de fundo) aceleram o jogo.'],
+    retranca:[
+     '🧱 Dois zagueiros + trinco: <b>Sem Compromisso/Âncora</b>. Quem inventa aqui, senta no banco.',
+     '⚡ UMA válvula de escape: um veloz (<b>Avançado</b>) sozinho lá na frente pra segurar a bola do alívio.',
+     '🎯 <b>Bola parada é jogo de jogo</b>: seus melhores cabeceadores sobem. É lá que a retranca faz gol.',
+     '📋 Detalhe: tempo perdido começa aos 70 min, não aos 15 — catimba cedo demais convida o sufoco.']
+  };
+
   let best='misto',bv=3;
   for(const k in st) if(st[k]>bv){bv=st[k];best=k;}
   if(best==='contra'&&bloco<=1&&linhadef<=1&&ment<=1) best='retranca';
@@ -821,6 +862,8 @@ function analisar(scroll){
     </div>
     <div class="stylebox">🎭 Estilo identificado: <b>${best==='misto'?'🎲 Estilo Misto / Personalizado':labels[best]}</b><br>
     <span style="font-size:13px;color:var(--sub)">${dicas[best]}</span></div>
+    ${best!=='misto'?`<div style="margin-top:12px"><div style="font-size:12px;font-weight:900;color:var(--neon2);letter-spacing:.5px;margin-bottom:6px">🎽 PAPEL DE JOGADOR & AJUSTES FINOS PRA ESSE ESTILO</div>
+    ${PAPTIPS[best].map(x=>`<div class="find"><span class="ic" style="font-size:13px">▸</span><div><div class="d" style="color:#c7d5e8">${x}</div></div></div>`).join('')}</div>`:''}
     <div style="margin-top:6px">
       ${empty?'<div class="find ok"><span class="ic">✅</span><div><div class="t">Sem conflitos detectados</div><div class="d">Sua tática não apresenta contradições óbvias. Teste e ajuste com base nos resultados!</div></div></div>':''}
       ${item(ok,'✅')}${item(err,'❌')}${item(wrn,'⚠️')}
@@ -829,13 +872,16 @@ function analisar(scroll){
       <button class="btn g" style="flex:1;justify-content:center" onclick="copyAnalysis()">📋 Copiar análise</button>
     </div>`;
   window._lastAn={best,bv,score,sLabel,err,wrn,ok,labels};
+  window._PAPTIPS=best!=='misto'?PAPTIPS[best]:null;
   if(scroll&&window.innerWidth<920) document.getElementById('resultBox').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function copyAnalysis(){
   const a=window._lastAn; if(!a)return;
   const t=(arr,p)=>arr.length?('\n'+p+'\n'+arr.map(x=>'  • '+x[0]+': '+x[1]).join('\n')):'';
   const styleName = a.best==='misto' ? 'Estilo Misto / Personalizado' : a.labels[a.best];
-  copyText(`🧪 ANÁLISE DE TÁTICA — FM Touch Lab\nNota de coerência: ${a.score}/100 (${a.sLabel})\nEstilo identificado: ${styleName}${t(a.ok,'✅ Pontos fortes:')}${t(a.err,'❌ Conflitos:')}${t(a.wrn,'⚠️ Atenção:')}`);
+  const strip=s=>s.replace(/<[^>]+>/g,'');
+  const pap=a.best&&window._PAPTIPS?('\n🎽 Papéis e ajustes finos:\n'+window._PAPTIPS.map(x=>'  • '+strip(x)).join('\n')):'';
+  copyText(`🧪 ANÁLISE DE TÁTICA — FM Touch Lab\nNota de coerência: ${a.score}/100 (${a.sLabel})\nEstilo identificado: ${styleName}${t(a.ok,'✅ Pontos fortes:')}${t(a.err,'❌ Conflitos:')}${t(a.wrn,'⚠️ Atenção:')}${pap}`);
 }
 window.analisar=analisar; window.copyAnalysis=copyAnalysis; window.copyTactic=copyTactic;
 
@@ -1434,11 +1480,34 @@ function parsePrintData(t){
     if(rx.test(t)){fKey=key;break;}
   }
   if((t.includes('losango')||t.includes('diamant'))&&fKey==='442') fKey='41212';
-  if(fKey){set('f_form',fKey,'🧩 Formação: '+FORMS[fKey].label);document.getElementById('pitchBox').innerHTML=pitchSVG(fKey,true);}
+  if(fKey){set('f_form',fKey,'🧩 Formação: '+FORMS[fKey].label);document.getElementById('pitchBox').innerHTML=pitchSVG(fKey,true,'#f2f5fa');}
   else miss.push('formação');
-  /* mentalidade */
-  const ment=findNear(t,['mentalidade'],[['muito defensiva',0],['defensiva',1],['cautelosa',2],['equilibrada',3],['muito ofensiva',6],['ofensiva',5],['positiva',4]]);
-  if(ment)set('f_ment',ment[1],'🧠 Mentalidade: '+['Muito Defensiva','Defensiva','Cautelosa','Equilibrada','Positiva','Ofensiva','Muito Ofensiva'][ment[1]]);
+  /* mentalidade — 3 camadas de detecção: perto do título → palavra isolada segura → texto colado */
+  const MCANDS=[['muito defensiva',0],['defensiva',1],['cautelosa',2],['equilibrada',3],['muito ofensiva',6],['muito atacante',6],['ofensiva',5],['atacar',5],['positiva',4]];
+  let ment=null;
+  const mA=(' '+t+' ').indexOf('mentalidade');
+  if(mA>=0) ment=firstCandPos((' '+t+' ').slice(mA,mA+160),expandCands(MCANDS));
+  if(!ment){ /* fallback por palavra isolada — sem confundir "linha defensiva", "transição ofensiva/defensiva" nem "contra-atacar" */
+    const W=(' '+t.replace(/[^a-z0-9]+/g,' ')+' ').replace(/contra atacar/g,' ').replace(/linha defensiva/g,' ').replace(/transicao ofensiva/g,' ').replace(/transicao defensiva/g,' ');
+    const has=w=>W.includes(' '+w+' ');
+    let mv=null;
+    if(W.includes(' muito ofensiva ')||W.includes(' muito atacante '))mv=6;
+    else if(W.includes(' muito defensiva '))mv=0;
+    else if(has('atacar')||has('ofensiva'))mv=5;
+    else if(has('positiva'))mv=4;
+    else if(has('cautelosa'))mv=2;
+    else if(has('defensiva'))mv=1;
+    if(mv!==null)ment=['f',mv];
+  }
+  if(!ment){ /* OCR espaçando as letras? último recurso no texto colado */
+    const Sx=S.replace(/contraatacar/g,'').replace(/contraataque/g,'').replace(/linhadefensiva/g,'').replace(/transicaoofensiva/g,'').replace(/transicaodefensiva/g,'');
+    if(/muito(ofensiv|atacant)/.test(Sx))ment=['f',6];
+    else if(Sx.includes('muitodefensiva'))ment=['f',0];
+    else if(Sx.includes('atacar')||Sx.includes('ofensiva'))ment=['f',5];
+    else if(Sx.includes('positiva'))ment=['f',4];
+    else if(Sx.includes('cautelosa'))ment=['f',2];
+  }
+  if(ment)set('f_ment',String(ment[1]),'🧠 Mentalidade: '+['Muito Defensiva','Defensiva','Cautelosa','Equilibrada','Positiva','Ofensiva','Muito Ofensiva'][ment[1]]);
   else miss.push('mentalidade');
   /* com bola */
   const larg=findNear(t,['largura'],[['muito estreita',0],['estreita',1],['muito ampla',4],['ampla',3],['equilibrada',2]]);
@@ -1467,6 +1536,14 @@ function parsePrintData(t){
   if(S.includes('segurarabola'))set('f_rec','segurar','🧊 Segura a bola');
   if(S.includes('distribuirrapidamente'))set('f_rap','sim','⚡ Reposição rápida');
   if(S.includes('lancamento')||S.includes('distribuicaolonga'))set('f_dist','longa','🚀 Distribuição longa');
+  /* frases da tela de instruções do FM Touch (texto, não sliders) */
+  if(S.includes('marcacaoapertada'))set('f_press','2','💪 Marcação apertada');
+  if(S.includes('baterpontapescurtos')||S.includes('distribuirparaosdefesascentrais'))set('f_dist','curta','🧤 Saída curta do goleiro');
+  if(S.includes('evitardistribuicaocurta'))set('f_pressgr','sim','🚫 Pressiona a saída curta deles');
+  if(S.includes('baterpontapeslongos'))set('f_dist','longa','🚀 Pontapés longos do goleiro');
+  if(S.includes('manterformacao'))set('f_rec','segurar','🧱 Mantém a formação');
+  if(S.includes('linhamaisalta'))set('f_linhadef','3','🛡️ Linha mais alta');
+  if(S.includes('linhamaisbaixa'))set('f_linhadef','1','🛡️ Linha mais baixa');
   /* papéis */
   if(S.includes('falsonove')||S.includes('falso9'))set('f_ca','falso9','🎭 Atacante: Falso 9');
   else if(S.includes('noveemeio'))set('f_ca','nove','🎭 Atacante: Nove e Meio');
@@ -1492,5 +1569,5 @@ renderTactics();
 renderScout();
 renderRoles();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2744ef059b7f614',t:'MTc4NjA4NTAyMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
