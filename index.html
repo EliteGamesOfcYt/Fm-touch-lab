@@ -221,7 +221,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
 <main class="page" id="taticas">
   <button class="crumb" data-go="home">← Menu</button>
   <div class="h2"><span class="dot"></span> Galeria de Táticas</div>
-  <p class="lead">Táticas <code>.fmf</code> enviadas pela comunidade, com formação, instruções e prints. Filtre pelo estilo — ou envie a sua pra aparecer aqui com seu nome!</p>
+  <p class="lead">Táticas <code>.fmf</code> enviadas pela comunidade, com formação, instruções e prints. Filtre pelo estilo — ou envie a sua! <b>Como funciona:</b> você envia pelo formulário 📬, a gente revisa e publica aqui com seu nome de autor (pode demorar alguns dias — é tudo feito pela comunidade 💚).</p>
 
   <div class="chips" id="tChips">
     <button class="chip on" data-f="all">Todas</button>
@@ -249,7 +249,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
   <div class="card" id="printPanel" style="display:none;margin-bottom:16px">
     <b>📸 Raio-X por Print</b>
     <p style="font-size:13px;color:var(--sub);margin:6px 0 4px">Envie os prints das telas de tática do jogo (quanto mais, melhor a leitura). A IA identifica formação, mentalidade, instruções e papéis — e já preenche o formulário pra você conferir.</p>
-    <p style="font-size:12px;color:var(--warn)">💡 Dica: prints nítidos, sem brilho na tela e com o texto completo aparecendo.</p>
+    <p style="font-size:12px;color:var(--warn)">💡 <b>IMPORTANTE:</b> envie o <b>print de tela</b> tirado DENTRO do jogo (botão power + volume, ou gesto de print do celular). Foto da tela de outro aparelho NÃO funciona — a IA não consegue ler texto torto e com reflexo. 🚫📷</p>
     <div id="slots">
       <label class="uslot" data-slot="form">🧩 Formação / Equipe<input type="file" accept="image/*"></label>
       <label class="uslot" data-slot="bola">⚽ Com a bola<input type="file" accept="image/*"></label>
@@ -617,7 +617,12 @@ function copyText(txt, ok){
 }
 
 /* ============ GALERIA DE TÁTICAS ============ */
+/* 📬 TÁTICAS DA COMUNIDADE entram aqui dentro da lista TACTICS abaixo */
 const TACTICS = [
+ {t:'Tática do Gigante', form:'4231', estilos:['Gegenpress','Posse de Bola'], autor:'Sr.manager', comunidade:true,
+  nota:'4-2-3-1 de Gegenpress personalizado com extremos cortando pra dentro: sai jogando curto desde a defesa, sufoca na perda com contra-pressão e marcação apertada, e decide com os pés trocados. Mentalidade Atacar — o Gigante não dá espaço. 🔥',
+  inst:['Mentalidade Atacar','Contra-pressão','Marcação apertada','Passes curtos','Jogar da defesa','Foco pelo meio'],
+  link:'https://drive.google.com/file/d/1H1sUaRuqXuEk1k7lS3Lnyz5gkhN83d9Q/view?usp=drivesdk'},
  {t:'Sufoco Total', form:'4231', estilos:['Gegenpress'], autor:'FM Touch Lab',
   nota:'Pressão alta, contra-pressão e transição em velocidade. Feita pra elencos jovens com Resistência alta — o sufoco é o plano de jogo.',
   inst:['Linha adiantada','Bloco alto','Contra-pressão','Pressão intensa','Reposição rápida'], link:'#'},
@@ -629,6 +634,15 @@ const TACTICS = [
   inst:['Linha atrás','Bloco baixo','Contra-atacar','Distribuição longa'], link:'#'}
 ];
 let tFilter='all';
+/* Converte link de compartilhamento do Google Drive em download direto */
+function dlLink(u){
+  if(!u)return'#';
+  if(u.includes('drive.google.com')){
+    const m=u.match(/\/file\/d\/([\w-]{10,})/)||u.match(/[?&]id=([\w-]{10,})/);
+    if(m)return'https://drive.google.com/uc?export=download&id='+m[1];
+  }
+  return u;
+}
 function renderTactics(){
   const q=(document.getElementById('tSearch').value||'').toLowerCase();
   const g=document.getElementById('tGrid');
@@ -639,12 +653,13 @@ function renderTactics(){
     const tags = tc.estilos.map(e=>`<span class="tag g">${e}</span>`).join('') + tc.inst.map(s=>`<span class="tag">${s}</span>`).join('');
     html += `<div class="card tcard">
       <h3>${tc.t}</h3>
+      ${tc.comunidade?'<span class="tag g" style="margin-bottom:4px">🌟 COMUNIDADE</span>':''}
       <div class="by">${FORMS[tc.form].label} · por <b style="color:var(--txt)">${tc.autor}</b></div>
       <div class="pitch">${pitchSVG(tc.form,false)}</div>
       <p style="font-size:13.5px;color:var(--sub)">${tc.nota}</p>
       <div class="tags">${tags}</div>
       <div class="row">
-        <a class="btn p" href="${tc.link}" onclick="if(this.getAttribute('href')==='#'){toast('Envie sua tática pelo botão abaixo 📤');return false}">⬇️ Baixar .fmf</a>
+        <a class="btn p" href="${dlLink(tc.link)}" onclick="if(this.getAttribute('href')==='#'){toast('Envie sua tática pelo botão abaixo 📤');return false}">⬇️ Baixar .fmf</a>
         <button class="btn g" onclick="copyTactic(${i})">📋 Resumo</button>
       </div>
     </div>`;
@@ -652,7 +667,7 @@ function renderTactics(){
   html += `<div class="card sendcard">
     <div style="font-size:38px">📤</div>
     <b>Sua tática merece um lugar aqui!</b>
-    <p>Envie o .fmf + os prints (formação, com/sem bola, transição) e apareça na galeria com seu nick.</p>
+    <p>Envie o .fmf + os prints (formação, com/sem bola, transição). Passando na revisão, sua tática entra aqui com seu nick! 🌟</p>
     <a class="btn p" href="${CONFIG.formsUrl}" target="_blank" rel="noopener">Enviar minha tática</a>
   </div>`;
   g.innerHTML=html;
@@ -1313,13 +1328,56 @@ function loadAILib(){
   });
 }
 const noAcc=s=>(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[–—]/g,'-').replace(/\s+/g,' ');
+/* Pré-processamento da imagem: amplia, converte pra cinza com contraste forte e inverte o fundo escuro do FM (OCR prefere texto escuro em fundo claro) */
+function prepImage(file){
+  return new Promise(res=>{
+    const url=URL.createObjectURL(file);
+    const img=new Image();
+    img.onload=()=>{
+      try{
+        const w=img.width,h=img.height;
+        const scale=Math.max(1,Math.min(3,2400/Math.max(w,h)));
+        const cw=Math.min(3600,Math.round(w*scale)),ch=Math.min(3600,Math.round(h*scale));
+        const c=document.createElement('canvas');c.width=cw;c.height=ch;
+        const x=c.getContext('2d',{willReadFrequently:true});
+        x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';
+        x.drawImage(img,0,0,cw,ch);
+        const d=x.getImageData(0,0,cw,ch),px=d.data;
+        let sum=0;
+        for(let i=0;i<px.length;i+=4)sum+=px[i]*.299+px[i+1]*.587+px[i+2]*.114;
+        const invert=(sum/(px.length/4))<128;
+        for(let i=0;i<px.length;i+=4){
+          let g=(px[i]*.299+px[i+1]*.587+px[i+2]*.114-128)*1.8+128;
+          g=g<0?0:g>255?255:g;
+          if(invert)g=255-g;
+          px[i]=px[i+1]=px[i+2]=g;
+        }
+        x.putImageData(d,0,0);
+        URL.revokeObjectURL(url);
+        res(c.toDataURL('image/png'));
+      }catch(e){URL.revokeObjectURL(url);res(file);}
+    };
+    img.onerror=()=>{URL.revokeObjectURL(url);res(file);};
+    img.src=url;
+  });
+}
 function firstCand(txt,cands){for(const c of cands){if(txt.includes(c[0]))return c;}return null;}
 function firstCandPos(txt,cands){
   let best=null,bi=1e9;
   for(const c of cands){const i=txt.indexOf(c[0]);if(i>=0&&i<bi){bi=i;best=c;}}
   return best;
 }
+function expandCands(cands){
+  const out=[];
+  for(const c of cands){
+    out.push(c);
+    const w=c[0].split(' ');
+    if(w.length>1&&w[0].length>3) out.push([w[0].slice(1)+' '+w.slice(1).join(' '),c[1]]);
+  }
+  return out;
+}
 function findNear(txt,anchors,cands){
+  cands=expandCands(cands);
   txt=' '+txt+' ';
   for(const a of anchors){
     const ai=txt.indexOf(a);
@@ -1343,7 +1401,8 @@ async function readPrints(){
   let allText='',done=0,failed=0;
   for(const [k,label] of active){
     try{
-      const r=await Tesseract.recognize(printFiles[k],'por',{logger:m=>{
+      const prepped=await prepImage(printFiles[k]);
+      const r=await Tesseract.recognize(prepped,'por',{logger:m=>{
         if(m.status==='recognizing text'){
           const p=((done+m.progress)/active.length)*100;
           bar.style.width=p+'%';
@@ -1356,7 +1415,7 @@ async function readPrints(){
   }
   bar.style.width='100%';
   if(!allText.trim()){
-    msg.textContent='Não consegui ler os prints 😕 Tenta imagens mais nítidas, sem cortes no texto.';
+    msg.textContent='Não rolou 😕 Dicas: use o print tirado DENTRO do jogo (não foto da tela de outro aparelho), com o texto da tática bem grande e sem brilho/reflexo. Se a tática tá em inglês, muda o texto abaixo pra EN.';
     btn.disabled=false; return;
   }
   parsePrintData(noAcc(allText));
@@ -1366,6 +1425,7 @@ async function readPrints(){
 window.readPrints=readPrints;
 function parsePrintData(t){
   const got=[],miss=[];
+  const S=t.replace(/[^a-z0-9]/g,''); /* texto colado: tolera OCR quebrando palavras ("gol eiro", "contra pressao") */
   const set=(id,val,label)=>{document.getElementById(id).value=val;got.push(label);};
   /* formação */
   let fKey=null;
@@ -1389,7 +1449,7 @@ function parsePrintData(t){
   if(passe)set('f_passe',passe[1],'🎯 Profundidade de passe detectada');
   const cruz=findNear(t,['cruzamento'],[['muito menos',0],['menos',1],['muito mais',4],['mais',3],['equilibrad',2]]);
   if(cruz)set('f_cruz',cruz[1],'🥏 Cruzamentos detectados');
-  if(t.includes('jogar a partir da defesa'))set('f_saida','sim','🏗️ Joga a partir da defesa');
+  if(S.includes('jogarapartirdadefesa'))set('f_saida','sim','🏗️ Joga a partir da defesa');
   const foco=findNear(t,['concentr'],[['esquerda','pontas'],['direita','pontas'],['meio','meio'],[ 'alas','pontas']]);
   if(foco)set('f_foco',foco[1],'🧭 Foco de jogada detectado');
   /* sem bola */
@@ -1399,23 +1459,23 @@ function parsePrintData(t){
   if(bloco)set('f_bloco',bloco[1],'🧱 Linha de confronto detectada');
   const press=findNear(t,['intensidade','pressao'],[['pouco intensa',0],['muito intensa',3],['intensa',2],['equilibrada',1]]);
   if(press)set('f_press',press[1],'💨 Pressão detectada');
-  if(t.includes('impedir')&&t.includes('goleiro'))set('f_pressgr','sim','🚫 Aperta a saída do goleiro');
+  if(S.includes('impedir')&&S.includes('goleiro'))set('f_pressgr','sim','🚫 Aperta a saída do goleiro');
   /* transição */
-  if(t.includes('contra-pressao'))set('f_perda','cp','🔥 Contra-pressão');
-  else if(t.includes('recuar para campo')||t.includes('recuar'))set('f_perda','recuar','↩️ Recua após perda');
-  if(t.includes('contra-atacar')||t.includes('contra ataque')||t.includes('contra-ataque'))set('f_rec','contra','⚡ Contra-ataca');
-  if(t.includes('segurar a bola'))set('f_rec','segurar','🧊 Segura a bola');
-  if(t.includes('distribuir rapidamente'))set('f_rap','sim','⚡ Reposição rápida');
-  if(t.includes('lancamento')||t.includes('distribuicao longa'))set('f_dist','longa','🚀 Distribuição longa');
+  if(S.includes('contrapressao'))set('f_perda','cp','🔥 Contra-pressão');
+  else if(S.includes('recuar'))set('f_perda','recuar','↩️ Recua após perda');
+  if(S.includes('contraatacar')||S.includes('contraataque'))set('f_rec','contra','⚡ Contra-ataca');
+  if(S.includes('segurarabola'))set('f_rec','segurar','🧊 Segura a bola');
+  if(S.includes('distribuirrapidamente'))set('f_rap','sim','⚡ Reposição rápida');
+  if(S.includes('lancamento')||S.includes('distribuicaolonga'))set('f_dist','longa','🚀 Distribuição longa');
   /* papéis */
-  if(t.includes('falso nove')||t.includes('falso 9'))set('f_ca','falso9','🎭 Atacante: Falso 9');
-  else if(t.includes('nove e meio'))set('f_ca','nove','🎭 Atacante: Nove e Meio');
-  else if(t.includes('atacante de pressao'))set('f_ca','pressing','🎭 Atacante: Pressão');
-  else if(t.includes('referencia'))set('f_ca','referencia','🎭 Atacante: Referência');
-  else if(t.includes('poacher')||t.includes('finalizador'))set('f_ca','artilheiro','🎭 Atacante: Finalizador');
-  else if(t.includes('avancado'))set('f_ca','avancado','🎭 Atacante: Avançado');
-  if(t.includes('extremo invertido')||t.includes('avancado interior'))set('f_pontas','corta','💨 Pontas cortam pra dentro');
-  else if(t.includes('extremo'))set('f_pontas','cruza','💨 Pontas cruzam');
+  if(S.includes('falsonove')||S.includes('falso9'))set('f_ca','falso9','🎭 Atacante: Falso 9');
+  else if(S.includes('noveemeio'))set('f_ca','nove','🎭 Atacante: Nove e Meio');
+  else if(S.includes('atacantedepressao'))set('f_ca','pressing','🎭 Atacante: Pressão');
+  else if(S.includes('referencia'))set('f_ca','referencia','🎭 Atacante: Referência');
+  else if(S.includes('poacher')||S.includes('finalizador'))set('f_ca','artilheiro','🎭 Atacante: Finalizador');
+  else if(S.includes('avancado'))set('f_ca','avancado','🎭 Atacante: Avançado');
+  if(S.includes('extremoinvertido')||S.includes('avancadointerior'))set('f_pontas','corta','💨 Pontas cortam pra dentro');
+  else if(S.includes('extremo'))set('f_pontas','cruza','💨 Pontas cruzam');
   if(!larg||!tempo||!passe)miss.push('algumas instruções com bola');
   if(!ldef||!bloco)miss.push('algumas instruções sem bola');
 
@@ -1432,5 +1492,5 @@ renderTactics();
 renderScout();
 renderRoles();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a273c5cffea7f61b',t:'MTc4NjA3OTQwMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2744ef059b7f614',t:'MTc4NjA4NTAyMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
