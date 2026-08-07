@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FM Touch Lab | Ferramentas para FM Touch 21 (base 2026)</title>
+<style>
+:root{
+  --bg:#0a0f1c; --card:#121a2b; --line:#1f2c44; --txt:#e8eef7; --sub:#93a4bd;
+  --neon:#2eff8f; --neon2:#37c4ff; --warn:#ffb648; --bad:#ff5d6c; --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt);line-height:1.5;padding-bottom:72px}
+a{color:var(--neon2);text-decoration:none}
+button{font-family:inherit}
+/* ===== HEADER / NAV ===== */
+header{position:sticky;top:0;z-index:60;background:rgba(10,15,28,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:10px 16px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:17px;white-space:nowrap;cursor:pointer}
+.logo span b{color:var(--neon)}
+.tabwrap{display:none;margin-left:auto;gap:4px}
+.tablink{background:transparent;border:none;color:var(--sub);font-size:13px;font-weight:700;padding:8px 12px;border-radius:99px;cursor:pointer;white-space:nowrap}
+.tablink.on{background:#2eff8f1a;color:var(--neon)}
+#menuBtn{margin-left:auto;background:#ffffff0d;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-size:14px;font-weight:800;cursor:pointer}
+#menuBtn.on{border-color:var(--neon);color:var(--neon)}
+#drop{display:none;border-top:1px solid var(--line);background:rgba(13,20,36,.98);padding:8px 12px 12px;position:absolute;left:0;right:0}
+#drop.open{display:block}
+.ditem{display:flex;align-items:center;gap:12px;width:100%;background:transparent;border:none;color:var(--txt);text-align:left;padding:12px 12px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer}
+.ditem:active{background:#ffffff10}
+.ditem .ic{font-size:20px}
+.ditem small{display:block;color:var(--sub);font-size:12px;font-weight:500}
+.ditem.on{background:#2eff8f14;color:var(--neon)}
+@media(min-width:820px){.tabwrap{display:flex}#menuBtn,#drop{display:none!important}}
+/* ===== LAYOUT ===== */
+/* quiz */
+.qbar{height:8px;border-radius:99px;background:#1b2740;overflow:hidden;margin:14px 0}
+.qbar i{display:block;height:100%;background:var(--neon);transition:width .3s;border-radius:99px}
+.qopt{display:block;width:100%;text-align:left;background:#0d1526;border:1px solid var(--line);color:var(--txt);border-radius:12px;padding:13px 14px;font-size:14px;font-weight:600;margin-top:10px;cursor:pointer;transition:.15s}
+.qopt:hover{border-color:var(--neon);background:#2eff8f0d}
+.qres{text-align:center;padding:8px 0}
+.qres .em{font-size:52px}
+.qres h3{font-size:22px;font-weight:900;margin:6px 0}
+.qres p{color:var(--sub);font-size:14px;margin-bottom:6px}
+.qres .tags{justify-content:center}
+/* roles */
+.role{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:#0d152655}
+.role b{font-size:14px}
+.role p{font-size:13px;color:var(--sub);margin:4px 0 2px}
+.rline{font-size:12.5px;color:var(--sub);margin-top:6px}
+.rline b{color:var(--neon);font-weight:800}
+.rline.bad b{color:var(--bad)}
+.novo{display:inline-block;font-size:9.5px;font-weight:900;letter-spacing:.8px;background:var(--neon);color:#04160c;border-radius:99px;padding:2px 8px;vertical-align:middle;margin-left:6px}
+.rcard{position:relative;cursor:pointer}
+.rcard[data-go]:hover{border-color:var(--neon)}
+.dstars{color:var(--warn);letter-spacing:2px;font-size:13px}
+.page{display:none;max-width:1100px;margin:0 auto;padding:22px 16px 10px}
+.page.on{display:block}
+.page.on{display:block}
+.crumb{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--line);color:var(--sub);font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:99px;cursor:pointer;margin-bottom:14px}
+.crumb:hover{color:var(--neon);border-color:var(--neon)}
+.h2{font-size:clamp(20px,4.5vw,27px);font-weight:900;display:flex;align-items:center;gap:10px}
+.h2 .dot{width:10px;height:10px;border-radius:3px;background:var(--neon);box-shadow:0 0 12px var(--neon)}
+.lead{color:var(--sub);font-size:14px;margin:8px 0 18px;max-width:760px}
+/* ===== HOME ===== */
+.hero{padding:34px 4px 22px;text-align:center;background:radial-gradient(600px 260px at 50% -90px,#2eff8f22,transparent 70%)}
+.badge{display:inline-block;font-size:12px;font-weight:700;color:var(--neon);border:1px solid #2eff8f55;background:#2eff8f12;padding:5px 12px;border-radius:99px;margin-bottom:14px}
+.hero h1{font-size:clamp(26px,6.5vw,42px);font-weight:900;letter-spacing:-.5px}
+.hero h1 em{font-style:normal;color:var(--neon)}
+.hero p{color:var(--sub);max-width:620px;margin:12px auto 0;font-size:15px}
+.stats{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:16px 0 2px}
+.stat{font-size:12px;font-weight:700;color:var(--sub);background:#ffffff08;border:1px solid var(--line);padding:6px 12px;border-radius:99px}
+.stat b{color:var(--txt)}
+.mgrid{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin-top:14px}
+@media(min-width:700px){.mgrid{grid-template-columns:repeat(3,1fr)}}
+.mcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 16px;cursor:pointer;text-align:left;transition:.15s;color:var(--txt)}
+.mcard:hover{border-color:var(--neon);transform:translateY(-2px)}
+.mcard .ic{font-size:26px}
+.mcard b{display:block;font-size:15.5px;margin:8px 0 4px}
+.mcard span{font-size:12.5px;color:var(--sub);line-height:1.45;display:block}
+.mcard .go{color:var(--neon);font-size:12px;font-weight:800;display:block;margin-top:10px}
+/* ===== CARDS / CHIPS / FORMS ===== */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--sub);cursor:pointer}
+.chip.on{background:var(--neon);color:#04160c;border-color:var(--neon)}
+.chip.blue.on{background:var(--neon2);border-color:var(--neon2);color:#041322}
+input[type=search],select{width:100%;background:#0d1526;border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:10px 12px;font-size:14px;outline:none}
+input[type=search]:focus,select:focus{border-color:var(--neon)}
+label.lab{display:block;font-size:12px;font-weight:700;color:var(--sub);margin:0 0 5px;text-transform:uppercase;letter-spacing:.4px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:14px;padding:12px 20px;border-radius:12px;border:1px solid transparent;cursor:pointer;transition:.15s}
+.btn.p{background:var(--neon);color:#04160c}
+.btn.p:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn.g{background:transparent;color:var(--txt);border-color:var(--line)}
+.btn.g:hover{border-color:var(--neon)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.tcard h3{font-size:16px;font-weight:800;margin:2px 0}
+.tcard .by{font-size:12px;color:var(--sub)}
+.pitch{background:linear-gradient(180deg,#123524,#0d2519);border:1px solid #1f4432;border-radius:12px;margin:12px 0}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.tag{font-size:11px;font-weight:700;padding:4px 9px;border-radius:99px;background:#37c4ff18;color:var(--neon2);border:1px solid #37c4ff33}
+.tag.g{background:#2eff8f14;color:var(--neon);border-color:#2eff8f33}
+.tcard .row{display:flex;gap:8px;margin-top:12px}
+.tcard .row .btn{flex:1;justify-content:center;padding:10px 8px;font-size:13px}
+.sendcard{border:1.5px dashed #2eff8f55;background:#2eff8f0a;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;min-height:240px}
+.sendcard b{font-size:16px}
+.sendcard p{font-size:13px;color:var(--sub)}
+/* ===== ANALYZER ===== */
+.an-grid{display:grid;gap:16px}
+@media(min-width:920px){.an-grid{grid-template-columns:1.15fr .85fr}}
+.field{margin-bottom:12px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fgrid .full{grid-column:1/-1}
+.subh{font-size:13px;font-weight:900;color:var(--neon);margin:18px 0 10px;letter-spacing:.5px;text-transform:uppercase}
+.subh.b{color:var(--neon2)}
+.presets{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 8px}
+.presets .chip.on{background:var(--neon2);color:#041322;border-color:var(--neon2)}
+.score{font-size:44px;font-weight:900;line-height:1}
+.sbar{height:10px;border-radius:99px;background:#1b2740;overflow:hidden;margin:10px 0 4px}
+.sbar i{display:block;height:100%;border-radius:99px;background:var(--neon);transition:width .5s}
+.slab{font-size:12px;color:var(--sub)}
+.stylebox{margin-top:14px;padding:12px;border-radius:12px;background:#37c4ff0e;border:1px solid #37c4ff33}
+.stylebox b{color:var(--neon2)}
+.find{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #ffffff0d}
+.find:last-child{border:none}
+.find .ic{font-size:16px;line-height:1.2}
+.find .t{font-size:14px;font-weight:700}
+.find .d{font-size:13px;color:var(--sub)}
+.find.err .t{color:var(--bad)} .find.wrn .t{color:var(--warn)} .find.ok .t{color:var(--neon)}
+/* ===== SCOUT ===== */
+.filters{display:grid;gap:10px;grid-template-columns:1fr 1fr;margin-bottom:14px}
+.filters .full{grid-column:1/-1}
+@media(min-width:700px){.filters{grid-template-columns:2fr 1fr 1fr 1fr 1fr}}
+.scard .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.scard h3{font-size:16px;font-weight:800}
+.scard .club{font-size:12.5px;color:var(--sub);margin-bottom:8px}
+.price{font-weight:900;color:var(--neon);font-size:14px;white-space:nowrap;background:#2eff8f12;border:1px solid #2eff8f33;padding:4px 9px;border-radius:99px}
+.price.b{color:var(--neon2);background:#37c4ff12;border-color:#37c4ff33}
+.note{font-size:13px;color:var(--sub);margin-top:10px;border-top:1px solid #ffffff0d;padding-top:10px}
+.banner{grid-column:1/-1;background:linear-gradient(120deg,#2eff8f12,#37c4ff10);border:1px solid #2eff8f33}
+.banner b{color:var(--neon)}
+.banner p{font-size:13px;color:var(--sub);margin-top:6px;line-height:1.7}
+/* ===== DETAILS ===== */
+details{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+summary{padding:15px 16px;font-weight:800;font-size:14.5px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px}
+summary::before{content:'▸';color:var(--neon);transition:.2s}
+details[open] summary::before{transform:rotate(90deg)}
+details .in{padding:0 16px 16px;font-size:14px;color:var(--sub)}
+details .in ol, details .in ul{padding-left:20px;margin:8px 0}
+details .in li{margin:6px 0}
+code{background:#0d1526;border:1px solid var(--line);border-radius:6px;padding:2px 7px;font-size:12.5px;color:var(--neon)}
+.gterm{padding:10px 0;border-bottom:1px solid #ffffff0d}
+.gterm:last-child{border:none}
+.gterm b{color:var(--txt)} .gterm span{color:var(--sub);font-size:13.5px;display:block}
+/* roadmap */
+.rcard .num{font-size:11px;font-weight:900;color:var(--neon2);letter-spacing:1px;text-transform:uppercase}
+.rcard h3{font-size:16px;margin:6px 0}
+.rcard p{font-size:13.5px;color:var(--sub)}
+.rcard.soon{border-color:#37c4ff55}
+.pill{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.6px;padding:3px 9px;border-radius:99px;background:#37c4ff18;color:var(--neon2);text-transform:uppercase;margin-bottom:6px}
+/* footer */
+footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);font-size:13px;text-align:center;border-top:1px solid var(--line)}
+/* toast */
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,80px);background:#0c2317;border:1px solid var(--neon);color:var(--neon);font-weight:700;font-size:14px;padding:11px 18px;border-radius:12px;opacity:0;transition:.3s;z-index:99;pointer-events:none;box-shadow:0 8px 30px #000c}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+::selection{background:#2eff8f44}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <div class="logo" data-go="home">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#2eff8f" stroke-width="2"/><path d="M12 7l3 2.2-1.2 3.6h-3.6L9 9.2 12 7z" fill="#2eff8f"/><path d="M12 2v5M21.6 9l-4.6 1.4M17.8 20l-3-3.6M6.2 20l3-3.6M2.4 9L7 10.4" stroke="#2eff8f" stroke-width="1.4"/></svg>
+      <span>FM Touch <b>Lab</b></span>
+    </div>
+    <div class="tabwrap" id="tabwrap"></div>
+    <button id="menuBtn">☰ Menu</button>
+  </nav>
+  <div id="drop"></div>
+</header>
+
+<!-- ============ HOME ============ -->
+<main class="page on" id="home">
+  <div class="hero">
+    <div class="badge">⚽ FM Touch 21 · Base 2026 ✔ atualizado</div>
+    <h1>Domine o <em>FM Touch 21</em> no Android</h1>
+    <p>Escolha uma ferramenta no menu abaixo — cada uma abre em sua própria tela, sem rolagem infinita. 👇</p>
+    <div class="stats">
+      <span class="stat"><b>8</b> ferramentas</span>
+      <span class="stat"><b>29</b> atletas no radar</span>
+      <span class="stat"><b>31</b> papéis explicados</span>
+      <span class="stat"><b>30+</b> conflitos detectáveis</span>
+    </div>
+  </div>
+
+  <div class="mgrid">
+    <button class="mcard" data-go="quiz"><span class="ic">🎭</span><b>Quiz de Estilo<span class="novo">NOVO</span></b><span>6 perguntas pra descobrir sua alma tática — e saí com instruções prontas pro Analisador.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="analisador"><span class="ic">🧪</span><b>Analisador</b><span>Monte sua tática e descubra o que não bate — com nota de coerência e correções.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="taticas"><span class="ic">📤</span><b>Táticas</b><span>Galeria .fmf da comunidade separada por estilo: posse, contra-ataque, gegenpress...</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="scout"><span class="ic">💎</span><b>Scout</b><span>Bons e baratos atualizados pra base 2026: idades, clubes e preços atuais.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="papeis"><span class="ic">📚</span><b>Papéis<span class="novo">NOVO</span></b><span>31 funções do FM Touch explicadas: atributos-chave, combina e NÃO combina com quê.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="desafios"><span class="ic">💪</span><b>Desafios<span class="novo">NOVO</span></b><span>Saves pra zerar o jogo: do XI de €1 mi à dinastia do interior.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="guias"><span class="ic">📖</span><b>Guias</b><span>Como instalar .fmf no Android, dicionário de termos do FM e dicas rápidas.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="ideias"><span class="ic">🚀</span><b>Novidades</b><span>O que vem por aí: análise por print com IA, tática da semana e mais.</span><span class="go">Abrir →</span></button>
+  </div>
+</main>
+
+<!-- ============ TÁTICAS ============ -->
+<main class="page" id="taticas">
+  <button class="crumb" data-go="home">← Menu</button>
+  <div class="h2"><span class="dot"></span> Galeria de Táticas</div>
+  <p class="lead">Táticas <code>.fmf</code> enviadas pela comunidade, com formação, instruções e prints. Filtre pelo estilo — ou envie a sua pra aparecer aqui com seu nome!</p>
+
+  <div class="chips" id="tChips">
+    <button class="chip on" data-f="all">Todas</button>
+    <button class="chip" data-f="Posse de Bola">🧠 Posse</button>
+    <button class="chip" data-f="Contra-Ataque">⚡ Contra-Ataque</button>
+    <button class="chip" data-f="Gegenpress">🔥 Gegenpress</button>
+    <button class="chip" data-f="Jogo Direto">🎯 Jogo Direto</button>
+    <button class="chip" data-f="Retranca">🧱 Retranca</button>
+  </div>
+  <div class="field"><input type="search" id="tSearch" placeholder="🔎 Buscar por nome ou autor..."></div>
+  <div class="grid" id="tGrid"></div>
+</main>
+
+<!-- ============ ANALISADOR ============ -->
+<main class="page" id="analisador">
+  <button class="crumb" data-go="home">← Menu</button>
+  <div class="h2"><span class="dot"></span> Analisador de Tática</div>
+  <p class="lead">Monte sua tática do jeito que está no jogo e o Lab aponta <b>o que não combina</b>, o que pode dar problema e como corrigir. Comece por um exemplo:</p>
+
+  <div class="presets">
+    <span style="font-size:12px;font-weight:700;color:var(--sub)">Carregar exemplo:</span>
+    <button class="chip blue" data-preset="gegen">🔥 Gegenpress</button>
+    <button class="chip blue" data-preset="posse">🧠 Posse</button>
+    <button class="chip blue" data-preset="contra">⚡ Contra-ataque</button>
+    <button class="chip blue" data-preset="direto">🎯 Jogo direto</button>
+    <button class="chip blue" data-preset="retranca">🧱 Retranca</button>
+  </div>
+
+  <div class="an-grid">
+    <div class="card">
+      <div class="subh">🧩 Base</div>
+      <div class="fgrid">
+        <div class="full"><label class="lab">Formação</label><select id="f_form"></select></div>
+        <div class="full"><label class="lab">Mentalidade</label>
+          <select id="f_ment"><option value="0">Muito Defensiva</option><option value="1">Defensiva</option><option value="2">Cautelosa</option><option value="3" selected>Equilibrada</option><option value="4">Positiva</option><option value="5">Ofensiva</option><option value="6">Muito Ofensiva</option></select></div>
+      </div>
+
+      <div class="subh b">⚽ Com a bola</div>
+      <div class="fgrid">
+        <div><label class="lab">Largura</label>
+          <select id="f_larg"><option value="0">Muito Estreita</option><option value="1">Estreita</option><option value="2" selected>Equilibrada</option><option value="3">Ampla</option><option value="4">Muito Ampla</option></select></div>
+        <div><label class="lab">Tempo</label>
+          <select id="f_tempo"><option value="0">Muito Lento</option><option value="1">Lento</option><option value="2" selected>Equilibrado</option><option value="3">Rápido</option><option value="4">Muito Rápido</option></select></div>
+        <div><label class="lab">Passe</label>
+          <select id="f_passe"><option value="0">Muito Curto</option><option value="1">Curto</option><option value="2" selected>Equilibrado</option><option value="3">Direto</option><option value="4">Muito Direto</option></select></div>
+        <div><label class="lab">Cruzamentos</label>
+          <select id="f_cruz"><option value="0">Muito Menos</option><option value="1">Menos Frequentes</option><option value="2" selected>Equilibrado</option><option value="3">Mais Frequentes</option><option value="4">Muito Mais Frequentes</option></select></div>
+        <div><label class="lab">Foco da jogada</label>
+          <select id="f_foco"><option value="misto" selected>Equilibrado</option><option value="meio">Pelo meio</option><option value="pontas">Pelas pontas</option></select></div>
+        <div><label class="lab">Jogar a partir da defesa</label>
+          <select id="f_saida"><option value="nao" selected>Não</option><option value="sim">Sim</option></select></div>
+      </div>
+
+      <div class="subh b">🛡️ Sem a bola</div>
+      <div class="fgrid">
+        <div><label class="lab">Linha defensiva</label>
+          <select id="f_linhadef"><option value="0">Muito Atrás</option><option value="1">Atrás</option><option value="2" selected>Equilibrada</option><option value="3">Adiantada</option><option value="4">Muito Adiantada</option></select></div>
+        <div><label class="lab">Linha de confronto (bloco)</label>
+          <select id="f_bloco"><option value="0">Muito Baixo</option><option value="1">Baixo</option><option value="2" selected>Médio</option><option value="3">Alto</option><option value="4">Muito Alto</option></select></div>
+        <div><label class="lab">Intensidade de pressão</label>
+          <select id="f_press"><option value="0">Pouco Intensa</option><option value="1" selected>Equilibrada</option><option value="2">Intensa</option><option value="3">Muito Intensa</option></select></div>
+        <div><label class="lab">Apertar saída do goleiro</label>
+          <select id="f_pressgr"><option value="nao" selected>Não</option><option value="sim">Sim</option></select></div>
+      </div>
+
+      <div class="subh b">🔄 Em transição</div>
+      <div class="fgrid">
+        <div><label class="lab">Após perder a posse</label>
+          <select id="f_perda"><option value="nada" selected>Nenhuma</option><option value="recuar">Recuar pro campo de defesa</option><option value="cp">Contra-pressão</option></select></div>
+        <div><label class="lab">Após recuperar a posse</label>
+          <select id="f_rec"><option value="nada" selected>Nenhuma</option><option value="segurar">Segurar a bola</option><option value="contra">Contra-atacar</option></select></div>
+        <div><label class="lab">Distribuição do goleiro</label>
+          <select id="f_dist"><option value="curta" selected>Curta / para a defesa</option><option value="longa">Longa / lançamentos</option></select></div>
+        <div><label class="lab">Distribuir rapidamente</label>
+          <select id="f_rap"><option value="nao" selected>Não</option><option value="sim">Sim</option></select></div>
+      </div>
+
+      <div class="subh b">🎭 Papéis e graus</div>
+      <div class="fgrid">
+        <div><label class="lab">Atacante principal</label>
+          <select id="f_ca"><option value="avancado" selected>Avançado</option><option value="artilheiro">Finalizador (Poacher)</option><option value="referencia">Referência (Pivot)</option><option value="falso9">Falso 9</option><option value="nove">Nove e Meio</option><option value="pressing">Atacante de Pressão</option></select></div>
+        <div><label class="lab">Pontas</label>
+          <select id="f_pontas"><option value="cruza" selected>Cruzam (Extremos)</option><option value="corta">Cortam pra dentro (EI/AI)</option><option value="misto">Misto</option></select></div>
+        <div><label class="lab">Nº de jogadores em Ataque</label><select id="f_ga"></select></div>
+        <div><label class="lab">Nº em Apoio</label><select id="f_gs"></select></div>
+        <div><label class="lab">Nº em Defesa</label><select id="f_gd"></select></div>
+        <div style="display:flex;align-items:flex-end"><button class="btn p" style="width:100%;justify-content:center" onclick="analisar(true)">🧪 Analisar tática</button></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:14px"><div class="pitch" id="pitchBox" style="margin:0"></div></div>
+      <div class="card" id="resultBox">
+        <div class="slab">Ajuste as instruções e toque em <b style="color:var(--txt)">"Analisar tática"</b> — ou carregue um exemplo acima.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ============ SCOUT ============ -->
+<main class="page" id="scout">
+  <button class="crumb" data-go="home">← Menu</button>
+  <div class="h2"><span class="dot"></span> Scout: Bons e Baratos 2026</div>
+  <p class="lead">Radar atualizado pra <b>base 2026</b>: idades, clubes e valores de hoje. Custos são <b>estimativas</b> — podem variar conforme sua atualização e o save.</p>
+
+  <div class="filters">
+    <input type="search" id="sSearch" placeholder="🔎 Buscar jogador ou clube...">
+    <select id="sPos">
+      <option value="all">📍 Todas posições</option>
+      <option value="GOL">🧤 Goleiros</option>
+      <option value="DEF">🛡️ Defensores</option>
+      <option value="MEIO">⚙️ Volantes / Meias</option>
+      <option value="ATA">🎯 Atacantes / Pontas</option>
+      <option value="LIVRE">🆓 Livres / Empréstimo</option>
+    </select>
+    <select id="sPreco">
+      <option value="99">💰 Qualquer preço</option>
+      <option value="1">Até €1 mi</option>
+      <option value="2">Até €2 mi</option>
+      <option value="5">Até €5 mi</option>
+      <option value="10">Até €10 mi</option>
+    </select>
+    <select id="sIdade">
+      <option value="99">👶 Qualquer idade</option>
+      <option value="21">Até 21 anos</option>
+      <option value="24">Até 24 anos</option>
+      <option value="28">Até 28 anos</option>
+    </select>
+    <select id="sOrd">
+      <option value="preco">⬇️ Mais baratos</option>
+      <option value="idade">👶 Mais jovens</option>
+      <option value="nome">🔤 Nome (A-Z)</option>
+    </select>
+  </div>
+
+  <div class="grid" id="sGrid"></div>
+</main>
+
+<!-- ============ QUIZ ============ -->
+<main class="page" id="quiz">
+  <button class="crumb" data-go="home">← Menu</button>
+  <div class="h2"><span class="dot"></span> Quiz: Qual é o seu estilo?</div>
+  <p class="lead">6 perguntas rápidas pra descobrir sua alma tática — no final, você sai com as instruções prontas pra testar no Analisador e a lista de atributos pra recrutar.</p>
+  <div class="card" id="quizBox"></div>
+</main>
+
+<!-- ============ PAPÉIS ============ -->
+<main class="page" id="papeis">
+  <button class="crumb" data-go="home">← Menu</button>
+  <div class="h2"><span class="dot"></span> Guia de Papéis & Funções</div>
+  <p class="lead">Cada papel do FM Touch explicado: o que faz, quais <b>atributos-chave</b> olhar no scout, com o que <b style="color:var(--neon)">combina</b> e o que <b style="color:var(--bad)">evitar</b>. Toque num setor pra abrir.</p>
+  <div id="rolesBox"></div>
+</main>
+
+<!-- ============ DESAFIOS ============ -->
+<main class="page" id="desafios">
+  <button class="crumb" data-go="home">← Menu</button>
+  <div class="h2"><span class="dot"></span> Saves Desafio</div>
+  <p class="lead">Zerou o save e não sabe o que fazer? Escolha um desafio, posta o resultado no grupo e carimba seu nome na história. 🏆</p>
+  <div class="grid">
+    <div class="card rcard"><div class="dstars">★★★★★</div><h3>💶 O XI de €1 milhão</h3><p>Monte um elenco campeão gastando no máximo <b>€1 mi por jogador</b>. Empréstimos com obrigação não valem — tem que ser compra em definitivo.</p></div>
+    <div class="card rcard"><div class="dstars">★★★★☆</div><h3>⛰️ Dinastia do Interior</h3><p>Pegue um time pequeno fora do eixo (Série C/D ou equivalente) e transforme em potência nacional sem sair dele. Cada título conta um capítulo.</p></div>
+    <div class="card rcard"><div class="dstars">★★★☆☆</div><h3>🇧🇷 Canarinho 100%</h3><p>Só jogadores brasileiros no elenco, do goleiro ao reserva do reserva. Vale garoto da base — na verdade, a base é o caminho.</p></div>
+    <div class="card rcard"><div class="dstars">★★★★☆</div><h3>🚫 Modo Interdito</h3><p>Proibido contratar no primeiro ano. Sobreviva com o que tem, desenvolva a base e só abra o cofre na segunda janela da segunda temporada.</p></div>
+    <div class="card rcard"><div class="dstars">★★★★★</div><h3>👑 O Penta</h3><p>Cinco títulos nacionais seguidos com o mesmo time. Se perder um, zera o desafio. Musiquinha de "é campeão" em looping eterno.</p></div>
+    <div class="card rcard"><div class="dstars">★★★☆☆</div><h3>🆓 Mercadores do Free</h3><p>Monte o time titular INTEIRO só com jogadores livres (sem contrato). Nosso Scout já tem uns nomes pra começar 👀</p></div>
+  </div>
+  <p class="lead" style="margin-top:16px">Completou algum? Envia print do troféu pelo formulário na aba <a href="#" data-go="taticas"><b>Táticas</b></a> que a gente coloca no mural! 📸</p>
+</main>
+
+<!-- ============ GUIAS ============ -->
+<main class="page" id="guias">
+  <button class="crumb" data-go="home">← Menu</button>
+  <div class="h2"><span class="dot"></span> Guias Rápidos</div>
+  <p class="lead">Tutoriais direto ao ponto pra aproveitar o site e o jogo no Android.</p>
+
+  <details>
+    <summary>📲 Como instalar uma tática .fmf no Android</summary>
+    <div class="in">
+      <ol>
+        <li>Baixe o arquivo <code>.fmf</code> (pelo link da galeria ou Google Drive).</li>
+        <li>Abra um gerenciador de arquivos (ex: app "Arquivos" do Google).</li>
+        <li>Mova o arquivo para: <code>Documentos/Sports Interactive/Football Manager Touch 2021/normal/tactics</code> — se a pasta <code>tactics</code> não existir, crie ela.</li>
+        <li>No jogo, vá em <b>Táticas → Gerenciar/Carregar</b> e selecione a tática importada.</li>
+      </ol>
+      <p><b>Dica:</b> o nome da pasta pode variar conforme a versão/atualização. Se não achar, procure a pasta do jogo dentro de Documentos e crie a pasta <code>tactics</code> lá dentro.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>📤 Como enviar sua tática pra comunidade</summary>
+    <div class="in">
+      <ol>
+        <li>Tire prints de: <b>Formação/elenco</b>, <b>Com a bola</b>, <b>Em transição</b>, <b>Sem a bola</b> (e resultados, se quiser provar que funciona 😄).</li>
+        <li>Exporte o <code>.fmf</code> ou suba os arquivos num Google Drive.</li>
+        <li>Preencha o formulário do botão <b>"Enviar minha tática"</b> com: nome da tática, formação, estilo, seu nick, prints e link do .fmf.</li>
+        <li>A gente revisa e publica na galeria com seu crédito!</li>
+      </ol>
+    </div>
+  </details>
+
+  <details>
+    <summary>📖 Mini dicionário de termos do FM</summary>
+    <div class="in">
+      <div class="gterm"><b>Gegenpress</b><span>Pressionar loucamente logo após perder a bola, pra recuperar em segundos. Exige bloco alto e muita Resistência do elenco.</span></div>
+      <div class="gterm"><b>Contra-pressão</b><span>Instrução de transição: ao perder a posse, os jogadores cercam quem recebeu a bola em vez de recuar.</span></div>
+      <div class="gterm"><b>Bloco (linha de confronto)</b><span>Onde seu time começa a pressionar. Bloco baixo = perto da sua área; bloco alto = no campo dele.</span></div>
+      <div class="gterm"><b>Linha defensiva</b><span>Onde seus zagueiros se posicionam. Adiantada comprime o campo, mas exige zagueiros rápidos.</span></div>
+      <div class="gterm"><b>Tiki-Taka</b><span>Posse com passes curtos e paciência, cansando o adversário até abrir espaço.</span></div>
+      <div class="gterm"><b>Finalizador (Poacher)</b><span>Atacante que vive dentro da área só pra empurrar pra rede. Pouco participa da construção.</span></div>
+      <div class="gterm"><b>Falso 9</b><span>Atacante que recua pro meio, criando superioridade e deixando os pontas atacarem a área.</span></div>
+      <div class="gterm"><b>Referência (Pivot)</b><span>Caminhão lá na frente: segura de costas, ganha no alto e alimenta quem chega.</span></div>
+      <div class="gterm"><b>Extremo Invertido</b><span>Ponta de lado "trocado" (destro na esquerda) que corta pra dentro pra finalizar.</span></div>
+      <div class="gterm"><b>Enganche</b><span>Meia clássico: para no meio, recebe e distribui. Precisa de time girando em volta.</span></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>🎮 Dicas rápidas de FM Touch 21 no celular</summary>
+    <div class="in">
+      <ul>
+        <li><b>Cansaço manda:</b> pressão intensa + temporada longa = elenco morto em fevereiro. Faça rodízio ou use reposição.</li>
+        <li><b>Olhe os atributos-chave do papel</b>, não a estrela: um 3★ certo rende mais que um 4★ errado.</li>
+        <li><b>Jovem precisa jogar:</b> wonderkid no banco não evolui. Empréstimo com "titular garantido" vale ouro.</li>
+        <li><b>Pré-temporada:</b> agende amistosos fracos pra entrosar a tática nova e subir a moral.</li>
+      </ul>
+    </div>
+  </details>
+</main>
+
+<!-- ============ NOVIDADES ============ -->
+<main class="page" id="ideias">
+  <button class="crumb" data-go="home">← Menu</button>
+  <div class="h2"><span class="dot"></span> Próximas Novidades</div>
+  <p class="lead">O que estamos preparando pro Lab (da comunidade pra comunidade):</p>
+  <div class="grid">
+    <div class="card rcard" data-go="quiz"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Ferramenta</div><h3>🎭 Quiz de Estilo</h3><p>Descubra sua alma tática em 6 perguntas e saia com instruções prontas. Já disponível!</p></div>
+    <div class="card rcard" data-go="papeis"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Conteúdo</div><h3>📚 Guia de Papéis</h3><p>31 funções explicadas com atributos-chave e combinações. Já disponível!</p></div>
+    <div class="card rcard" data-go="desafios"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Conteúdo</div><h3>💪 Saves Desafio</h3><p>Seis desafios com nível de dificuldade pra zerar o jogo. Já disponível!</p></div>
+    <div class="card rcard soon"><span class="pill">Em breve</span><div class="num">Fase 2</div><h3>🤖 Análise de tática por prints</h3><p>Envie só os prints da sua tática e a IA lê formação, papéis e instruções automaticamente, apontando os conflitos. Por enquanto, use o Analisador manual — mesma lógica!</p></div>
+    <div class="card rcard"><div class="num">Comunidade</div><h3>🏆 Tática da semana</h3><p>Votação aberta na melhor tática enviada, com destaque na página inicial e badge pro autor.</p></div>
+    <div class="card rcard"><div class="num">Comunidade</div><h3>💬 Grupo da comunidade</h3><p>Espaço pra trocar save, tática e dica — comentários nas táticas e grupo no WhatsApp/Discord.</p></div>
+  </div>
+</main>
+
+<footer>
+  <p><b style="color:var(--txt)">FM Touch Lab</b> — feito com 💚 pela comunidade FM Touch 21.<br>
+  Projeto de fãs, sem vínculo com a Sports Interactive/SEGA.</p>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+'use strict';
+/* ============ CONFIG — EDITE AQUI ============ */
+const CONFIG = {
+  formsUrl: 'https://forms.gle/SEU_FORM_AQUI',   // link do Google Forms para envio de táticas
+  whatsapp: 'https://wa.me/5500000000000'         // (opcional) seu WhatsApp para envio direto
+};
+
+/* ============ NAVEGAÇÃO (MENU / ABAS) ============ */
+const PAGES=[
+ ['home','🏠 Início','Todas as ferramentas'],
+ ['taticas','📤 Táticas','Galeria .fmf por estilo'],
+ ['analisador','🧪 Analisador','Diagnóstico da sua tática'],
+ ['quiz','🎭 Quiz de Estilo','Descubra sua alma tática'],
+ ['scout','💎 Scout','Bons e baratos 2026'],
+ ['papeis','📚 Papéis','Guia de funções e atributos'],
+ ['desafios','💪 Desafios','Saves pra zerar o jogo'],
+ ['guias','📖 Guias','Tutoriais e dicas'],
+ ['ideias','🚀 Novidades','Roadmap do Lab']
+];
+const validPages=PAGES.map(p=>p[0]);
+const tabwrap=document.getElementById('tabwrap'), drop=document.getElementById('drop'), menuBtn=document.getElementById('menuBtn');
+PAGES.forEach(([id,label,desc])=>{
+  const b=document.createElement('button'); b.className='tablink'; b.dataset.go=id; b.textContent=label; tabwrap.appendChild(b);
+  const d=document.createElement('button'); d.className='ditem'; d.dataset.go=id;
+  const [ic,...rest]=label.split(' ');
+  d.innerHTML=`<span class="ic">${ic}</span><span>${rest.join(' ')}<small>${desc}</small></span>`;
+  drop.appendChild(d);
+});
+function go(id){
+  if(!validPages.includes(id)) id='home';
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===id));
+  document.querySelectorAll('[data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
+  drop.classList.remove('open'); menuBtn.classList.remove('on'); menuBtn.textContent='☰ Menu';
+  window.scrollTo(0,0);
+  if(('#'+id)!==location.hash) history.replaceState(null,'','#'+id);
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');
+  if(g){e.preventDefault(); go(g.dataset.go);}
+});
+menuBtn.addEventListener('click',e=>{
+  e.stopPropagation();
+  const open=drop.classList.toggle('open'); menuBtn.classList.toggle('on',open);
+  menuBtn.textContent=open?'✕ Fechar':'☰ Menu';
+});
+document.addEventListener('click',e=>{ if(!e.target.closest('#drop')&&!e.target.closest('#menuBtn')){drop.classList.remove('open');menuBtn.classList.remove('on');menuBtn.textContent='☰ Menu';}});
+window.addEventListener('hashchange',()=>go(location.hash.replace('#','')||'home'));
+go(location.hash.replace('#','')||'home');
+
+/* ============ FORMAÇÕES ============ */
+const FORMS = {
+ '4231':  {label:'4-2-3-1', wide:true,  wb:false, dm:true,  narrow:false, back3:false,
+   pts:[[50,6,'GR'],[18,22,'LD'],[38,20,'ZAG'],[62,20,'ZAG'],[82,22,'LE'],[35,42,'VOL'],[65,42,'VOL'],[20,60,'PE'],[50,62,'MEI'],[80,60,'PD'],[50,84,'ATA']]},
+ '433':   {label:'4-3-3',   wide:true,  wb:false, dm:false, narrow:false, back3:false,
+   pts:[[50,6,'GR'],[18,22,'LD'],[38,20,'ZAG'],[62,20,'ZAG'],[82,22,'LE'],[30,48,'MC'],[50,52,'MC'],[70,48,'MC'],[20,68,'PE'],[80,68,'PD'],[50,84,'ATA']]},
+ '442':   {label:'4-4-2',   wide:true,  wb:false, dm:false, narrow:false, back3:false,
+   pts:[[50,6,'GR'],[18,22,'LD'],[38,20,'ZAG'],[62,20,'ZAG'],[82,22,'LE'],[18,52,'MD'],[38,52,'MC'],[62,52,'MC'],[82,52,'ME'],[38,82,'ATA'],[62,82,'ATA']]},
+ '4411':  {label:'4-4-1-1', wide:true,  wb:false, dm:false, narrow:false, back3:false,
+   pts:[[50,6,'GR'],[18,22,'LD'],[38,20,'ZAG'],[62,20,'ZAG'],[82,22,'LE'],[18,52,'MD'],[38,52,'MC'],[62,52,'MC'],[82,52,'ME'],[50,72,'SA'],[50,86,'ATA']]},
+ '4141':  {label:'4-1-4-1', wide:true,  wb:false, dm:true,  narrow:false, back3:false,
+   pts:[[50,6,'GR'],[18,22,'LD'],[38,20,'ZAG'],[62,20,'ZAG'],[82,22,'LE'],[50,40,'VOL'],[18,58,'MD'],[38,58,'MC'],[62,58,'MC'],[82,58,'ME'],[50,84,'ATA']]},
+ '4312':  {label:'4-3-1-2', wide:false, wb:false, dm:false, narrow:true,  back3:false,
+   pts:[[50,6,'GR'],[18,22,'LD'],[38,20,'ZAG'],[62,20,'ZAG'],[82,22,'LE'],[30,48,'MC'],[50,52,'MC'],[70,48,'MC'],[50,68,'MEI'],[38,84,'ATA'],[62,84,'ATA']]},
+ '41212': {label:'4-4-2 Losango', wide:false, wb:false, dm:true, narrow:true, back3:false,
+   pts:[[50,6,'GR'],[18,22,'LD'],[38,20,'ZAG'],[62,20,'ZAG'],[82,22,'LE'],[50,40,'VOL'],[32,56,'MC'],[68,56,'MC'],[50,70,'MEI'],[38,84,'ATA'],[62,84,'ATA']]},
+ '532':   {label:'5-3-2',   wide:false, wb:true,  dm:false, narrow:true,  back3:true,
+   pts:[[50,6,'GR'],[14,28,'ALD'],[30,20,'ZAG'],[50,17,'ZAG'],[70,20,'ZAG'],[86,28,'ALE'],[30,50,'MC'],[50,54,'MC'],[70,50,'MC'],[38,82,'ATA'],[62,82,'ATA']]},
+ '523':   {label:'5-2-3',   wide:true,  wb:true,  dm:false, narrow:false, back3:true,
+   pts:[[50,6,'GR'],[14,28,'ALD'],[30,20,'ZAG'],[50,17,'ZAG'],[70,20,'ZAG'],[86,28,'ALE'],[38,50,'MC'],[62,50,'MC'],[22,68,'PE'],[78,68,'PD'],[50,86,'ATA']]},
+ '352':   {label:'3-5-2',   wide:false, wb:true,  dm:false, narrow:true,  back3:true,
+   pts:[[50,6,'GR'],[30,20,'ZAG'],[50,17,'ZAG'],[70,20,'ZAG'],[14,48,'ALD'],[86,48,'ALE'],[35,54,'MC'],[50,58,'MC'],[65,54,'MC'],[38,84,'ATA'],[62,84,'ATA']]},
+ '3421':  {label:'3-4-2-1', wide:true,  wb:false, dm:false, narrow:false, back3:true,
+   pts:[[50,6,'GR'],[30,20,'ZAG'],[50,17,'ZAG'],[70,20,'ZAG'],[14,50,'MD'],[36,50,'MC'],[64,50,'MC'],[86,50,'ME'],[35,72,'MEI'],[65,72,'MEI'],[50,88,'ATA']]},
+ '343':   {label:'3-4-3',   wide:true,  wb:false, dm:false, narrow:false, back3:true,
+   pts:[[50,6,'GR'],[30,20,'ZAG'],[50,17,'ZAG'],[70,20,'ZAG'],[14,50,'MD'],[36,50,'MC'],[64,50,'MC'],[86,50,'ME'],[24,72,'PE'],[76,72,'PD'],[50,88,'ATA']]},
+ '424':   {label:'4-2-4',   wide:true,  wb:false, dm:false, narrow:false, back3:false,
+   pts:[[50,6,'GR'],[18,22,'LD'],[38,20,'ZAG'],[62,20,'ZAG'],[82,22,'LE'],[38,44,'MC'],[62,44,'MC'],[20,66,'PE'],[80,66,'PD'],[38,86,'ATA'],[62,86,'ATA']]}
+};
+const PX = x => 6 + x*0.88, PY = y => 112 - y*1.04;
+function pitchSVG(formKey, labels, color){
+  const f = FORMS[formKey]; color = color || '#2eff8f';
+  let dots = '';
+  f.pts.forEach(p=>{
+    dots += `<circle cx="${PX(p[0]).toFixed(1)}" cy="${PY(p[1]).toFixed(1)}" r="3.2" fill="${color}" stroke="#04160c" stroke-width="1"/>`;
+    if(labels) dots += `<text x="${PX(p[0]).toFixed(1)}" y="${(PY(p[1])-5.5).toFixed(1)}" font-size="4.4" font-weight="700" fill="#cfe8d8" text-anchor="middle">${p[2]}</text>`;
+  });
+  return `<svg viewBox="0 0 100 120" style="width:100%;display:block">
+    <rect x="6" y="8" width="88" height="104" rx="2" fill="none" stroke="#ffffff22" stroke-width=".8"/>
+    <line x1="6" y1="60" x2="94" y2="60" stroke="#ffffff22" stroke-width=".8"/>
+    <circle cx="50" cy="60" r="9" fill="none" stroke="#ffffff22" stroke-width=".8"/>
+    <rect x="28" y="8" width="44" height="20" fill="none" stroke="#ffffff22" stroke-width=".8"/>
+    <rect x="40" y="8" width="20" height="8" fill="none" stroke="#ffffff22" stroke-width=".8"/>
+    <rect x="28" y="92" width="44" height="20" fill="none" stroke="#ffffff22" stroke-width=".8"/>
+    <rect x="40" y="104" width="20" height="8" fill="none" stroke="#ffffff22" stroke-width=".8"/>
+    ${dots}</svg>`;
+}
+
+/* ============ TOAST / COPIAR ============ */
+let toastT;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200);
+}
+function copyText(txt, ok){
+  (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(
+    ()=>toast(ok||'📋 Copiado!'),
+    ()=>{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(ok||'📋 Copiado!')}catch(e){toast('Não consegui copiar 😕')}document.body.removeChild(ta);}
+  );
+}
+
+/* ============ GALERIA DE TÁTICAS ============ */
+const TACTICS = [
+ {t:'Sufoco Total', form:'4231', estilos:['Gegenpress'], autor:'FM Touch Lab',
+  nota:'Pressão alta, contra-pressão e transição em velocidade. Feita pra elencos jovens com Resistência alta — o sufoco é o plano de jogo.',
+  inst:['Linha adiantada','Bloco alto','Contra-pressão','Pressão intensa','Reposição rápida'], link:'#'},
+ {t:'Tiki-Taka da Quebrada', form:'433', estilos:['Posse de Bola'], autor:'FM Touch Lab',
+  nota:'Posse paciente saindo desde a defesa, muitos graus de Apoio e paciência pra abrir o espaço. Pra quem gosta do jogo nos pés.',
+  inst:['Tempo lento','Passes curtos','Jogar da defesa','Segurar a bola'], link:'#'},
+ {t:'Raio Catimbeiro', form:'523', estilos:['Contra-Ataque','Retranca'], autor:'FM Touch Lab',
+  nota:'Cinco atrás, bloco baixo e três flechas na frente. Sofre pouco, castiga muito. Pedal de coisa feia nos 90 minutos incluso.',
+  inst:['Linha atrás','Bloco baixo','Contra-atacar','Distribuição longa'], link:'#'}
+];
+let tFilter='all';
+function renderTactics(){
+  const q=(document.getElementById('tSearch').value||'').toLowerCase();
+  const g=document.getElementById('tGrid');
+  let html='';
+  TACTICS.forEach((tc,i)=>{
+    if(tFilter!=='all' && !tc.estilos.includes(tFilter)) return;
+    if(q && !(tc.t.toLowerCase().includes(q)||tc.autor.toLowerCase().includes(q))) return;
+    const tags = tc.estilos.map(e=>`<span class="tag g">${e}</span>`).join('') + tc.inst.map(s=>`<span class="tag">${s}</span>`).join('');
+    html += `<div class="card tcard">
+      <h3>${tc.t}</h3>
+      <div class="by">${FORMS[tc.form].label} · por <b style="color:var(--txt)">${tc.autor}</b></div>
+      <div class="pitch">${pitchSVG(tc.form,false)}</div>
+      <p style="font-size:13.5px;color:var(--sub)">${tc.nota}</p>
+      <div class="tags">${tags}</div>
+      <div class="row">
+        <a class="btn p" href="${tc.link}" onclick="if(this.getAttribute('href')==='#'){toast('Envie sua tática pelo botão abaixo 📤');return false}">⬇️ Baixar .fmf</a>
+        <button class="btn g" onclick="copyTactic(${i})">📋 Resumo</button>
+      </div>
+    </div>`;
+  });
+  html += `<div class="card sendcard">
+    <div style="font-size:38px">📤</div>
+    <b>Sua tática merece um lugar aqui!</b>
+    <p>Envie o .fmf + os prints (formação, com/sem bola, transição) e apareça na galeria com seu nick.</p>
+    <a class="btn p" href="${CONFIG.formsUrl}" target="_blank" rel="noopener">Enviar minha tática</a>
+  </div>`;
+  g.innerHTML=html;
+}
+function copyTactic(i){
+  const tc=TACTICS[i];
+  copyText(`⚽ TÁTICA — ${tc.t}\n📐 Formação: ${FORMS[tc.form].label}\n🏷️ Estilo: ${tc.estilos.join(', ')}\n📝 ${tc.nota}\n⚙️ Instruções: ${tc.inst.join(' · ')}\n👤 Autor: ${tc.autor}\nvia FM Touch Lab`);
+}
+document.getElementById('tChips').addEventListener('click',e=>{
+  if(e.target.dataset.f===undefined)return;
+  document.querySelectorAll('#tChips .chip').forEach(c=>c.classList.remove('on'));
+  e.target.classList.add('on'); tFilter=e.target.dataset.f; renderTactics();
+});
+document.getElementById('tSearch').addEventListener('input',renderTactics);
+
+/* ============ ANALISADOR ============ */
+(function initAnalyzer(){
+  const fs=document.getElementById('f_form');
+  for(const k in FORMS) fs.innerHTML+=`<option value="${k}">${FORMS[k].label}</option>`;
+  [['f_ga',3],['f_gs',5],['f_gd',2]].forEach(([id,def])=>{
+    const s=document.getElementById(id);
+    for(let i=0;i<=10;i++) s.innerHTML+=`<option value="${i}" ${i===def?'selected':''}>${i}</option>`;
+  });
+  fs.addEventListener('change',()=>{document.getElementById('pitchBox').innerHTML=pitchSVG(fs.value,true);});
+  document.getElementById('pitchBox').innerHTML=pitchSVG('4231',true);
+})();
+
+const PRESETS={
+ gegen:{form:'4231',ment:4,larg:2,tempo:2,passe:1,cruz:2,foco:'misto',saida:'sim',linhadef:3,bloco:3,press:2,pressgr:'sim',perda:'cp',rec:'contra',dist:'curta',rap:'sim',ga:3,gs:5,gd:2,ca:'pressing',pontas:'corta'},
+ posse:{form:'433',ment:4,larg:3,tempo:1,passe:1,cruz:1,foco:'misto',saida:'sim',linhadef:3,bloco:3,press:2,pressgr:'nao',perda:'cp',rec:'segurar',dist:'curta',rap:'nao',ga:2,gs:6,gd:2,ca:'falso9',pontas:'corta'},
+ contra:{form:'523',ment:1,larg:2,tempo:3,passe:3,cruz:2,foco:'misto',saida:'nao',linhadef:1,bloco:1,press:1,pressgr:'nao',perda:'recuar',rec:'contra',dist:'longa',rap:'sim',ga:1,gs:4,gd:5,ca:'avancado',pontas:'corta'},
+ direto:{form:'442',ment:3,larg:2,tempo:3,passe:4,cruz:3,foco:'pontas',saida:'nao',linhadef:2,bloco:2,press:1,pressgr:'nao',perda:'recuar',rec:'contra',dist:'longa',rap:'nao',ga:2,gs:5,gd:3,ca:'referencia',pontas:'cruza'},
+ retranca:{form:'532',ment:1,larg:1,tempo:2,passe:3,cruz:1,foco:'misto',saida:'nao',linhadef:0,bloco:0,press:1,pressgr:'nao',perda:'recuar',rec:'contra',dist:'longa',rap:'nao',ga:1,gs:4,gd:5,ca:'referencia',pontas:'cruza'}
+};
+function applyPreset(key){
+  const p=PRESETS[key]; if(!p)return;
+  const set=(id,v)=>{document.getElementById(id).value=v};
+  set('f_form',p.form);set('f_ment',p.ment);set('f_larg',p.larg);set('f_tempo',p.tempo);
+  set('f_passe',p.passe);set('f_cruz',p.cruz);set('f_foco',p.foco);set('f_saida',p.saida);
+  set('f_linhadef',p.linhadef);set('f_bloco',p.bloco);set('f_press',p.press);set('f_pressgr',p.pressgr);
+  set('f_perda',p.perda);set('f_rec',p.rec);set('f_dist',p.dist);set('f_rap',p.rap);
+  set('f_ga',p.ga);set('f_gs',p.gs);set('f_gd',p.gd);set('f_ca',p.ca);set('f_pontas',p.pontas);
+  document.getElementById('pitchBox').innerHTML=pitchSVG(p.form,true);
+  analisar(true);
+}
+window.applyPreset=applyPreset;
+document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>applyPreset(b.dataset.preset)));
+
+function analisar(scroll){
+  const v=id=>document.getElementById(id).value;
+  const ment=+v('f_ment'),larg=+v('f_larg'),tempo=+v('f_tempo'),passe=+v('f_passe'),cruz=+v('f_cruz'),
+        linhadef=+v('f_linhadef'),bloco=+v('f_bloco'),press=+v('f_press'),
+        ga=+v('f_ga'),gs=+v('f_gs'),gd=+v('f_gd');
+  const foco=v('f_foco'),saida=v('f_saida'),pressgr=v('f_pressgr'),perda=v('f_perda'),
+        rec=v('f_rec'),dist=v('f_dist'),rap=v('f_rap'),ca=v('f_ca'),pontas=v('f_pontas');
+  const F=FORMS[v('f_form')];
+  const err=[],wrn=[],ok=[];
+  const st={posse:0,contra:0,gegen:0,direto:0};
+
+  /* --- graus --- */
+  if(ga+gs+gd!==10) err.push(['Graus não fecham','A soma de jogadores em Ataque + Apoio + Defesa precisa ser 10 (11 menos o goleiro). Agora está '+ (ga+gs+gd) +'.']);
+  else{
+    if(gd===0) wrn.push(['Ninguém segurando atrás','Sem nenhum grau de Defesa, ninguém "fica em casa" nas transições. Deixe pelo menos 2 (em geral, seus zagueiros).']);
+    if(ga===0) wrn.push(['Quem finaliza?','Sem grau de Ataque, quase ninguém ataca a área: muita posse, pouco gol. Coloque 2-3 jogadores em Ataque.']);
+    if(ga>=6&&ment<=2) err.push(['Time partido','Muitos graus de Ataque numa mentalidade reativa deixam um buraco gigante no meio. Segure para 1-3 em Ataque.']);
+    if(ment>=5&&ga<=1) wrn.push(['Muita vontade, pouca gente','Mentalidade ofensiva com 1 ou nenhum jogador em Ataque costuma gerar posse estéril e chutes de longe.']);
+  }
+
+  /* --- pressão x bloco x linha --- */
+  if(perda==='cp'){
+    if(bloco<=1) err.push(['Contra-pressão longe da bola','Contra-pressão com bloco recuado não funciona: seus jogadores estão longe demais pra cercar quem recebe. Use "Recuar" ou suba o bloco.']);
+    if(press===0) wrn.push(['Contra-pressão mansa','Contra-pressão com pressão "Pouco Intensa" perde força. Combine com Intensa ou Muito Intensa.']);
+    if(linhadef<=1) wrn.push(['Buraco entre a pressão e a zaga','Contra-pressionando lá em cima com a linha muito atrás, o meio fica deserto pós-recuperação. Suba a linha defensiva.']);
+  }
+  if(linhadef>=3&&bloco<=1) err.push(['Zaga exposta + time recuado','Linha adiantada com bloco baixo deixa a defesa pendurada e o time longe — espaço nas costas E time esticado. Alinhe os dois.']);
+  if(bloco-linhadef>=2) err.push(['Vale no meio-campo','Linha de confronto muito acima da linha defensiva: o adversário recebe livre entre suas linhas. Diminua a distância.']);
+  if(linhadef===4) wrn.push(['Linha muito adiantada','Só funciona com zagueiros velozes e goleiro que sai do gol. Com jogadores lentos, baixe um nível.']);
+  if(pressgr==='sim'&&bloco<=1) wrn.push(['Atacante sozinho no press','Apertar a saída do goleiro com bloco recuado deixa seus atacantes 4x1 contra a zaga deles. Só vale com bloco Médio/Alto.']);
+  if(perda==='cp'&&bloco>=3&&press>=2&&linhadef>=3){ok.push(['Sufoco bem armado','Contra-pressão + bloco alto + pressão intensa + linha adiantada: núcleo correto de Gegenpress.'+ (pressgr==='sim'?'':' Considere apertar a saída do goleiro também.')]);st.gegen+=4;}
+
+  /* --- transição / saída de bola --- */
+  if(saida==='sim'&&dist==='longa') err.push(['Saída curta com chutão','"Jogar a partir da defesa" pede passe curto do goleiro, mas você manda ele estourar lançamentos. Escolha um dos dois.']);
+  if(rec==='segurar'&&rap==='sim') err.push(['Distribuir rápido pra quê?','Repor rápido, mas ao recuperar a posse o time segura a bola? Ou é transição rápida (Contra-atacar) ou é calma — os dois não rolam.']);
+  if(rec==='contra'){
+    st.contra+=3;
+    if(tempo<=1) wrn.push(['Motor V8 com ré engatada','Contra-atacar com tempo Muito Lento/Lento faz o time cadenciar quando devia acelerar. Suba o tempo ou remova o "Contra-atacar".']);
+    if(ment<=2&&bloco<=1) ok.push(['Tradicional arma mortal','Mentalidade reativa + bloco recuado + contra-atacar: o clássico "sofrer pouco e matar no raio".']);
+    if(rap==='sim'||dist==='longa') st.contra+=2;
+  }
+
+  /* --- com a bola --- */
+  if(passe<=1) st.posse+2; else if(passe===2) st.posse+=1;
+  if(tempo<=1&&passe<=1&&saida==='sim'){ok.push(['Núcleo de posse completo','Tempo baixo + passe curto + saída desde a defesa: estrutura correta de Tiki-Taka.']);st.posse+=2;}
+  if(rec==='segurar') st.posse+=2;
+  if(saida==='sim') st.posse+=1;
+  if(passe>=3) st.direto+=2;
+  if(passe>=3&&rec==='segurar') wrn.push(['Quer posse ou quer rifar?','Passe direto com "Segurar a bola" se contradiz: a bola vai e volta. Passe curto/misto combina mais com posse.']);
+  if(passe===4&&ment>=5) wrn.push(['Urgência demais','Passe Muito Direto com mentalidade ofensiva = todos forçando lançamento. Sem uma Referência boa no alto, é doação de bola.']);
+
+  /* --- cruzamentos / pontas / largura --- */
+  if(cruz>=3){
+    if(ca==='falso9') wrn.push(['Pra quem você cruza?','Chuva de cruzamento com Falso 9 recuado é bola pro zagueiro afastar. Use Avançado/Finalizador/Referência — ou corte os cruzamentos.']);
+    if(ca==='referencia') ok.push(['Alvo na área','Cruzamentos frequentes alimentam sua Referência: combinação clássica e letal.']);
+    if(!F.wide&&!F.wb) wrn.push(['Cruzamento da onde?','Formação sem homens de lado com muitos cruzamentos: vai sobrar pro lateral cruzar, e a zaga deles agradece.']);
+  }
+  if(cruz<=1&&ca==='referencia') wrn.push(['Referência faminta','Referência com "muito menos cruzamentos" fica isolada: os pontos fortes dela (alto/força) não aparecem.']);
+  if(foco==='pontas'&&!F.wide&&!F.wb) err.push(['Foco pelas pontas sem pontas','O foco manda a bola pro lado, mas a formação (losango/estreita) não tem homem de amplitude. Mude o foco ou a formação.']);
+  if(foco==='meio'&&!F.narrow&&cruz>=3) wrn.push(['Meio x cruzamento','Foco pelo meio com muitos cruzamentos: instruções opostas pros pontas. Defina: jogo interior ou pelos lados.']);
+  if(larg<=1&&pontas==='cruza'&&F.wide) wrn.push(['Pontas sem calçada','Pontas que cruzam precisam de largura pra receber em velocidade. Com largura muito estreita, ficam espremidos no meio.']);
+  if(larg>=3&&F.narrow) wrn.push(['Losango esticado','Formação naturalmente estreita forçada a ser ampla cansa os meias e expõe os corredores. Largura equilibrada rende mais.']);
+  if(ca==='referencia'&&pontas==='corta'&&F.wide) wrn.push(['Referência sem serviço','Pontas cortando pra dentro + Referência: ninguém cruza pro grandão. Deixe ao menos um lado como Extremo (cruzando).']);
+  if(ca==='pressing'&&press===0) wrn.push(['Atacante de pressão sozinho','Atacante de Pressão pede pressão geral do time. Com pressão pouco intensa, ele corre por todos e morre aos 60 min.']);
+  if(ca==='falso9'&&pontas==='cruza'&&F.wide) wrn.push(['Falso 9 com extremos clássicos','F9 recua e os extremos cruzam... pra ninguém (o 9 saiu da área). Combine F9 com pontas que cortam pra dentro.']);
+
+  /* --- estilos --- */
+  if(passe>=3&&tempo>=3) st.direto+=2;
+  if(dist==='longa') st.direto+=2;
+  if(ca==='referencia') st.direto+=1;
+  if(F.back3&&ment>=5) wrn.push(['Cinco atrás com sangue nos olhos','Formação de 5 defensores com mentalidade muito alta estica as distâncias. Prefira Equilibrada/Positiva — os alas já dão amplitude.']);
+  if(st.gegen>=4&&rec==='contra') st.gegen+=1;
+  if(bloco>=3) st.gegen+=1;
+
+  const labels={posse:'🧠 Posse de Bola / Tiki-Taka',contra:'⚡ Contra-Ataque',gegen:'🔥 Gegenpress / Sufoco',direto:'🎯 Jogo Direto',retranca:'🧱 Retranca / Estacionar o Ônibus'};
+  const dicas={
+    posse:'Priorize <b>Passe, Tomada de Decisão e Técnica</b> nos meias. Contrate goleiro e zagueiros que saibam sair jogando.',
+    contra:'Ouro aqui é <b>Velocidade, Arrancada e Finalização</b> nos pontas/atacantes. Laterais com bom cruzamento dão gol de graça.',
+    gegen:'Exige <b>Resistência, Esforço e Determinação</b> — elenco jovem rende mais. Tenha 6-7 titulares de rotação.',
+    direto:'Invista numa Referência com <b>Força, Impulsão e Jogo Aéreo</b>, e um meia pra caçar a segunda bola.',
+    retranca:'Time fechado vive de <b>Força, Marcação e Concentração</b> na zaga + um 9 forte pra segurar lançamento. Bola parada vira arma principal.',
+    misto:'Sua tática não tem identidade clara. Defina o plano: pressionar alto, esperar e sair no raio, ou dominar a posse.'
+  };
+  let best='misto',bv=3;
+  for(const k in st) if(st[k]>bv){bv=st[k];best=k;}
+  if(best==='contra'&&bloco<=1&&linhadef<=1&&ment<=1) best='retranca';
+
+  let score=100-err.length*15-wrn.length*7; if(score<5)score=5;
+  let sColor='var(--neon)',sLabel='Bem amarrada! 🟢';
+  if(score<65){sColor='var(--bad)';sLabel='Precisa de revisão 🔴';}
+  else if(score<85){sColor='var(--warn)';sLabel='Boa, com ajustes 🟡';}
+
+  const item=(arr,ic)=>arr.map(x=>`<div class="find ${ic==='❌'?'err':ic==='⚠️'?'wrn':'ok'}"><span class="ic">${ic}</span><div><div class="t">${x[0]}</div><div class="d">${x[1]}</div></div></div>`).join('');
+  const empty=(!err.length&&!wrn.length&&!ok.length);
+
+  document.getElementById('resultBox').innerHTML=`
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="score" style="color:${sColor}">${score}</div>
+      <div style="flex:1">
+        <div class="slab"><b style="color:var(--txt)">Coerência tática</b> · ${sLabel}</div>
+        <div class="sbar"><i style="width:${score}%;background:${sColor}"></i></div>
+      </div>
+    </div>
+    <div class="stylebox">🎭 Estilo identificado: <b>${best==='misto'?'🎲 Estilo Misto / Personalizado':labels[best]}</b><br>
+    <span style="font-size:13px;color:var(--sub)">${dicas[best]}</span></div>
+    <div style="margin-top:6px">
+      ${empty?'<div class="find ok"><span class="ic">✅</span><div><div class="t">Sem conflitos detectados</div><div class="d">Sua tática não apresenta contradições óbvias. Teste e ajuste com base nos resultados!</div></div></div>':''}
+      ${item(ok,'✅')}${item(err,'❌')}${item(wrn,'⚠️')}
+    </div>
+    <div class="row" style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn g" style="flex:1;justify-content:center" onclick="copyAnalysis()">📋 Copiar análise</button>
+    </div>`;
+  window._lastAn={best,bv,score,sLabel,err,wrn,ok,labels};
+  if(scroll&&window.innerWidth<920) document.getElementById('resultBox').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function copyAnalysis(){
+  const a=window._lastAn; if(!a)return;
+  const t=(arr,p)=>arr.length?('\n'+p+'\n'+arr.map(x=>'  • '+x[0]+': '+x[1]).join('\n')):'';
+  const styleName = a.best==='misto' ? 'Estilo Misto / Personalizado' : a.labels[a.best];
+  copyText(`🧪 ANÁLISE DE TÁTICA — FM Touch Lab\nNota de coerência: ${a.score}/100 (${a.sLabel})\nEstilo identificado: ${styleName}${t(a.ok,'✅ Pontos fortes:')}${t(a.err,'❌ Conflitos:')}${t(a.wrn,'⚠️ Atenção:')}`);
+}
+window.analisar=analisar; window.copyAnalysis=copyAnalysis; window.copyTactic=copyTactic;
+
+/* ============ SCOUT — BASE 2026 ============ */
+/* {n:nome, i:idade(2026), c:clube atual, p:posição, r:papéis, v:valor est. €mi, d:dica, tipo?:'emp'} */
+const SCOUT=[
+ /* GOLEIROS */
+ {n:'Maarten Vandevoordt',i:24,c:'RB Leipzig · ALE',p:['GOL'],r:['Goleiro'],v:8,d:'O achado de 2021 virou realidade: goleiro de seleção, e ainda sai por preço justo.'},
+ {n:'Guillaume Restes',i:21,c:'Toulouse · FRA',p:['GOL'],r:['Goleiro'],v:10,d:'Titular na Ligue 1 desde os 19. Potencial de top-5 do mundo na posição.'},
+ /* DEFENSORES */
+ {n:'Kevin Lomónaco',i:24,c:'Independiente · ARG',p:['DEF'],r:['Zagueiro'],v:3,d:'Zagueiro raiz, forte na bola aérea. Preço clássico de achadinho argentino.'},
+ {n:'Becir Omeragic',i:24,c:'Montpellier · FRA',p:['DEF'],r:['Zagueiro'],v:5,d:'Técnico pra sair jogando e já rodado em primeira divisão. Sobra em elenco médio.'},
+ {n:'Robert Renan',i:22,c:'Zenit · RUS',p:['DEF'],r:['Zagueiro'],v:6,d:'Cria do Corinthians, forte e rápido. Mercado russo = pechincha garantida.'},
+ {n:'Devyne Rensch',i:23,c:'Roma · ITA',p:['DEF'],r:['Lateral Direito','Zagueiro'],v:10,d:'Multifuncional titular de Serie A: fecha três posições do corredor direito.'},
+ {n:'Facundo Medina',i:27,c:'Marseille · FRA',p:['DEF'],r:['Zagueiro','Lateral Esquerdo'],v:15,d:'Já no auge: zagueiro/L.E. aguerrido pra quem quer vencer AGORA.'},
+ {n:'Pedro Lima',i:20,c:'Wolves · ING',p:['DEF'],r:['Lateral Ofensivo','Ala Direito'],v:8,d:'Ex-Sport: lateral moderno que chega forte ao ataque. Compra antes do estouro.'},
+ {n:'Jorthy Mokio',i:18,c:'Ajax · HOL',p:['DEF'],r:['Zagueiro','Volante'],v:3,d:'A nova cria da escola do Ajax: zagueiro que joga de volante. Potencial altíssimo.'},
+ {n:'Sergio Ramos',i:40,c:'Monterrey · MEX',p:['DEF'],r:['Zagueiro'],v:0,d:'LIVRE/veterano: liderança de vestiário e bola aérea pra um ano de glória.'},
+ {n:'Thiago Silva',i:41,c:'Fluminense · BRA',p:['DEF'],r:['Zagueiro'],v:0,d:'LIVRE: o Monstro dando aula até os 41. Contrata pra última dança e mentor da zaga.'},
+ /* MEIO-CAMPO */
+ {n:'Charlie Patiño',i:22,c:'Deportivo · ESP',p:['MEIO'],r:['Meia','Box-to-Box'],v:3,d:'A jóia do Arsenal que o mercado esqueceu na Espanha. Pague com troco e lucre depois.'},
+ {n:'Lennon Miller',i:20,c:'Motherwell · ESC',p:['MEIO'],r:['Meia','Box-to-Box'],v:3,d:'Jogava de capitão na adolescência: cérebro de meio-campo barato e gigante.'},
+ {n:'Chris Rigg',i:19,c:'Sunderland · ING',p:['MEIO'],r:['Meia-Atacante','Box-to-Box'],v:5,d:'Raça + chute de fora. O queridinho dos scouts ingleses no momento.'},
+ {n:'Assan Ouédraogo',i:20,c:'RB Leipzig · ALE',p:['MEIO'],r:['Box-to-Box','Volante'],v:8,d:'1,91m de potência no meio. Vira o motor do seu time por anos.'},
+ {n:'Lorran',i:20,c:'Flamengo · BRA',p:['MEIO'],r:['Meia-Atacante','Nove e Meio'],v:6,d:'A última grande cria da base rubro-negra. Tédio não existe com ele em campo.'},
+ {n:'Rodrigo Mora',i:19,c:'Porto · POR',p:['MEIO'],r:['Meia-Atacante','Extremo Invertido'],v:12,d:'A maior promessa portuguesa da geração. Decidia jogo profissional aos 17.'},
+ {n:'Sverre Nypan',i:19,c:'Man City · ING',p:['MEIO'],r:['Meia','Meia-Atacante'],v:0.1,tipo:'emp',d:'No elenco do City não tem espaço: o empréstimo é quase certo. Aproveite de graça.'},
+ {n:'Andrey Santos',i:22,c:'Chelsea · ING',p:['MEIO'],r:['Box-to-Box','Volante'],v:0.1,tipo:'emp',d:'Brasileiro completíssimo. Se o Chelsea liberar empréstimo, é reforço titular de graça.'},
+ /* ATAQUE */
+ {n:'Kaio Jorge',i:24,c:'Cruzeiro · BRA',p:['ATA'],r:['Avançado','Finalizador'],v:6,d:'LEMBRA DELE? O baratinho do Santos em 2021 agora é artilheiro feito — e segue acessível.'},
+ {n:'Matías Arezo',i:23,c:'Grêmio · BRA',p:['ATA'],r:['Finalizador'],v:4,d:'Poacher uruguaio raiz: frieza na área por preço sulamericano.'},
+ {n:'Lázaro',i:24,c:'Flamengo · BRA',p:['ATA'],r:['Avançado','Extremo Invertido'],v:5,d:'Voltou da Europa mais maduro. Velocidade e finalização no mercado BR.'},
+ {n:'Talles Magno',i:24,c:'Corinthians · BRA',p:['ATA'],r:['Extremo Invertido','Nove e Meio'],v:8,d:'Técnica e imprevisibilidade. Rendendo muito no Timão — custo-benefício topo.'},
+ {n:'Gonzalo Plata',i:25,c:'Flamengo · BRA',p:['ATA'],r:['Extremo'],v:12,d:'Explosão pura: poucos ganham dele no 1x1 na América do Sul.'},
+ {n:'Gabriel Veron',i:23,c:'Porto · POR',p:['ATA'],r:['Extremo'],v:8,d:'Se as lesões respeitarem, ainda tem bola de seleção. Aposta com desconto.'},
+ {n:'Rayan',i:20,c:'Vasco · BRA',p:['ATA'],r:['Finalizador','Avançado'],v:4,d:'O novo 9 da Colina: potência e faro de gol direto da base vascaína.'},
+ {n:'Eli Júnior Kroupi',i:20,c:'Bournemouth · ING',p:['ATA'],r:['Avançado','Finalizador'],v:8,d:'Feio pro zagueiro, lindo pro bolso: máquina de gols no futebol francês.'},
+ {n:'Adam Hložek',i:23,c:'Leverkusen · ALE',p:['ATA'],r:['Avançado','Meia-Atacante'],v:15,d:'A lenda tcheca do FM21 já entrega futebol de elite. Vale cada euro do investimento.'},
+ {n:'Neymar',i:34,c:'Santos · BRA',p:['ATA'],r:['Meia-Atacante','Extremo Invertido'],v:0,d:'LIVRE ou quase: o retorno do ídolo ao Peixe. Contrato curto = sua chance de um ano mágico.'}
+];
+function sCat(p){
+  if(p.includes('GOL'))return'GOL';
+  if(p.includes('DEF'))return'DEF';
+  if(p.includes('MEIO'))return'MEIO';
+  return'ATA';
+}
+function fmtPrice(p){
+  if(p.tipo==='emp')return'Empréstimo';
+  if(p.v===0)return'Livre';
+  return'~€'+String(p.v).replace('.',',')+' mi';
+}
+function renderScout(){
+  const q=(document.getElementById('sSearch').value||'').toLowerCase();
+  const pos=document.getElementById('sPos').value;
+  const max=+document.getElementById('sPreco').value;
+  const idade=+(document.getElementById('sIdade')?document.getElementById('sIdade').value:99);
+  const ord=document.getElementById('sOrd').value;
+  let arr=SCOUT.filter(p=>{
+    if(q && !(p.n.toLowerCase().includes(q)||p.c.toLowerCase().includes(q)))return false;
+    if(pos==='LIVRE'){ if(!(p.v===0||p.tipo==='emp'))return false; }
+    else if(pos!=='all' && sCat(p.p)!==pos)return false;
+    if(p.tipo!=='emp' && p.v>max)return false;
+    if(p.i>idade)return false;
+    return true;
+  });
+  arr.sort((a,b)=> ord==='preco'?a.v-b.v : ord==='idade'?a.i-b.i : a.n.localeCompare(b.n));
+  const g=document.getElementById('sGrid');
+  let html=`<div class="card banner">
+    <b>🌟 Placar 2021 → 2026</b>
+    <p>Quem contratou os achadinhos de 2021 tá rico: Moisés Caicedo saiu por €2 mi e hoje vale ~€110 mi no Chelsea · Aït-Nouri no Man City · Julián Álvarez no Atlético · Almada no Atlético · Durán no Al-Nassr · Endrick no Real Madrid · Estêvão no Chelsea... e o Lamine Yamal nem existia na base de 2021 👶. Moral: os baratos de hoje são os craques de 2031. Invista cedo!</p>
+  </div>`;
+  if(!arr.length){g.innerHTML=html+'<div class="card" style="grid-column:1/-1;text-align:center;color:var(--sub)">Nenhum jogador encontrado com esses filtros 😕</div>';return;}
+  html+=arr.map(p=>`
+   <div class="card tcard scard">
+     <div class="top"><h3>${p.n} <span style="color:var(--sub);font-weight:600;font-size:13px">· ${p.i} anos</span></h3>
+       <span class="price ${p.v>3?'b':''}">${fmtPrice(p)}</span></div>
+     <div class="club">${p.c} · ${p.p.join('/')}</div>
+     <div class="tags" style="margin:4px 0 0">${p.r.map(r=>`<span class="tag">${r}</span>`).join('')}</div>
+     <p class="note">${p.d}</p>
+     <div class="row"><button class="btn g" style="flex:1;justify-content:center" onclick="copyPlayer(${SCOUT.indexOf(p)})">📋 Copiar ficha</button></div>
+   </div>`).join('');
+  g.innerHTML=html;
+}
+function copyPlayer(idx){
+  const p=SCOUT[idx];
+  copyText(`⚽ ${p.n} (${p.i}) — ${p.c}\n📍 ${p.p.join('/')} | Papéis: ${p.r.join(', ')}\n💰 ${fmtPrice(p)}\n📝 ${p.d}\nvia FM Touch Lab (base 2026)`);
+}
+window.copyPlayer=copyPlayer;
+['sSearch','sPos','sPreco','sIdade','sOrd'].forEach(id=>{const el=document.getElementById(id); if(el) el.addEventListener('input',renderScout);});
+
+/* ============ GUIA DE PAPÉIS ============ */
+const ROLES=[
+{s:'🧤 Goleiros',items:[
+ {n:'Goleiro',faz:'O clássico: defende e entrega o mais simples possível.',a:['Reflexos','Impulsão','Posicionamento'],ok:'bloco baixo e zaga mais lenta',no:'linha muito adiantada (ele não sai do gol)'},
+ {n:'Goleiro-Líbero',faz:'Sai jogando com os pés e antecipa bolas nas costas da zaga adiantada.',a:['Reflexos','Primeiro Toque','Antecipação','Velocidade'],ok:'linha adiantada + jogo de posse',no:'esquemas retranqueiros de chutão'}
+]},
+{s:'🛡️ Zagueiros',items:[
+ {n:'Zagueiro (Central)',faz:'Seguro e confiável: marca, desarma e não inventa com a bola.',a:['Marcação','Desarme','Impulsão','Posicionamento'],ok:'praticamente qualquer estilo',no:'esperar dele a construção de trás'},
+ {n:'Zagueiro com Bola',faz:'Inicia a jogada da defesa com passes verticais e lançamentos trocados.',a:['Passe','Visão','Técnica','Desarme'],ok:'posse de bola + saída da defesa',no:'jogo direto puro (vira rifador de bola)'},
+ {n:'Zagueiro Sem Compromisso',faz:'Só destrói: zero riscos com a bola, tudo que sobra ele isola.',a:['Desarme','Força','Agressividade'],ok:'retranca e contra-ataque',no:'time de posse (entrega a bola de graça)'},
+ {n:'Líbero',faz:'Zagueiro que avança pro meio-campo criando superioridade numérica.',a:['Passe','Tomada de Decisão','Marcação','Mov. sem Bola'],ok:'sistemas com 3 zagueiros',no:'linha de 2 zagueiros clássica (deixa buraco)'}
+]},
+{s:'↔️ Laterais',items:[
+ {n:'Lateral',faz:'Apoia o ataque com equilíbrio, sem se lançar o tempo todo.',a:['Cruzamento','Resistência','Desarme'],ok:'times equilibrados de posse ou transição',no:'exigir que ele decida o jogo sozinho'},
+ {n:'Lateral Ofensivo / Ala',faz:'Ataca o corredor inteiro e cruza em volume. É meio lateral, meio ponta.',a:['Cruzamento','Resistência','Velocidade'],ok:'formações com 3/5 defensores',no:'linha de 4 sem cobertura (o corredor vaza)'},
+ {n:'Lateral Defensivo',faz:'Quase não passa do meio-campo: segura o lado e protege o zagueiro.',a:['Marcação','Desarme','Concentração'],ok:'times que atacam pelo lado oposto',no:'esquemas que precisam de amplitude dele'},
+ {n:'Lateral Invertido',faz:'Corta pro meio e vira "meio-campista extra" na saída de bola.',a:['Passe','Tomada de Decisão','Técnica','Posicionamento'],ok:'posse + pontas que dão amplitude',no:'pontas invertidas (ocupa o mesmo espaço)'}
+]},
+{s:'⚙️ Volantes',items:[
+ {n:'Volante (Âncora)',faz:'O pai da zaga: não sai da frente da área por nada nesse mundo.',a:['Posicionamento','Marcação','Força','Concentração'],ok:'meias agressivos e alas bem ofensivos',no:'esperar construção ou chegada ao ataque'},
+ {n:'Cão de Guarda',faz:'Corre atrás da bola o jogo inteiro. Sua única religião é o desarme.',a:['Desarme','Esforço','Resistência','Agressividade'],ok:'gegenpress e bloco médio/alto',no:'bloco muito baixo (fica sem função)'},
+ {n:'Regista',faz:'O maestro recuado: dita o ritmo do time de trás, como um Pirlo.',a:['Passe','Visão','Tomada de Decisão','Primeiro Toque'],ok:'posse de bola com proteção ao lado',no:'pressão alta sem escudo defensivo perto'},
+ {n:'Segundo Zagueiro',faz:'Cai entre os zagueiros na saída de bola, formando linha de 3.',a:['Posicionamento','Marcação','Passe'],ok:'alas ofensivos + construção curta',no:'esquemas que precisam de volante agressivo à frente'}
+]},
+{s:'🎯 Meias Centrais',items:[
+ {n:'Box-to-Box',faz:'Da área à área: desarma lá atrás e aparece pra finalizar na frente.',a:['Resistência','Esforço','Desarme','Finalização'],ok:'quase qualquer esquema (o coringa)',no:'times que exigem um meia especialista fixo'},
+ {n:'Meia Central',faz:'O obediente: executa com equilíbrio o que a instrução geral mandar.',a:['Passe','Tomada de Decisão','Trabalho de Equipe'],ok:'táticas balanceadas e rotações',no:'papéis criativos exigindo improviso constante'},
+ {n:'Carrilero',faz:'Leva-e-traz do corredor: cobre o lado que a formação não ocupa naturalmente.',a:['Resistência','Passe','Trabalho de Equipe'],ok:'meios estreitos (losango, 4-3-1-2)',no:'meio-campo que já tem amplitude natural'},
+ {n:'Mezzala',faz:'Ataca o espaço entre lateral e zagueiro (half-space) trocando posição com o ponta.',a:['Drible','Primeiro Toque','Mov. sem Bola','Passe'],ok:'pontas abertos + laterais que sobem',no:'meio-campo congestionado de armadores'},
+ {n:'Armador (Organizador)',faz:'O cérebro do time: recebe em qualquer lugar, gira e decide o jogo.',a:['Visão','Passe','Tomada de Decisão','Criatividade'],ok:'atacantes móveis que atacam espaço',no:'jogo direto (a bola literalmente pula ele)'}
+]},
+{s:'🎩 Meia-Atacantes',items:[
+ {n:'Meia-Atacante (Clássico)',faz:'Vive nas costas dos volantes adversários: arma e também finaliza.',a:['Visão','Passe','Criatividade','Chutes de Longe'],ok:'esquemas com um 9 fixo referenciando',no:'times sem movimentação à frente dele'},
+ {n:'Enganche',faz:'Para entre as linhas e o jogo gira em torno dele. Zero velocidade permitida.',a:['Visão','Passe','Técnica','Tomada de Decisão'],ok:'alas e pontas velozes ao redor',no:'contra-ataque e gegenpress (ele não corre)'},
+ {n:'Atacante Sombra',faz:'Meia que ataca a área como um segundo camisa 9, sem a marcação de um.',a:['Mov. sem Bola','Finalização','Antecipação','Aceleração'],ok:'Falso 9 abrindo o corredor central',no:'meia-armador no mesmo espaço (duplo engarrafamento)'}
+]},
+{s:'💨 Pontas / Extremos',items:[
+ {n:'Extremo (Ponta Clássico)',faz:'Busca a linha de fundo e cruza. Alegria de centroavante de área.',a:['Velocidade','Drible','Cruzamento'],ok:'Referência ou Finalizador na área',no:'Falso 9 (cruza pra ninguém)'},
+ {n:'Extremo Invertido',faz:'Pé trocado: corta pra dentro pra finalizar ou enfiar passes.',a:['Drible','Finalização','Passe','Mov. sem Bola'],ok:'Falso 9 + lateral que sobrepuja por fora',no:'plano de jogo baseado em cruzamento'},
+ {n:'Avançado Interior',faz:'Mais atacante do que ponta: ataca o espaço e decide com finalizações.',a:['Velocidade','Finalização','Mov. sem Bola'],ok:'referência que segura + meia que alimenta',no:'exigir dele construção pelos lados'}
+]},
+{s:'⚽ Atacantes',items:[
+ {n:'Avançado',faz:'O 9 completo: corre atrás, recebe, gira e finaliza de todo jeito.',a:['Velocidade','Finalização','Primeiro Toque','Trabalho de Equipe'],ok:'contra-ataque e posse com mobilidade',no:'jogo direto sem ninguém por perto'},
+ {n:'Finalizador (Poacher)',faz:'Mora na área e só existe pro último toque. Texto de linha de impedimento.',a:['Finalização','Antecipação','Sangue Frio'],ok:'extremos cruzando em volume',no:'posse paciente (fica assistindo o jogo)'},
+ {n:'Referência (Pivot)',faz:'O caminhão: segura de costas, ganha no alto e alimenta quem vem de trás.',a:['Força','Impulsão','Cabeceamento','Primeiro Toque'],ok:'jogo direto + chuva de cruzamentos',no:'tiki-taka rasteiro sem bola aérea'},
+ {n:'Falso 9',faz:'Recua pro meio, arrasta o zagueiro e abre avenida pros pontas.',a:['Primeiro Toque','Criatividade','Passe','Drible'],ok:'pontas cortando pra dentro + sombra',no:'cruzamento como plano principal'},
+ {n:'Nove e Meio',faz:'Híbrido de armador e 9: recua, combina e chega pra finalizar.',a:['Primeiro Toque','Passe','Finalização','Visão'],ok:'duplas de ataque móveis',no:'time estático sem movimentação ao redor'},
+ {n:'Atacante de Pressão',faz:'O primeiro zagueiro do time: não deixa o adversário sair jogando em paz.',a:['Esforço','Resistência','Agressividade','Aceleração'],ok:'gegenpress e bloco alto',no:'bloco baixo (pressiona sozinho e morre)'}
+]}];
+function renderRoles(){
+  document.getElementById('rolesBox').innerHTML=ROLES.map(g=>`
+   <details><summary>${g.s}</summary><div class="in" style="padding-top:12px">
+    ${g.items.map(r=>`<div class="role">
+      <b>${r.n}</b>
+      <p>${r.faz}</p>
+      <div class="tags" style="margin:6px 0 0">${r.a.map(x=>`<span class="tag g">${x}</span>`).join('')}</div>
+      <div class="rline">✔ <b>Combina com:</b> ${r.ok}</div>
+      <div class="rline bad">✖ <b>Evite:</b> ${r.no}</div>
+    </div>`).join('')}
+   </div></details>`).join('');
+}
+
+/* ============ QUIZ DE ESTILO ============ */
+const QSTYLES={
+ posse:{e:'🧠',n:'Maestro da Posse',d:'"A bola é MINHA e ponto final." Seu time adormece o adversário com paciência, triangulações e passes curtos até o espaço aparecer. Guardiola orgulharia.',preset:'posse',inst:['Tempo lento','Passes curtos','Jogar da defesa','Segurar a bola'],rec:'Recrute: Passe, Tomada de Decisão, Primeiro Toque e Técnica.'},
+ gegen:{e:'🔥',n:'Sufocador Profissional',d:'Perder a bola pra você é ofensa pessoal: o time inteiro cerca e recupera em 5 segundos. O contra-ataque do adversário morre no nascimento.',preset:'gegen',inst:['Bloco alto','Contra-pressão','Pressão intensa','Linha adiantada'],rec:'Recrute: Resistência, Esforço, Determinação e Aceleração.'},
+ contra:{e:'⚡',n:'Raio Mortal',d:'Sofrer pressão? Às vezes. Mas quando você rouba a bola, são 3 toques e gol. Seus pontas acordam sonhando com espaço aberto.',preset:'contra',inst:['Bloco médio/baixo','Contra-atacar','Reposição rápida','Passes diretos'],rec:'Recrute: Velocidade, Arrancada, Finalização e Cruzamento.'},
+ direto:{e:'🎯',n:'Almirante do Jogo Direto',d:'Pra que 30 passes se a bola vai da zaga pro caminhão lá na frente? Segunda bola, cruzamento, gol. Simples como o futebol das antigas.',preset:'direto',inst:['Passe direto','Bola na referência','Cruzamentos','Distribuição longa'],rec:'Recrute: Força, Impulsão, Cabeceamento e Primeiro Toque.'},
+ retranca:{e:'🧱',n:'Mestre do Busão Estacionado',d:'0x0 é bonito, 1x0 é arte. Onze atrás da linha da bola, catimba cirúrgica e um contra mortífero quando o adversário desespera. Simeone do celular.',preset:'retranca',inst:['Linha muito atrás','Bloco baixo','Cautela total','Contra letal'],rec:'Recrute: Força, Marcação, Concentração + um zagueirão pra bola parada.'}
+};
+const QUESTIONS=[
+ {q:'1. Seu time recupera a bola no meio-campo. O que passa na sua cabeça?',o:[
+  ['Toca RÁPIDO pro ponta voando 🏃💨',{contra:3}],
+  ['Circula até abrir o espaço certinho',{posse:3}],
+  ['Lançamento direto pro grandão lá na frente',{direto:3}],
+  ['Recupera? Eu nem perco a bola — e quando perco, cerco TODO MUNDO',{gegen:3}],
+  ['Segura. Respira. Olha o relógio. 1x0 já está bom',{retranca:3}]]},
+ {q:'2. O adversário está com a bola. Sua defesa faz o quê?',o:[
+  ['Sobe junto com o time pra sufocar',{gegen:3}],
+  ['Fecha as duas linhas perto da área e espera ele errar',{retranca:3}],
+  ['Equilibra: rouba e sai em velocidade na hora',{contra:3}],
+  ['Adversário com a bola? Raramente acontece, a bola é nossa',{posse:3}],
+  ['Espera o passe deles e já mira o lançamento no caminhão',{direto:3}]]},
+ {q:'3. Pode escolher UM jogador pro seu time. Quem é?',o:[
+  ['Um 9 matador que finaliza até de costas',{direto:2,posse:1}],
+  ['Um ponta elétrico que ganha qualquer corrida',{contra:3}],
+  ['Um meia que dita o ritmo do jogo inteiro',{posse:3}],
+  ['Um atacante que nem cansa de pressionar',{gegen:3}],
+  ['Um zagueirão de 1,95m que vira artilheiro de escanteio',{retranca:3}]]},
+ {q:'4. 1x0 pra você aos 85 minutos. Instrução pro time:',o:[
+  ['Linha de 5, bola pro córner da bandeirinha e sorriso no rosto',{retranca:3}],
+  ['Fica com a bola nos pés deles: posse é a melhor defesa',{posse:3}],
+  ['Espera eles se jogarem e mata em UM contra-ataque',{contra:3}],
+  ['Empatar? Buscamos o SEGUNDO gol até o apito final',{gegen:3}],
+  ['Chutão pra frente e disputa a segunda bola',{direto:3}]]},
+ {q:'5. Qual grito seu treinador mais escutaria?',o:[
+  ['"APERTA! TODO MUNDO APERTA!"',{gegen:3}],
+  ['"CALMA! Trabalhem a bola!"',{posse:3}],
+  ['"VAI VAI VAI VAI!"',{contra:3}],
+  ['"Fecha tudo e ninguém passa!"',{retranca:3}],
+  ['"Bola longa no pivô!"',{direto:3}]]},
+ {q:'6. Seu time REAL favorito do mundo é:',o:[
+  ['O Barcelona do Guardiola',{posse:3}],
+  ['O Liverpool do Klopp',{gegen:3}],
+  ['O Leicester campeão da Premier',{contra:3}],
+  ['Qualquer time raiz de chutão e escanteio',{direto:2,retranca:1}],
+  ['O Atlético de Madrid do Simeone',{retranca:3}]]}
+];
+let qI=0,qAns=[];
+function quizStart(){
+  qI=0; qAns=[];
+  renderQ();
+}
+function renderQ(){
+  const box=document.getElementById('quizBox');
+  if(qI>=QUESTIONS.length){quizResult();return;}
+  const Q=QUESTIONS[qI];
+  box.innerHTML=`
+    <div class="slab">Pergunta ${qI+1} de ${QUESTIONS.length}</div>
+    <div class="qbar"><i style="width:${(qI/QUESTIONS.length)*100}%"></i></div>
+    <h3 style="font-size:17px;margin:12px 0 4px">${Q.q}</h3>
+    ${Q.o.map((o,i)=>`<button class="qopt" onclick="quizAnswer(${i})">${o[0]}</button>`).join('')}
+    ${qI>0?`<button class="chip" style="margin-top:14px" onclick="qI--;renderQ()">↩ Voltar</button>`:''}`;
+}
+function quizAnswer(i){
+  qAns[qI]=QUESTIONS[qI].o[i][1];
+  qI++; renderQ();
+}
+function quizResult(){
+  const qScore={posse:0,contra:0,gegen:0,direto:0,retranca:0};
+  qAns.forEach(p=>{for(const k in p)qScore[k]+=p[k]});
+  let best='posse',bv=-1;
+  for(const k in qScore) if(qScore[k]>bv){bv=qScore[k];best=k;}
+  const S=QSTYLES[best];
+  document.getElementById('quizBox').innerHTML=`
+   <div class="qres">
+     <div class="qbar"><i style="width:100%"></i></div>
+     <div class="em">${S.e}</div>
+     <h3>${S.n}</h3>
+     <p>${S.d}</p>
+     <div class="tags">${S.inst.map(x=>`<span class="tag g">${x}</span>`).join('')}</div>
+     <p style="margin-top:10px"><b style="color:var(--txt)">🎯 ${S.rec}</b></p>
+     <div class="row" style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;justify-content:center">
+       <button class="btn p" onclick="applyPreset('${S.preset}');go('analisador')">🧪 Ver no Analisador</button>
+       <button class="btn g" onclick="copyText('🎭 Meu estilo no FM Touch Lab: ${S.e} ${S.n} — ${S.d} Faz o quiz e descobre o seu!')">📋 Copiar resultado</button>
+     </div>
+     <button class="chip" style="margin-top:16px" onclick="quizStart()">🔄 Refazer quiz</button>
+   </div>`;
+}
+window.quizStart=quizStart;window.quizAnswer=quizAnswer;
+document.getElementById('quizBox').innerHTML=`
+  <div class="qres">
+    <div class="em">🎭</div>
+    <h3>Bora descobrir seu DNA tático?</h3>
+    <p>São só 6 perguntas. Sem resposta errada — só o seu jeito de pensar futebol.</p>
+    <button class="btn p" style="margin-top:12px" onclick="quizStart()">▶️ Começar o quiz</button>
+  </div>`;
+
+/* init */
+renderTactics();
+renderScout();
+renderRoles();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a272dd471aa36d67',t:'MTc4NjA2OTg3OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
