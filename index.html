@@ -213,18 +213,18 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
     <p>Escolha uma ferramenta no menu abaixo — cada uma abre em sua própria tela, sem rolagem infinita. 👇</p>
     <div class="stats">
       <span class="stat"><b>9</b> ferramentas</span>
-      <span class="stat"><b>1.000+</b> atletas no radar</span>
+      <span class="stat"><b>1.146</b> atletas no radar</span>
       <span class="stat"><b>31</b> papéis explicados</span>
       <span class="stat"><b>30+</b> conflitos detectáveis</span>
     </div>
   </div>
 
   <div class="mgrid">
-    <button class="mcard" data-go="analisador" data-print="1"><span class="ic">📸</span><b>Raio-X por Print<span class="novo">NOVO</span></b><span>Envie os prints da sua tática e a IA lê tudo sozinha, apontando o que não bate.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="analisador" data-print="1"><span class="ic">📸</span><b>Raio-X por Print<span class="novo">NOVO</span></b><span>Envie os prints da sua tática: a IA lê as instruções e entrega o raio-x completo — estilo, pontos fortes e plano de ajuste.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="quiz"><span class="ic">🎭</span><b>Quiz de Estilo</b><span>6 perguntas pra descobrir sua alma tática — e saí com instruções prontas pro Analisador.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="analisador"><span class="ic">🧪</span><b>Analisador</b><span>Monte sua tática e descubra o que não bate — com nota de coerência e correções.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="taticas"><span class="ic">📤</span><b>Táticas</b><span>Galeria .fmf da comunidade separada por estilo: posse, contra-ataque, gegenpress...</span><span class="go">Abrir →</span></button>
-    <button class="mcard" data-go="scout"><span class="ic">💎</span><b>Scout</b><span>Database com 1.036 atletas base 2026: busque por papel, preço, idade e tipo de achado.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="scout"><span class="ic">💎</span><b>Scout</b><span>Database com 1.146 atletas base 2026: busque por papel, preço, idade e tipo de achado.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="papeis"><span class="ic">📚</span><b>Papéis</b><span>31 funções do FM Touch explicadas: atributos-chave, combina e NÃO combina com quê.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="desafios"><span class="ic">💪</span><b>Desafios</b><span>Saves pra zerar o jogo: do XI de €1 mi à dinastia do interior.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="guias"><span class="ic">📖</span><b>Guias</b><span>Como instalar .fmf no Android, dicionário de termos do FM e dicas rápidas.</span><span class="go">Abrir →</span></button>
@@ -254,7 +254,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
 <main class="page" id="analisador">
   <button class="crumb" data-go="home">← Menu</button>
   <div class="h2"><span class="dot"></span> Analisador de Tática</div>
-  <p class="lead">Monte sua tática do jeito que está no jogo e o Lab aponta <b>o que não combina</b>, o que pode dar problema e como corrigir. Comece por um exemplo:</p>
+  <p class="lead">Monte sua tática do jeito que está no jogo e o Lab entrega o <b>raio-x completo</b>: como o time joga, o que não combina e o <b>plano de ajuste</b> pra corrigir. Comece por um exemplo:</p>
 
   <div class="chips" style="margin-bottom:12px">
     <button class="chip blue on" id="mManual" onclick="setMode('manual')">🎛️ Preencher manual</button>
@@ -364,7 +364,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
 <main class="page" id="scout">
   <button class="crumb" data-go="home">← Menu</button>
   <div class="h2"><span class="dot"></span> Scout: Bons e Baratos 2026</div>
-  <p class="lead">Database com <b>1.036 atletas</b> atualizados pra base 2026, mais a <b>lista completa de contratos acabando</b> vinda dos prints do jogo 🎮. Busque por <b>papel</b> (Construtor, Trinco, Mezzala, Falso 9...), tipo de achado, preço e idade. Valores são <b>estimativas da comunidade</b>.</p>
+  <p class="lead">Database com <b>1.146 atletas</b> atualizados pra base 2026, mais a <b>lista completa de contratos acabando</b> vinda dos prints do jogo 🎮. Busque por <b>papel</b> (Construtor, Trinco, Mezzala, Falso 9...), tipo de achado, preço e idade. Valores são <b>estimativas da comunidade</b>.</p>
 
   <label class="lab">🎭 Buscar por papel</label>
   <div class="chips" id="roleChips"></div>
@@ -505,7 +505,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
     <div class="card rcard" data-go="quiz"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Ferramenta</div><h3>🎭 Quiz de Estilo</h3><p>Descubra sua alma tática em 6 perguntas e saia com instruções prontas. Já disponível!</p></div>
     <div class="card rcard" data-go="papeis"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Conteúdo</div><h3>📚 Guia de Papéis</h3><p>31 funções explicadas com atributos-chave e combinações. Já disponível!</p></div>
     <div class="card rcard" data-go="desafios"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Conteúdo</div><h3>💪 Saves Desafio</h3><p>Seis desafios com nível de dificuldade pra zerar o jogo. Já disponível!</p></div>
-    <div class="card rcard" data-go="analisador"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Fase 2A</div><h3>📸 Raio-X por Print</h3><p>A IA já lê seus prints de tática direto no aparelho — sem cadastro, sem chave, sem custo! Está dentro do Analisador, aba "📸 IA lê meu print".</p></div>
+    <div class="card rcard" data-go="analisador"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ TURBINADO</span><div class="num">Fase 2A</div><h3>📸 Raio-X por Print</h3><p>Leitura turbinada e relatório COMPLETO: DNA tático, raio-x em texto, plano de ajuste passo a passo, papéis certos e matchups do seu estilo. Sem cadastro, sem chave, sem custo!</p></div>
     <div class="card rcard soon"><span class="pill">Em breve</span><div class="num">Fase 2B</div><h3>🤖 IA visual completa</h3><p>Uma IA que literalmente ENXERGA o print (posições, setas e papéis desenhados) e dá conselhos em texto. Essa precisa de um servidorzinho — chega em breve.</p></div>
     <div class="card rcard"><div class="num">Comunidade</div><h3>🏆 Tática da semana</h3><p>Votação aberta na melhor tática enviada, com destaque na página inicial e badge pro autor.</p></div>
     <div class="card rcard"><div class="num">Comunidade</div><h3>💬 Grupo da comunidade</h3><p>Espaço pra trocar save, tática e dica — comentários nas táticas e grupo no WhatsApp/Discord.</p></div>
@@ -826,7 +826,7 @@ function analisar(scroll){
   }
 
   /* --- com a bola --- */
-  if(passe<=1) st.posse+2; else if(passe===2) st.posse+=1;
+  if(passe<=1) st.posse+=2; else if(passe===2) st.posse+=1;
   if(tempo<=1&&passe<=1&&saida==='sim'){ok.push(['Núcleo de posse completo','Tempo baixo + passe curto + saída desde a defesa: estrutura correta de Tiki-Taka.']);st.posse+=2;}
   if(rec==='segurar') st.posse+=2;
   if(saida==='sim') st.posse+=1;
@@ -895,50 +895,136 @@ function analisar(scroll){
      '📋 Detalhe: tempo perdido começa aos 70 min, não aos 15 — catimba cedo demais convida o sufoco.']
   };
 
+  const extras=window._extras||{};
+  if(extras.arm&&linhadef<=1) wrn.push(['Armadilha de impedimento x linha recuada','A armadilha só funciona com a linha lá na frente: recuada, os atacantes partem de trás com vantagem e caem na cara do gol. Suba a linha ou desligue a armadilha.']);
+  if(extras.carrinho&&press===0) wrn.push(['Carrinho pesado com pressão mansa','Dividida forte só compensa com o time subido e pressão intensa — senão é falta e cartão amarelo. Aumente a pressão ou alivie o carrinho.']);
+
   let best='misto',bv=3;
   for(const k in st) if(st[k]>bv){bv=st[k];best=k;}
   if(best==='contra'&&bloco<=1&&linhadef<=1&&ment<=1) best='retranca';
+  const order=Object.entries(st).sort((a,b)=>b[1]-a[1]);
+  const SHORTN={posse:'Posse',contra:'Contra-Ataque',gegen:'Gegenpress',direto:'Jogo Direto',retranca:'Retranca'};
+  const tipSrc=best!=='misto'?best:(order[0][1]>0?order[0][0]:null);
 
+  /* 📖 raio-x em texto corrido */
+  const MENTTXT=['Mentalidade muito defensiva: primeiro não sofrer — o time ataca só com a casa protegida.','Postura defensiva: sai em transição curta, sem abrir a casinha.','Cautela: espera o erro dos outros antes de acelerar.','Equilíbrio total: ataca sem se esticar, defende sem se afundar.','Postura positiva: busca o gol sem doideiras atrás.','Joga no campo deles: mentalidade ofensiva, pressão moral constante.','Tudo ou nada: risco máximo pra matar o jogo o quanto antes.'];
+  const LARGN=['muito estreita','estreita','equilibrada','ampla','muito ampla'];
+  const TEMPON=['muito lento','lento','equilibrado','rápido','muito rápido'];
+  const PASSEN=['muito curto','curto','médio','direto','muito direto'];
+  const CRUZN=['quase nunca','poucos','na medida','bastantes','muitos — chuva de bola na área'];
+  const LINHAN=['colada no próprio gol','recuada','equilibrada','adiantada','quase no círculo central'];
+  const BLOCON=['muito baixo, lá no seu terço','baixo','médio','alto','muito alto, quase no campo deles'];
+  const PRESSN=['pouco intensa — marca em pé','equilibrada','intensa','muito intensa — sufoco total'];
+
+  let xb=MENTTXT[ment]+' Com a bola, o time joga com largura '+LARGN[larg]+', tempo '+TEMPON[tempo]+' e passe '+PASSEN[passe]+'. ';
+  xb+=(saida==='sim'?'A jogada nasce no goleiro, numa construção curta desde a defesa. ':'O goleiro ganha terreno na reposição e o time começa de cima, sem cerimônia atrás. ');
+  xb+=(foco==='meio'?'O miolo é o plano A: triângulos curtos por dentro, tabelas e infiltração. ':foco==='pontas'?'O mapa é largo: a bola chega cedo nos extremos pro 1x1. ':'Sem foco fixo: o ataque flui pro espaço que abrir. ');
+  xb+=(cruz>=3?'Cruzamento é instrumento principal: '+CRUZN[cruz]+'. ':cruz<=1?'Cruza pouco ('+CRUZN[cruz]+'): a escolha é furar a parede por dentro, com passe. ':'Cruza quando o corredor abre, sem obsessão. ');
+  if(extras.lev)xb+='No último terço tem paciência: trabalha a bola até à área e só finaliza com chance clara. ';
+  if(extras.corre)xb+='Tem licença pra conduzir: levar a bola no pé quebra a primeira linha deles. ';
+  if(extras.expr)xb+='Criatividade liberada: sinal verde pro imprevisível dos craques. ';
+  if(extras.disc)xb+='E muita disciplina com a bola: risco mínimo, posse segura. ';
+  if(extras.prof)xb+='O passe em profundidade tá liberado: qualquer brecha pelas costas vira tentativa. ';
+
+  let xs='Sem a bola, a linha da zaga fica '+LINHAN[linhadef]+' e o time aperta num bloco '+BLOCON[bloco]+', com pressão '+PRESSN[press]+'. ';
+  xs+=(pressgr==='sim'?'A saída de bola dos outros já nasce sufocada: os atacantes apertam o goleiro desde o pontapé. ':'A saída dos outros é liberada: prioridade total é manter o próprio bloco organizado. ');
+  if(extras.arm)xs+='Armadilha de impedimento ativa: exige linha alinhada, zaga veloz e leitura coletiva. ';
+  if(extras.carrinho)xs+='Dividida é pra valer: carrinho com força liberado — olho no calendário de suspensões. ';
+  if(extras.carrinhoLeve)xs+='Carrinho com moderação: mata a jogada em pé e evita bola parada perigosa. ';
+  if(extras.blocruz)xs+='Fecha a fonte: bloqueia os cruzamentos dos outros cedo, antes da bola viajar. ';
+  if(extras.marc)xs+='Marcação individual de coleira nas referências adversárias. ';
+
+  let xt=(perda==='cp'?'Perdeu a bola, o cerco é imediato: todo mundo em cima de quem recebeu (contra-pressão). ':perda==='recuar'?'Perdeu, reagrupa: o time volta correndo pra trás da linha da bola e tranca o corredor central. ':'Na perda da posse, o time segue o posicionamento padrão, sem gatilho especial. ');
+  xt+=(rec==='contra'?'Recuperou, pisa fundo: primeiro passe pra frente — o time vira um raio no contra-ataque. ':rec==='segurar'?'Recuperou, segura: mantém a formação, respira e reinicia com calma. ':'Na recuperação, segue o plano normal, sem acelerar nem segurar por regra. ');
+  xt+='O goleiro distribui '+(dist==='longa'?'longo, procurando a referência lá na frente':'curto, nos defensores, pra construção começar')+(rap==='sim'?' — e com pressa, a reposição rápida já é treino ensaiado.':'.');
+
+  /* 🧬 DNA tático */
+  const DNA={
+    posse:'Identidade clara de <b>domínio pela bola</b>: construir curto lá de trás, circular com paciência e finalizar só com chance clara. O time defende ATACANDO — se a bola é sua, o adversário não machuca. Referência real: o City do Guardiola e a Espanha de 2010.',
+    contra:'Identidade de <b>impacto direto</b>: aguenta a bola sem sofrer gol e, no primeiro roubo, o time vira raio — 2-3 passes e tá na cara do goleiro. Referência real: o Real Madrid de Zidane e o Leicester campeão inglês.',
+    gegen:'Identidade de <b>agressividade total</b>: perdeu a bola, TODO MUNDO em cima — a própria pressão é a principal jogada de criação. Drena as pernas dos outros e decide o jogo cedo. Referência real: o Liverpool de Klopp e o Leverkusen de Xabi Alonso.',
+    direto:'Identidade <b>objetiva, sem firula</b>: vertical, busca a referência cedo, cruza e luta pela segunda bola. Não é bonito — é letal. Referência real: o Atlético de Simeone campeão de 2014.',
+    retranca:'Identidade <b>defensiva até o osso</b>: bloco compacto, linha baixa e paciência pra contra-atacar raro, mas mortal. Referência real: a Inter de Mourinho de 2010.',
+    misto:'Você mistura sinais de vários planos — pode ser um híbrido mortal (quando é de propósito) ou o clássico "nem carne nem peixe". Escolhe um plano A com as dicas abaixo que o time ganha identidade na hora. 👇'
+  };
+  let styleName=best==='misto'
+    ?('🎲 Estilo Misto / Personalizado'+(order[0][1]>0?' · puxando pra '+SHORTN[order[0][0]]+(order[1][1]>0?' + '+SHORTN[order[1][0]]:''):''))
+    :labels[best];
+  let dnaTxt=DNA[best];
+  if(best!=='misto') dnaTxt+=' '+dicas[best];
+
+  /* 🛠️ plano de ajuste */
+  const plan=[];
+  err.forEach(e=>plan.push(['🔴 Corrige logo','<b>'+e[0]+':</b> '+e[1]]));
+  wrn.forEach(w=>plan.push(['🟡 Ajuste fino','<b>'+w[0]+':</b> '+w[1]]));
+  const NEXT={
+    posse:[['🧪 Teste evolutivo','Encaixe uma Mezzala em grau Ataque pra dar chegada de trás — posse sem infiltração vira chute de 30 metros.'],['📦 Tenha um plano B','Se o adversário se fechar todo, guarde uma Referência no banco pra mudar pro jogo de cruzamento na 2ª etapa.']],
+    contra:[['🧪 Teste evolutivo','Ative a distribuição rápida do goleiro e conte os gols que nascem de transição — se cair, o problema é velocidade na frente, não a instrução.'],['📦 Tenha um plano B','Adversário recuado demais? Suba um clique de mentalidade e dê grau Ataque pra um meia.']],
+    gegen:[['🧪 Teste evolutivo','Teste marcação individual no armador deles + impedimento ligado se a zaga for rápida. Isso mata a construção adversária na fonte.'],['📦 Tenha um plano B','Sufoco cobra o físico: mantenha um 2º volante com Resistência alta no banco e troque pontas aos 60 min.']],
+    direto:[['🧪 Teste evolutivo','Laterais com ordem de cruzar da intermediária chegam mais rápido sem perder os homens de área.'],['📦 Tenha um plano B','Se a Referência apagar no jogo aéreo, troque por um Avançado veloz e passe em profundidade.']],
+    retranca:[['🧪 Teste evolutivo','Bola parada ofensiva é seu ataque: treine escanteios e faltas laterais TODA semana.'],['📦 Tenha um plano B','Precisando do resultado? Suba pro bloco médio + contra-ataque aos 60 min, quando a linha dos outros cansa.']],
+    misto:[['🚩 Escolhe o plano A','Olha o DNA acima 👆 e puxa os sliders pro estilo que combinou mais — a confusão some na hora.'],['🧪 Faça o quiz do Lab','O quiz do menu descobre seu estilo ideal em 6 perguntas e volta com as instruções prontas pra colar aqui.']]
+  };
+  if(!plan.length&&NEXT[tipSrc||'misto'])NEXT[tipSrc||'misto'].forEach(n=>plan.push(n));
+  const plan4=plan.slice(0,4);
+
+  /* 🆚 matchups */
+  const VSMAP={
+    posse:['💚 Ama enfrentar: retrancas e times que abdicam da bola — a paciência esgota quem só corre atrás.','🔥 Sofre contra: Gegenpress organizado e contra-ataque de dois toques. Mantenha 2 zagueiros velozes atrás da bola.'],
+    contra:['💚 Ama enfrentar: times que sobem em bloco e deixam campo sobrando atrás.','🔥 Sofre contra: retrancas duplas sem espaço NENHUM. Se travar, tenha um plano de posse no bolso.'],
+    gegen:['💚 Ama enfrentar: times que pensam demais com a bola e saída de bola ruim — vira café da manhã.','🔥 Sofre contra: lançamento nas costas da linha adiantada. Precisa zaga veloz + goleiro que sai do gol.'],
+    direto:['💚 Ama enfrentar: zagas lentas e linhas altas, onde a Referência brilha.','🔥 Sofre contra: dupla de volante boa de segunda bola + zaga forte no jogo aéreo. Tenha um plano B pelo chão.'],
+    retranca:['💚 Ama enfrentar: favoritos sem criatividade — eles se esgotam batendo na sua parede.','🔥 Sofre contra: chute de fora de qualidade e bola parada ofensiva dos outros.'],
+    misto:['Identidade ainda em obra: define o plano A nas instruções acima pra eu te dizer exatamente contra QUEM você é mortal — e pra quem vira presa fácil.']
+  };
+  const vs=VSMAP[best==='misto'?'misto':best];
+
+  /* nota + decomposição */
   let score=100-err.length*15-wrn.length*7; if(score<5)score=5;
   let sColor='var(--neon)',sLabel='Bem amarrada! 🟢';
   if(score<65){sColor='var(--bad)';sLabel='Precisa de revisão 🔴';}
   else if(score<85){sColor='var(--warn)';sLabel='Boa, com ajustes 🟡';}
+  const brk='Base 100 − 15 × '+err.length+' conflito(s) − 7 × '+wrn.length+' ajuste(s) = '+score+' pts';
 
-  const item=(arr,ic)=>arr.map(x=>`<div class="find ${ic==='❌'?'err':ic==='⚠️'?'wrn':'ok'}"><span class="ic">${ic}</span><div><div class="t">${x[0]}</div><div class="d">${x[1]}</div></div></div>`).join('');
-  const empty=(!err.length&&!wrn.length&&!ok.length);
+  const item=(arr,ic)=>arr.map(x=>'<div class="find '+(ic==='❌'?'err':ic==='⚠️'?'wrn':'ok')+'"><span class="ic">'+ic+'</span><div><div class="t">'+x[0]+'</div><div class="d">'+x[1]+'</div></div></div>').join('');
+  const secH=(t)=>'<div style="font-size:12px;font-weight:900;color:var(--neon2);letter-spacing:.5px;margin:16px 0 6px">'+t+'</div>';
+  const PAPMIX=['🧭 <b>Um armador definido</b> (Construtor ou Meia Móvel) pra ser a primeira saída do seu plano.','🛡️ Dois zagueiros confiáveis: qualquer estilo paga caro por erro individual na zaga.','⚡ Um jogador de aceleração pura (ponta ou avançado) pra destravar jogo feio.','📋 Cola nos relatórios do assistente: ele aponta o que a SUA identidade tá pedindo em campo.'];
+  const papList=tipSrc?PAPTIPS[tipSrc]:PAPMIX;
 
-  document.getElementById('resultBox').innerHTML=`
-    <div style="display:flex;align-items:center;gap:16px">
-      <div class="score" style="color:${sColor}">${score}</div>
-      <div style="flex:1">
-        <div class="slab"><b style="color:var(--txt)">Coerência tática</b> · ${sLabel}</div>
-        <div class="sbar"><i style="width:${score}%;background:${sColor}"></i></div>
-      </div>
-    </div>
-    <div class="stylebox">🎭 Estilo identificado: <b>${best==='misto'?'🎲 Estilo Misto / Personalizado':labels[best]}</b><br>
-    <span style="font-size:13px;color:var(--sub)">${dicas[best]}</span></div>
-    ${best!=='misto'?`<div style="margin-top:12px"><div style="font-size:12px;font-weight:900;color:var(--neon2);letter-spacing:.5px;margin-bottom:6px">🎽 PAPEL DE JOGADOR & AJUSTES FINOS PRA ESSE ESTILO</div>
-    ${PAPTIPS[best].map(x=>`<div class="find"><span class="ic" style="font-size:13px">▸</span><div><div class="d" style="color:#c7d5e8">${x}</div></div></div>`).join('')}</div>`:''}
-    <div style="margin-top:6px">
-      ${empty?'<div class="find ok"><span class="ic">✅</span><div><div class="t">Sem conflitos detectados</div><div class="d">Sua tática não apresenta contradições óbvias. Teste e ajuste com base nos resultados!</div></div></div>':''}
-      ${item(ok,'✅')}${item(err,'❌')}${item(wrn,'⚠️')}
-    </div>
-    <div class="row" style="display:flex;gap:8px;margin-top:14px">
-      <button class="btn g" style="flex:1;justify-content:center" onclick="copyAnalysis()">📋 Copiar análise</button>
-    </div>`;
-  window._lastAn={best,bv,score,sLabel,err,wrn,ok,labels};
-  window._PAPTIPS=best!=='misto'?PAPTIPS[best]:null;
+  document.getElementById('resultBox').innerHTML=
+    '<div style="display:flex;align-items:center;gap:16px">'
+    +'<div class="score" style="color:'+sColor+'">'+score+'</div>'
+    +'<div style="flex:1"><div class="slab"><b style="color:var(--txt)">Coerência tática</b> · '+sLabel+'</div>'
+    +'<div class="sbar"><i style="width:'+score+'%;background:'+sColor+'"></i></div>'
+    +'<div style="font-size:11px;color:var(--sub);margin-top:6px">'+brk+'</div></div></div>'
+    +'<div class="stylebox">🎭 <b>DNA TÁTICO:</b> <b>'+styleName+'</b><br><span style="font-size:13px;color:var(--sub)">'+dnaTxt+'</span></div>'
+    +secH('📖 COMO ESSE TIME JOGA — O RAIO-X EM TEXTO')
+    +'<div style="font-size:13px;color:#c7d5e8;line-height:1.6;margin-bottom:8px"><b style="color:var(--neon)">⚽ Com a bola —</b> '+xb+'</div>'
+    +'<div style="font-size:13px;color:#c7d5e8;line-height:1.6;margin-bottom:8px"><b style="color:#5fb7ff">🛡️ Sem a bola —</b> '+xs+'</div>'
+    +'<div style="font-size:13px;color:#c7d5e8;line-height:1.6"><b style="color:#ffb648">🔄 Nas transições —</b> '+xt+'</div>'
+    +(ok.length?secH('💪 PONTOS FORTES JÁ PRONTOS')+item(ok,'✅'):'')
+    +((err.length||wrn.length)?secH('⚠️ RISCOS E CONFLITOS')+item(err,'❌')+item(wrn,'⚠️'):'<div class="find ok" style="margin-top:14px"><span class="ic">✅</span><div><div class="t">Sem conflitos internos</div><div class="d">A tática não contradiz nenhuma instrução. Tá protegida!</div></div></div>')
+    +secH('🛠️ PLANO DE AJUSTE (na ordem de prioridade)')
+    +plan4.map(function(p,i){return '<div class="find"><span class="ic" style="font-weight:900;color:var(--neon2)">'+(i+1)+'º</span><div><div class="t">'+p[0]+'</div><div class="d">'+p[1]+'</div></div></div>';}).join('')
+    +secH('🎽 OS PAPÉIS CERTOS PRA ESSA IDEIA')
+    +papList.map(x=>'<div class="find"><span class="ic" style="font-size:13px">▸</span><div><div class="d" style="color:#c7d5e8">'+x+'</div></div></div>').join('')
+    +secH('🆚 NO CONFRONTO — AMOR E ÓDIO DO SEU ESTILO')
+    +vs.map(x=>'<div class="find"><span class="ic">🎯</span><div><div class="d" style="color:#c7d5e8">'+x+'</div></div></div>').join('')
+    +secH('🧠 COMO EU CHEGUEI NESSA NOTA')
+    +'<div style="font-size:12px;color:var(--sub);line-height:1.6">Base de 100 pontos: desconto 15 por conflito real (instruções que se anulam) e 7 por ajuste fino. A nota mede <b>coerência interna</b> — até uma retranca feiosa pode ser 100 coerente 😄. O resto se resolve em campo: resultados, xG e olho no jogo.</div>'
+    +'<div class="row" style="display:flex;gap:8px;margin-top:14px"><button class="btn g" style="flex:1;justify-content:center" onclick="copyAnalysis()">📋 Copiar análise completa</button></div>';
+  window._lastAn={best,bv,score,sLabel,err,wrn,ok,labels,styleName,dnaTxt,xb,xs,xt,plan4,vs,brk,pap:papList};
   if(scroll&&window.innerWidth<920) document.getElementById('resultBox').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function copyAnalysis(){
   const a=window._lastAn; if(!a)return;
-  const t=(arr,p)=>arr.length?('\n'+p+'\n'+arr.map(x=>'  • '+x[0]+': '+x[1]).join('\n')):'';
-  const styleName = a.best==='misto' ? 'Estilo Misto / Personalizado' : a.labels[a.best];
-  const strip=s=>s.replace(/<[^>]+>/g,'');
-  const pap=a.best&&window._PAPTIPS?('\n🎽 Papéis e ajustes finos:\n'+window._PAPTIPS.map(x=>'  • '+strip(x)).join('\n')):'';
-  copyText(`🧪 ANÁLISE DE TÁTICA — FM Touch Lab\nNota de coerência: ${a.score}/100 (${a.sLabel})\nEstilo identificado: ${styleName}${t(a.ok,'✅ Pontos fortes:')}${t(a.err,'❌ Conflitos:')}${t(a.wrn,'⚠️ Atenção:')}${pap}`);
+  const strip=s=>String(s).replace(/<[^>]+>/g,'');
+  const t=(arr,p)=>arr.length?('\n\n'+p+'\n'+arr.map(x=>'  • '+x[0]+': '+strip(x[1])).join('\n')):'';
+  const pap=a.pap?('\n\n🎽 Papéis e ajustes finos:\n'+a.pap.map(x=>'  • '+strip(x)).join('\n')):'';
+  copyText('🧪 RAIO-X DE TÁTICA — FM Touch Lab\nNota de coerência: '+a.score+'/100 ('+a.sLabel+')\n'+a.brk+'\n\n🎭 DNA tático: '+strip(a.styleName)+'\n'+strip(a.dnaTxt)+'\n\n📖 Como esse time joga:\n⚽ Com a bola: '+strip(a.xb)+'\n🛡️ Sem a bola: '+strip(a.xs)+'\n🔄 Nas transições: '+strip(a.xt)+t(a.ok,'✅ Pontos fortes:')+t(a.err,'❌ Conflitos:')+t(a.wrn,'⚠️ Atenção:')+'\n\n🛠️ Plano de ajuste:\n'+a.plan4.map((p,i)=>'  '+(i+1)+'. '+strip(p[0])+' '+strip(p[1])).join('\n')+'\n\n🆚 No confronto:\n'+a.vs.map(v=>'  • '+strip(v)).join('\n')+pap);
 }
-window.analisar=analisar; window.copyAnalysis=copyAnalysis; window.copyTactic=copyTactic;
+function focusField(id){const el=document.getElementById(id);if(!el)return;el.scrollIntoView({behavior:'smooth',block:'center'});el.style.outline='2px solid var(--neon)';el.style.outlineOffset='3px';el.style.borderRadius='10px';setTimeout(()=>{el.style.outline='';el.style.outlineOffset='';el.style.borderRadius='';},2400);}
+window.analisar=analisar; window.copyAnalysis=copyAnalysis; window.copyTactic=copyTactic; window.focusField=focusField;
 
 /* ============ SCOUT — BASE 2026 ============ */
 /* {n:nome, i:idade(2026), c:clube atual, p:posição, r:papéis, v:valor est. €mi, d:dica, tipo?:'emp'} */
@@ -1886,7 +1972,7 @@ const DB_GAME5 = [
  {n:'Rómulo Otero',i:28,c:'Criciúma · VEN',p:['ATA'],r:['Extremo','Meia-Atacante'],v:2.7,d:'Canhota venezuelana decidida: batedor de falta e tabela curta. Craque.'},
  {n:'Marcelino Moreno',i:25,c:'Lanús · ARG',p:['MEIO'],r:['Meia','Meia-Atacante'],v:2.7,d:'Armador do Lanús: técnico e objetivo por 2,7 mi. Garimpo argentino clássico.'},
  {n:'Boschilia',i:24,c:'Operário-PR · BRA',p:['MEIO'],r:['Meia-Atacante','Armador'],v:2.7,d:'Saudável, é dos melhores armadores do Brasil: no Operário-PR por 2,7 mi. Golpe!'},
- {n:'Wallace Yan',i:20,c:'Flamengo · BRA',p:['ATA'],r:['Segundo Atacante','Meia-Atacante'],v:2.6,d:'Joia do FLAMENGO de 20 anos: MO e PL, 2,6 mi na base da confiança.'},
+ {n:'Wallace Yan',i:20,c:'Flamengo · BRA',p:['ATA'],r:['Segundo Atacante','Meia-Atacante'],v:2.6,d:'FEZ GOL NO CHELSEA NO MUNDIAL DE CLUBES na vida real!! Cria do Mengão com faro de gol e raça. 💎'},
  {n:'Édison Flores',i:26,c:'D.C. United · PER',p:['ATA'],r:['Extremo','Meia-Atacante'],v:2.6,d:'Orejas peruano: extremo de energia total na MLS. Barato e elétrico.'},
  {n:'Cauly',i:29,c:'São Paulo · BRA',p:['ATA'],r:['Extremo','Meia-Atacante'],v:2.5,d:'Meia motor do São Paulo: 2,5 mi com gol, chegada e visão. Bom negócio.'},
  {n:'Carlinhos',i:26,c:'Dibba Al-Fujairah · BRA',p:['MEIO'],r:['Meia','Meia-Atacante'],v:2.5,d:'Meia técnico na Arábia: troco de balango pra jogador nível Série A.'},
@@ -2020,7 +2106,120 @@ const DB_GAME5 = [
  {n:'Guilherme (Atlético-GO)',i:29,c:'Atlético Goianiense · BRA',p:['MEIO'],r:['Meia-Atacante','Armador'],v:3.3,d:'Outro Guilherme no radar kk: meia-atacante fino do Dragão por 3,3 mi.'},
  {n:'Pablo López (Güemes)',i:31,c:'Güemes · ARG',p:['MEIO'],r:['Meia-Atacante','Armador'],v:0.225,d:'O outro Pablo López do save: meia experiente do Güemes por €225 mil.'},
 ];
-const SCOUT_ALL = SCOUT.concat(DB_FMI, DB_SOSI, DB_SDJ, DB_CHEFE, DB_GAME2, DB_GAME3, DB_GAME4, DB_GAME5);
+const DB_GAME6 = [
+ /* 🛡️⚡ prints p01-p27: zagueiros (Lista Preferencial+pesquisa), MEIAS PESADOS (Doué, J.Félix, David, Zaniolo...) e PLs baratos — com curadoria de potencial pesquisada na net */
+ {n:'Vicente Pizarro',i:18,c:'Rosario Central · CHI',p:['MEIO'],r:['Volante','Trinco'],v:0.21,d:'Volante chileno com selo de seleção futura: cria do Colo Colo agora segura no Rosario Central.'},
+ {n:'Malik Tillman',i:21,c:'Bayer 04 · USA',p:['MEIO'],r:['Meia-Atacante','Segundo Atacante'],v:0.195,d:'Meia-atacante americano de classe: explodiu no PSV na vida real. MO e PL por menos que um combo.'},
+ {n:'Miguel',i:19,c:'Napoli · ESP',p:['DEF'],r:['Lateral Esquerdo','Ala Esquerdo'],v:0.079,d:'Miguel Gutiérrez vibes: LE espanhol que na vida real trocou o Girona pelo NAPOLI. Chegada e cruzamento doce. 💎'},
+ {n:'Giovani Henrique',i:17,c:'Al-Sadd · BRA',p:['ATA'],r:['Extremo','Meia-Atacante'],v:0.063,d:'Extremo brasileiro de 17 no Qatar: drible de rua com preço de pipa. Garimpo exótico.'},
+ {n:'Carles Llario',i:18,c:'R. Madrid B · ESP',p:['ATA'],r:['Extremo','Meia-Atacante'],v:0.041,d:'Pontinha do Castilla de olho no Bernabéu: velocidade espanhola por €41 mil. Garimpo madrilenho.'},
+ {n:'Diogo Pinto',i:16,c:'Sporting B · POR',p:['GOL'],r:['Goleiro'],v:0,d:'Goleiro de 16 no Sporting B: os leões também criam GR tops (vibes Rui Patricio). Quase de graça. 💎'},
+ {n:'Rodrigo Cáseres',i:23,c:'Villa Dálmine · ARG',p:['DEF'],r:['Zagueiro'],v:0.875,d:'Zagueiro argentino aplicado: raça da Primera por preço de reserva.'},
+ {n:'Tomás Fernández',i:21,c:'Gimnasia · ARG',p:['DEF'],r:['Zagueiro'],v:0.85,d:'Defensor de garra das divisões argentinas: garimpo puro, chefe.'},
+ {n:'Andrea Cistana',i:23,c:'Brescia · ITA',p:['DEF'],r:['Zagueiro'],v:0.85,d:'Zagueiro do Brescia: escola lombarda, sai jogando de pé bom. Ofício italiano clássico.'},
+ {n:'Bruno Palazzo',i:20,c:'Gimnasia · ARG',p:['DEF'],r:['Zagueiro'],v:0.825,d:'Zaga sul-americana barata: corta tudo e ainda sai jogando com dignidade.'},
+ {n:'Maximiliano Centurión',i:21,c:'Argentinos Jrs. · ARG',p:['DEF'],r:['Zagueiro'],v:0.825,d:'Cria da escola argentina de zagueiros duros: preço de parrilla.'},
+ {n:'Alexis Sosa',i:21,c:'Banfield · ARG',p:['DEF'],r:['Zagueiro'],v:0.825,d:'Baixo custo, alta entrega: zagueiro honesto pra qualquer esquema.'},
+ {n:'Nicolás Zalazar',i:23,c:'Platense · ARG',p:['DEF'],r:['Zagueiro'],v:0.825,d:'Defensor firme e jovem: mais um da linha de montagem argentina kk.'},
+ {n:'Filip Benković',i:23,c:'Eintracht Braunschweig · CRO',p:['DEF'],r:['Zagueiro'],v:0.8,d:'Tem Copa do Mundo 2018 no currículo real kk: qualidade sobrando por €800 mil e experiência pura.'},
+ {n:'Tomás López',i:23,c:'Gimnasia Mendoza · ARG',p:['DEF'],r:['Zagueiro'],v:0.8,d:'Zagueiro de ofício por menos de €1 mi: matematicamente impossível dar errado kk.'},
+ {n:'Nicolás Demartini',i:21,c:'Barracas Central · ARG',p:['DEF'],r:['Zagueiro'],v:0.8,d:'Zagueiro argentino aplicado: raça da Primera por preço de reserva.'},
+ {n:'Fernando Cosciuc',i:22,c:'San Martín SJ · ARG',p:['DEF'],r:['Zagueiro'],v:0.725,d:'Defensor de garra das divisões argentinas: garimpo puro, chefe.'},
+ {n:'Maximiliano Acuña',i:22,c:'Central Córdoba · ARG',p:['DEF'],r:['Zagueiro'],v:0.725,d:'Zaga sul-americana barata: corta tudo e ainda sai jogando com dignidade.'},
+ {n:'Jason Kerr',i:23,c:'St. Johnstone · SCO',p:['DEF'],r:['Zagueiro'],v:0.7,d:'Zagueiro escocês do St. Johnstone: seguro na área e baratinho. Ofício das Highlands kk.'},
+ {n:'Enzo Ortiz',i:23,c:'Brown de Adrogué · ARG',p:['DEF'],r:['Zagueiro'],v:0.7,d:'Cria da escola argentina de zagueiros duros: preço de parrilla.'},
+ {n:'Francisco Álvarez',i:20,c:'Argentinos Jrs. · ARG',p:['DEF'],r:['Zagueiro'],v:0.675,d:'Baixo custo, alta entrega: zagueiro honesto pra qualquer esquema.'},
+ {n:'Isaac Monti',i:22,c:'Boca Juniores · ARG',p:['DEF'],r:['Zagueiro'],v:0.675,d:'Boca formando zagueiro: 22 anos com raça Xeneize certificada. Preço de Bombonera lotada.'},
+ {n:'Bruno Cabrera',i:23,c:'Newells Old Boys · ARG',p:['DEF'],r:['Zagueiro'],v:0.675,d:'Defensor firme e jovem: mais um da linha de montagem argentina kk.'},
+ {n:'Marco Di Cesare',i:18,c:'Racing Club · ARG',p:['DEF'],r:['Zagueiro','Volante'],v:0.625,d:'Joia da Academia: 18 anos no Cilindro visto como capitão futuro do Racing. PROJETO TOP. 💎'},
+ {n:'Juan Antonini',i:21,c:'Sarmiento · ARG',p:['DEF'],r:['Zagueiro'],v:0.6,d:'Zagueiro de ofício por menos de €1 mi: matematicamente impossível dar errado kk.'},
+ {n:'Rodrigo Herrera',i:20,c:'Defensa y Justicia · ARG',p:['DEF'],r:['Zagueiro'],v:0.6,d:'Zagueiro argentino aplicado: raça da Primera por preço de reserva.'},
+ {n:'Miranda',i:20,c:'Operário-PR · BRA',p:['DEF'],r:['Zagueiro'],v:0.6,d:'Nome de lenda de Milan/Real kk: zagueiro do Operário-PR marca firme por €600 mil.'},
+ {n:'Horacio Igarzábal',i:20,c:'Sol de Mayo · ARG',p:['DEF'],r:['Zagueiro'],v:0.575,d:'Defensor de garra das divisões argentinas: garimpo puro, chefe.'},
+ {n:'Damián Fernández',i:20,c:'Defensa y Justicia · ARG',p:['DEF'],r:['Zagueiro'],v:0.575,d:'Zaga sul-americana barata: corta tudo e ainda sai jogando com dignidade.'},
+ {n:'Agustín Álvarez',i:20,c:'Godoy Cruz · ARG',p:['DEF'],r:['Zagueiro'],v:0.575,d:'Cria da escola argentina de zagueiros duros: preço de parrilla.'},
+ {n:'Juan Díaz',i:22,c:'Agropecuario · ARG',p:['DEF'],r:['Zagueiro'],v:0.575,d:'Baixo custo, alta entrega: zagueiro honesto pra qualquer esquema.'},
+ {n:'Nicolás',i:23,c:'Huachipato · CHI',p:['DEF'],r:['Zagueiro'],v:0.575,d:'Zagueiro chileno de nome único nível brasileiro kk: firmeza do Huachipato por €575 mil.'},
+ {n:'Franco Calderón',i:22,c:'Universidad de Chile · ARG',p:['DEF'],r:['Zagueiro'],v:0.55,d:'Formado na U de Chile: zagueiro de 22 com seleção universitária no DNA. Camarada.'},
+ {n:'Diego Mastrángelo',i:18,c:'Gimnasia · ARG',p:['DEF'],r:['Zagueiro'],v:0.55,d:'18 anos no Lobo de La Plata: físico de zagueirão italiano-argentino. PROJETO TOP. 💎'},
+ {n:'Matías Mariatti',i:23,c:'Ferro · ARG',p:['DEF'],r:['Zagueiro'],v:0.55,d:'Defensor firme e jovem: mais um da linha de montagem argentina kk.'},
+ {n:'Luciano Squadrone',i:21,c:'Estudiantes · ARG',p:['DEF'],r:['Zagueiro'],v:0.55,d:'Nome de chefe final de videogame kk: zagueiro firme do Pincha por €550 mil.'},
+ {n:'Augusto Aguirre',i:21,c:'San Martín Tucumán · ARG',p:['DEF'],r:['Zagueiro'],v:0.525,d:'Zagueiro de ofício por menos de €1 mi: matematicamente impossível dar errado kk.'},
+ {n:'Agustín Heredia',i:23,c:'Cerro Largo · ARG',p:['DEF'],r:['Zagueiro'],v:0.525,d:'Zagueiro argentino aplicado: raça da Primera por preço de reserva.'},
+ {n:'Bruno Rodríguez',i:21,c:'Sarmiento · ARG',p:['DEF'],r:['Zagueiro'],v:0.5,d:'Defensor de garra das divisões argentinas: garimpo puro, chefe.'},
+ {n:'Mauricio Guzmán',i:21,c:'Almagro · ARG',p:['DEF'],r:['Zagueiro'],v:0.5,d:'Zaga sul-americana barata: corta tudo e ainda sai jogando com dignidade.'},
+ {n:'Pedro Gonçalves',i:22,c:'Sporting · POR',p:['MEIO'],r:['Meia','Meia-Atacante'],v:26.5,d:'POTE: meia-artilheiro do Sporting, máquina de gols de fora da área na vida real. PRONTÍSSIMO pro titulo. 💎'},
+ {n:'Nicolò Zaniolo',i:21,c:'Udinese · ITA',p:['ATA'],r:['Extremo','Meia-Atacante'],v:23.5,d:'Talento azzurro de Inter/Roma/Gala na vida real: força mais fantasia juntas. Na Udinese renasce.'},
+ {n:'Donny van de Beek',i:23,c:'Girona · NED',p:['MEIO'],r:['Meia','Meia-Atacante'],v:18,d:'O Donny da era mágica do Ajax, agora sorrisão no Girona: meia de área por €18 mi. Bug lindo.'},
+ {n:'Angel Gomes',i:20,c:'Wolves · ENG',p:['MEIO'],r:['Meia-Atacante','Armador'],v:15.25,d:'Mini-maestro inglês: Lille e seleção na vida real. 20 aninhos de passe refinado nos Wolves. 💎'},
+ {n:'Krépin Diatta',i:21,c:'AS Monaco · SEN',p:['ATA'],r:['Extremo','Meia-Atacante'],v:14.5,d:'Um dos mais RÁPIDOS da Ligue 1 na vida real: flecha senegalesa do Monaco. Extremo raio.'},
+ {n:'Yusuf Yazıcı',i:23,c:'LOSC · TUR',p:['MEIO'],r:['Meia','Meia-Atacante'],v:14,d:'Canhota turca lendária: hat-tricks na Europa pelo Lille na vida real. Falta e média MORTAIS.'},
+ {n:'Steven Alzate',i:22,c:'Atlanta United · COL',p:['MEIO'],r:['Meia','Meia-Atacante'],v:11,d:'Colombiano-técnico formado no Brighton: surpresinha útil do Atlanta. Químico de meio-campo.'},
+ {n:'Jonathan David',i:20,c:'I Zebre · CAN',p:['ATA'],r:['Extremo','Avançado'],v:10.25,d:'DAVID: tanque de gols do Canadá, ídolo do Lille disputado por gigantes na vida real. €10 mi = BUG HISTÓRICO. 💎'},
+ {n:'Nikola Vlasic',i:23,c:'Torino · CRO',p:['MEIO'],r:['Meia-Atacante','Armador'],v:9.75,d:'Croata elegante no Torino: West Ham e CSKA na vida real. Meia completo eternamente subestimado.'},
+ {n:'Abdülkadir Ömür',i:21,c:'Antalyaspor · TUR',p:['ATA'],r:['Extremo','Meia-Atacante'],v:9.25,d:'Joia do Trabzonspor na vida real: armador turco clássico com visão de última geração.'},
+ {n:'Amine Harit',i:23,c:'OM · MAR',p:['ATA'],r:['Extremo','Meia-Atacante'],v:9,d:'Drible marroquino puro: Schalke e OM na vida real. No dia bom baila no meio de três kk.'},
+ {n:'Lovro Majer',i:22,c:'VfL Wolfsburg · CRO',p:['MEIO'],r:['Meia-Atacante','Armador'],v:8.75,d:'Herdeiro do caminho de Modric: Dinamo e Rennes na vida real. Canhoto cerebral do Wolfsburg.'},
+ {n:'Eljif Elmas',i:21,c:'Napoli · MKD',p:['MEIO'],r:['Meia','Meia-Atacante'],v:8.5,d:'Curinga macedônio CAMPEÃO ITALIANO com o Napoli na vida real: meia-atacante versátil e guerreiro.'},
+ {n:'João Félix',i:21,c:'Al-Nassr · POR',p:['ATA'],r:['Extremo','Avançado'],v:8.5,d:'JOÃO FÉLIX: na vida real custou €127 MILHÕES um dia!! Aqui €8,5 mi com maré de magia por desbloquear. 💎'},
+ {n:'Todd Cantwell',i:22,c:'Rangers · ENG',p:['ATA'],r:['Extremo','Meia-Atacante'],v:8.25,d:'Meia inglês estiloso: Norwich e Bournemouth na vida real, hoje artista do Rangers. Bom e barato.'},
+ {n:'Florian Neuhaus',i:23,c:'Borussia MG · GER',p:['MEIO'],r:['Meia','Meia-Atacante'],v:8.25,d:'Box-to-box alemão do Gladbach: gol, pulmão e passe. Primeira prateleira por €8,25 mi.'},
+ {n:'Ianis Hagi',i:22,c:'Alanyaspor · ROU',p:['ATA'],r:['Extremo','Meia-Atacante'],v:7.25,d:'FILHO DO GHEORGHE HAGI!! Canhota romena mágica com Galatasaray e Rangers no currículo real. HERANÇA PESADA kk.'},
+ {n:'Ramadan Sobhi',i:23,c:'Pyramids · EGY',p:['ATA'],r:['Extremo','Meia-Atacante'],v:6.75,d:'Egípcio rodado na Inglaterra na vida real: hoje faraó do Pyramids. Agilidade oriental garantida.'},
+ {n:'Carles Pérez',i:22,c:'Aris Salonica · ESP',p:['ATA'],r:['Extremo','Meia-Atacante'],v:6.5,d:'Ex-La Masia e Roma na vida real: ponta canhoto portátil agora fino na Grécia. Técnica catalana.'},
+ {n:'Jonathan Ikoné',i:22,c:'Paris FC · FRA',p:['ATA'],r:['Extremo','Meia-Atacante'],v:6.25,d:'Extremo francês de Lille/Fiorentina na vida real: no Paris FC da segunda é LUXO gaulês.'},
+ {n:'Ezequiel Barco',i:21,c:'Spartak Moscovo · ARG',p:['ATA'],r:['Extremo','Meia-Atacante'],v:5.75,d:'BARCO: conquistou a MLS com o Atlanta na vida real! Canhoto argentino genial por 5,75 mi. 💎'},
+ {n:'Emre Mor',i:23,c:'Fatih Karagümrük · TUR',p:['ATA'],r:['Extremo','Meia-Atacante'],v:5.75,d:'O eterno Neymar turco kk: o drible ainda mora nos pés dele. Renascimento por €5,75 mi.'},
+ {n:'Mohamed Ihattaren',i:18,c:'Fortuna Sittard · NED',p:['ATA'],r:['Extremo','Meia-Atacante'],v:5.75,d:'O MAIOR talento desviado da Holanda recente: renascimento no Sittard. Se engrenar, é TOP DO MUNDO kk. 💎'},
+ {n:'Mauro Júnior',i:21,c:'PSV · BRA',p:['ATA'],r:['Extremo','Meia-Atacante'],v:5.25,d:'Brasileiro coringa do PSV: lateral, ala ou ponta — entrega em todas com caneta inclusa kk.'},
+ {n:'Hannes Wolf',i:21,c:'Borussia MG · AUT',p:['MEIO'],r:['Meia-Atacante','Armador'],v:5.25,d:'Extremo cerebral austríaco: Salzburg e Gladbach na vida real. Subestimado nível ouro.'},
+ {n:'Orkun Kökçü',i:20,c:'Beşiktaş · TUR',p:['MEIO'],r:['Meia','Meia-Atacante'],v:4.9,d:'KÖKÇÜ: capitão do Feyenoord na vida real, meia turco líder de elenco inteiro por €4,9 mi. 💎'},
+ {n:'Yari Verschaeren',i:19,c:'Anderlecht · BEL',p:['MEIO'],r:['Meia','Meia-Atacante'],v:4.8,d:'Metrônomo belga de 19 do Anderlecht: a escola roxa segue produzindo 10 de luxo. 💎'},
+ {n:'Martin Sarrafiore',i:23,c:'Independiente · ARG',p:['ATA'],r:['Extremo','Meia-Atacante'],v:2,d:'Armador subestimado do Independiente com Miami e Huracán na estrada: categoria por €2 mi.'},
+ {n:'Julio Villalba',i:22,c:'Sportivo Luqueño · PAR',p:['ATA'],r:['Avançado','Finalizador'],v:0.525,d:'Artilheiro paraguaio do Luqueño: faro de gol guaraní por €525 mil. Temperamento incluso kk.'},
+ {n:'Axel Rodríguez',i:23,c:'All Boys · ARG',p:['ATA'],r:['Avançado','Finalizador'],v:0.525,d:'Centroavante jovem das divisões argentinas: garimpo de €500 mil clássico do FM.'},
+ {n:'Francisco García',i:22,c:'Colegiales · ARG',p:['ATA'],r:['Extremo','Avançado'],v:0.525,d:'Nome de garimpeiro: baratinho, jovem e com vontade de sobra. Aposta do Lab.'},
+ {n:'Luca Martínez Dupuy',i:19,c:'Godoy Cruz · MEX',p:['ATA'],r:['Avançado','Finalizador'],v:0.5,d:'Mexicano-argentino do Godoy Cruz: 19 anos, gol simples e direto. Projeto americano. 💎'},
+ {n:'Franco García',i:23,c:'Newells Old Boys · ARG',p:['ATA'],r:['Avançado','Finalizador'],v:0.5,d:'Artilheiro barato com vontade: nome de olheiro amador campeão kk.'},
+ {n:'Enzo López',i:22,c:'Los Andes · ARG',p:['ATA'],r:['Avançado','Finalizador'],v:0.5,d:'Pl jovem pra desenvolver no treino: hoje troco, amanhã titular absoluto.'},
+ {n:'Facundo Salto',i:18,c:'Racing Club · ARG',p:['ATA'],r:['Avançado','Finalizador'],v:0.5,d:'Cria da Academia do Racing: 18 anos de centroavantaria pura. Avellaneda fornece, chefe. 💎'},
+ {n:'Stefan Posch',i:23,c:'Como · AUT',p:['DEF'],r:['Zagueiro'],v:1.7,d:'Austríaco do Como: discrição profissional e zero erro bobo. Relógio zagueiro kk.'},
+ {n:'Jonathan Mensah',i:30,c:'New England · GHA',p:['DEF'],r:['Zagueiro'],v:1.7,d:'Ganês capitão campeão da MLS com o Columbus na vida real: liderança veterana acessível.'},
+ {n:'Miguel Ángel Torrén',i:32,c:'Argentinos Jrs. · ARG',p:['DEF'],r:['Zagueiro'],v:1.6,d:'Pilar eterno do Argentinos Jrs: nome de respeito da zaga argentina. Ofício por €1,6 mi.'},
+ {n:'Mike te Wierik',i:28,c:'FC Groningen · NED',p:['DEF'],r:['Zagueiro'],v:1.6,d:'Holandês de 1,91 rodado na Alemanha: domina o aéreo em qualquer país kk.'},
+ {n:'Joaquín Novillo',i:22,c:'Aldosivi · ARG',p:['DEF'],r:['Zagueiro'],v:1.6,d:'Jovem argentino firme do Aldosivi: físico e preço camarada, projeção boa pra rotação.'},
+ {n:'Guillermo Maripán',i:32,c:'Internacional · CHI',p:['DEF'],r:['Zagueiro'],v:1.6,d:'Chileno-zagueirão do Inter: titular de seleção e de Monaco na vida real. €1,6 mi por ELITE. 💎'},
+ {n:'Rick van Drongelen',i:22,c:'Rostock · NED',p:['DEF'],r:['Zagueiro'],v:1.6,d:'Cria da escola argentina de zagueiros duros: preço de parrilla.'},
+ {n:'Lucas Kal',i:24,c:'Sport · BRA',p:['DEF'],r:['Zagueiro'],v:1.6,d:'Zagueiro do Sport na ilha: raça rubro-negra e preço bacana. Marca e até sobe com estilo.'},
+ {n:'Raúl Albiol',i:35,c:'Pisa · ESP',p:['DEF'],r:['Zagueiro'],v:1.6,d:'ALBIOL AOS 35 NO PISA: na vida real CAMPEÃO DO MUNDO 2010 e da EURO 2012!! €1,6 mi por currículo REAL. 💎'},
+ {n:'Gabriel Paulista',i:34,c:'Corinthians · BRA',p:['DEF'],r:['Zagueiro'],v:1.5,d:'Veterano do Coringão: Arsenal e Valencia na vida real! Aos 34 ainda impõe o físico.'},
+ {n:'Andreu Fontàs',i:31,c:'Sporting Kansas City · ESP',p:['DEF'],r:['Zagueiro','Volante'],v:1.5,d:'Canhoto formado no Barça rodando a MLS: sai jogando com elegância de Masia.'},
+ {n:'Ardian Ismajli',i:24,c:'Spezia · ALB',p:['DEF'],r:['Zagueiro'],v:1.5,d:'Albanês moderno do Spezia: rápido, alto e barato. A Itália exporta bem esse tipo.'},
+ {n:'Bruno Bianchi',i:31,c:'Colón · ARG',p:['DEF'],r:['Zagueiro'],v:1.5,d:'Baixo custo, alta entrega: zagueiro honesto pra qualquer esquema.'},
+ {n:'Matías Nani',i:22,c:'Unión SF · ARG',p:['DEF'],r:['Zagueiro'],v:1.5,d:'Zagueiro do Unión de Santa Fe: 22 anos de raça santafesina por €1,5 mi.'},
+ {n:'Néstor Breitenbruch',i:25,c:'Atl. Tucumán · ARG',p:['DEF'],r:['Zagueiro'],v:1.5,d:'Defensor firme e jovem: mais um da linha de montagem argentina kk.'},
+ {n:'Arlind Ajeti',i:27,c:'Reggiana · ALB',p:['DEF'],r:['Zagueiro'],v:1.5,d:'Zagueiro de ofício por menos de €1 mi: matematicamente impossível dar errado kk.'},
+ {n:'Léo Ortiz',i:29,c:'Flamengo · BRA',p:['DEF'],r:['Zagueiro'],v:1.5,d:'LÉO ORTIZ NO FLAMENGO: líder da melhor defesa do Brasil na vida real. €1,5 mi = ROUBO NA GÁVEA!! 💎'},
+ {n:'Andrey Semenov',i:31,c:'Akhmat · RUS',p:['DEF'],r:['Zagueiro'],v:1.5,d:'Paredão russo do Akhmat: 1,90 de marcação dura por preço de mercearia.'},
+ {n:'Erick Cabaco',i:25,c:'Ferrol · URU',p:['DEF'],r:['Zagueiro'],v:1.4,d:'Uruguayo rodado por Holanda e Espanha na vida real: ofício gigante por €1,4 mi.'},
+ {n:'Aníbal Leguizamón',i:28,c:'Belgrano · ARG',p:['DEF'],r:['Zagueiro'],v:1.4,d:'Zagueiro argentino aplicado: raça da Primera por preço de reserva.'},
+ {n:'Gastón Suso',i:29,c:'Arsenal Sarandí · ARG',p:['DEF'],r:['Zagueiro'],v:1.4,d:'Defensor de garra das divisões argentinas: garimpo puro, chefe.'},
+ {n:'Yaroslav Rakitskyi',i:31,c:'Zenit · UKR',p:['DEF'],r:['Zagueiro'],v:1.4,d:'Zagueiro CONSTRUTOR canhoto do Zenit: sai jogando como camisa 10. Ucraniano CLASSE A.'},
+ {n:'Tiago Casasola',i:25,c:'Catania · ARG',p:['DEF'],r:['Zagueiro','Lateral Direito'],v:1.4,d:'Zaga sul-americana barata: corta tudo e ainda sai jogando com dignidade.'},
+ {n:'Giorgos Tzavellas',i:33,c:'Alanyaspor · GRE',p:['DEF'],r:['Zagueiro'],v:1.4,d:'Grego veterano com Premier e Bundesliga na vida real: currículo internacional barato.'},
+ {n:'Diego Polenta',i:28,c:'Nacional · URU',p:['DEF'],r:['Zagueiro'],v:1.4,d:'Cria da escola argentina de zagueiros duros: preço de parrilla.'},
+ {n:'Gustavo Canto',i:26,c:'Gimnasia · ARG',p:['DEF'],r:['Zagueiro'],v:1.4,d:'Baixo custo, alta entrega: zagueiro honesto pra qualquer esquema.'},
+ {n:'Franco Paredes',i:21,c:'Argentinos Jrs. · ARG',p:['DEF'],r:['Zagueiro'],v:1.4,d:'Defensor firme e jovem: mais um da linha de montagem argentina kk.'},
+ {n:'Fabián Balbuena',i:33,c:'Grêmio · PAR',p:['DEF'],r:['Zagueiro'],v:1.4,d:'O GENERAL NO GRÊMIO: West Ham e Corinthians na vida real! €1,4 mi por liderança testada na PL. 💎'},
+ {n:'Bubacarr Sanneh',i:26,c:'AGF · GAM',p:['DEF'],r:['Zagueiro'],v:1.4,d:'Gambiano rápido na Dinamarca: modelo moderno de zagueirão por troco.'},
+ {n:'Bram Nuytinck',i:30,c:'Sampdoria · NED',p:['DEF'],r:['Zagueiro'],v:1.4,d:'Holandês firme com prateleira italiana na vida real: zagueiro de confiança absoluta.'},
+ {n:'Stefan Radu',i:34,c:'Lazio · ROU',p:['DEF'],r:['Zagueiro'],v:1.4,d:'LENDA VIVA DA LAZIO: vida inteira de azul-celeste romano. Ídolo real eterno por €1,4 mi. 💎'},
+ {n:'Scott McKenna',i:24,c:'Las Palmas · SCO',p:['DEF'],r:['Zagueiro'],v:1.4,d:'Zagueiro escocês forte: Nottingham Forest na vida real. Físico de Highlands kk.'},
+ {n:'Héctor Moreno',i:32,c:'Monterrey · MEX',p:['DEF'],r:['Zagueiro'],v:1.3,d:'Mexicano com currículo de COPAS DO MUNDO na vida real!! Experiência total por €1,3 mi.'},
+ {n:'Gustavo Henrique',i:32,c:'Corinthians · BRA',p:['DEF'],r:['Zagueiro'],v:1.3,d:'Torre de 1,96 do Timão: impõe respeito na área dos dois lados. AÉREA TOTAL.'},
+ {n:'Rafael Tolói',i:34,c:'São Paulo · BRA',p:['DEF'],r:['Zagueiro'],v:1.3,d:'TOLÓI NO SPFC: cérebro da Atalanta histórica e zagueiro da Itália campeã da Euro na vida real! BUG €1,3 mi. 💎'},
+];
+const SCOUT_ALL = SCOUT.concat(DB_FMI, DB_SOSI, DB_SDJ, DB_CHEFE, DB_GAME2, DB_GAME3, DB_GAME4, DB_GAME5, DB_GAME6);
 
 /* Lista COMPLETA: contrato acabando no save do chefe 🎮 (dados exatos dos prints, base 2026 da comunidade) */
 const FA_FREE = [
@@ -2687,12 +2886,14 @@ async function readPrints(){
   msg.textContent='Carregando IA (1ª vez baixa ~10 MB)...';
   try{await loadAILib();}
   catch(e){
-    msg.textContent='😅 Sem internet pra carregar a IA agora. Confere a conexão e tenta de novo — ou use o modo manual.';
+    msg.innerHTML=location.hostname.includes('github.io')
+      ?'😅 A IA não baixou agora. Confere a conexão (precisa de internet na 1ª leitura) e toca em "Ler prints" de novo — ou usa o modo manual.'
+      :'😅 A IA precisa baixar ~10 MB e esta página de demonstração (Arena) bloqueia downloads externos. ✅ Testa no site oficial: <b>elitegamesofcyt.github.io/Fm-touch-lab</b> — lá funciona! (Sobe o arquivo novo no GitHub antes 😉)';
     btn.disabled=false; return;
   }
   const slots=[['form','Formação'],['bola','Com a bola'],['trans','Em transição'],['sembola','Sem a bola']];
   const active=slots.filter(([k])=>printFiles[k]);
-  let allText='',done=0,failed=0;
+  let allText='',done=0,failed=0; const slotTexts={}; let errLast='';
   for(const [k,label] of active){
     try{
       const prepped=await prepImage(printFiles[k]);
@@ -2702,40 +2903,72 @@ async function readPrints(){
           bar.style.width=p+'%';
           msg.textContent=`Lendo: ${label}… ${Math.round(m.progress*100)}%`;
         }
-      }});
-      allText+='\n'+r.data.text;
-    }catch(e){failed++;}
+      },workerPath:'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js',corePath:'https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core.wasm.js',langPath:'https://cdn.jsdelivr.net/npm/tesseract.js-data@4/4.0.0_best_int',errorHandler:e=>{errLast=(e&&e.message)?e.message:String(e);}});
+      allText+='\n'+r.data.text; slotTexts[k]=noAcc(r.data.text);
+    }catch(e){failed++; errLast=(e&&e.message)?e.message:String(e);}
     done++;
   }
   bar.style.width='100%';
   if(!allText.trim()){
-    msg.textContent='Não rolou 😕 Dicas: use o print tirado DENTRO do jogo (não foto da tela de outro aparelho), com o texto da tática bem grande e sem brilho/reflexo. Se a tática tá em inglês, muda o texto abaixo pra EN.';
+    msg.innerHTML=location.hostname.includes('github.io')
+      ?'😓 A IA carregou mas não leu nada. Tenta: prints tirados DENTRO do jogo (não foto de outra tela), texto bem grande, sem reflexo/brilho. Se seguir falhando, o modo manual preenche tudo rapidinho também! 💪'
+      :'😓 A IA carregou, mas <b>esta página de demonstração (Arena) bloqueia</b> as peças externas que ela baixa da nuvem — não é culpa sua nem dos prints! ✅ No site oficial a leitura funciona 100%: <b>elitegamesofcyt.github.io/Fm-touch-lab</b><br>📤 Lembra do ritual: sobe o index.html novo no GitHub (Add file → Upload files → Commit changes) e testa por lá.'
+      +(errLast?'<br><span style="font-size:10px;opacity:.55">Detalhe técnico: '+errLast.slice(0,140)+'</span>':'');
     btn.disabled=false; return;
   }
-  parsePrintData(noAcc(allText));
+  parsePrintData(slotTexts);
   msg.textContent=failed?`Leitura feita (1 print falhou). Confere o que a IA encontrou ⤵`:'Leitura concluída! Confere o que a IA encontrou ⤵';
   btn.disabled=false;
 }
 window.readPrints=readPrints;
-function parsePrintData(t){
-  const got=[],miss=[];
-  const S=t.replace(/[^a-z0-9]/g,''); /* texto colado: tolera OCR quebrando palavras ("gol eiro", "contra pressao") */
-  const set=(id,val,label)=>{document.getElementById(id).value=val;got.push(label);};
-  /* formação */
+function parsePrintData(slotTexts){
+  slotTexts=slotTexts||{};
+  const tB=slotTexts.bola||'', tS=slotTexts.sembola||'', tT=slotTexts.trans||'', tF=slotTexts.form||'';
+  const t=(tF+' '+tB+' '+tT+' '+tS).replace(/\s+/g,' ');
+  const S=t.replace(/[^a-z0-9]/g,'');
+  const Sb=tB.replace(/[^a-z0-9]/g,''), Ss=tS.replace(/[^a-z0-9]/g,''), St=tT.replace(/[^a-z0-9]/g,'');
+  function bset(s){const b=new Set();for(let i=0;i<s.length-1;i++)b.add(s.slice(i,i+2));return b;}
+  const Bb=bset(Sb), Bs=bset(Ss), Bt=bset(St), Ball=bset(S);
+  /* pareamento tolerante a erro de OCR: ≥80% dos pedaços de 2 letras batem */
+  function fzySet(b,kw){ if(kw.length<8)return false; let tot=0,hit=0; const seen={};
+    for(let i=0;i<kw.length-1;i++){const g=kw.slice(i,i+2); if(seen[g])continue; seen[g]=1; tot++; if(b.has(g))hit++;}
+    return tot>0&&hit/tot>=0.8; }
+  const any=(Sx,b,arr)=>{for(const k of arr){if(Sx.includes(k)||fzySet(b,k))return true;}return false;};
+
+  const chips=[],warnc=[],notes=[],qfix=[];
+  const cnt={form:0,bola:0,trans:0,sembola:0};
+  const extras={};
+  const g=(h)=>chips.push('<span class="tag g">'+h+'</span>');
+  const set=(id,val,label,panel)=>{document.getElementById(id).value=val;g('✅ '+label);if(panel)cnt[panel]++;};
+  const chip=(label,panel)=>{g('✅ '+label);if(panel)cnt[panel]++;};
+
+  const LGN=['Muito Estreita','Estreita','Equilibrada','Ampla','Muito Ampla'];
+  const TPN=['Muito Lento','Lento','Equilibrado','Rápido','Muito Rápido'];
+  const PSN=['Muito Curto','Curto','Equilibrado','Direto','Muito Direto'];
+  const CZN=['Quase nunca','Poucos','Equilibrado','Mais frequentes','Muito mais frequentes'];
+  const LDN=['Muito Atrás','Atrás','Equilibrada','Adiantada','Muito Adiantada'];
+  const BLN=['Muito Baixo','Baixo','Médio','Alto','Muito Alto'];
+  const PRN=['Pouco Intensa','Equilibrada','Intensa','Muito Intensa'];
+
+  /* === 🧩 FORMAÇÃO === */
   let fKey=null;
   for(const [pat,key] of FPATS){
     const rx=new RegExp(pat.replace(/-/g,'\\s*-\\s*'));
     if(rx.test(t)){fKey=key;break;}
   }
+  if(!fKey){
+    for(const [pat,key] of FPATS){ if(S.includes(pat.replace(/-/g,''))){fKey=key;break;} }
+  }
   if((t.includes('losango')||t.includes('diamant'))&&fKey==='442') fKey='41212';
-  if(fKey){set('f_form',fKey,'🧩 Formação: '+FORMS[fKey].label);document.getElementById('pitchBox').innerHTML=pitchSVG(fKey,true,'#f2f5fa');}
-  else miss.push('formação');
-  /* mentalidade — 3 camadas de detecção: perto do título → palavra isolada segura → texto colado */
+  if(fKey){set('f_form',fKey,'🧩 Formação: '+FORMS[fKey].label,'form');document.getElementById('pitchBox').innerHTML=pitchSVG(fKey,true,'#f2f5fa');}
+  else if(tF) warnc.push('🔎 Print da formação: não achei o esquema numérico — tenta um corte com "4-2-3-1" bem visível');
+
+  /* === 🧠 MENTALIDADE (3 camadas) === */
   const MCANDS=[['muito defensiva',0],['defensiva',1],['cautelosa',2],['equilibrada',3],['muito ofensiva',6],['muito atacante',6],['ofensiva',5],['atacar',5],['positiva',4]];
   let ment=null;
   const mA=(' '+t+' ').indexOf('mentalidade');
   if(mA>=0) ment=firstCandPos((' '+t+' ').slice(mA,mA+160),expandCands(MCANDS));
-  if(!ment){ /* fallback por palavra isolada — sem confundir "linha defensiva", "transição ofensiva/defensiva" nem "contra-atacar" */
+  if(!ment){
     const W=(' '+t.replace(/[^a-z0-9]+/g,' ')+' ').replace(/contra atacar/g,' ').replace(/linha defensiva/g,' ').replace(/transicao ofensiva/g,' ').replace(/transicao defensiva/g,' ');
     const has=w=>W.includes(' '+w+' ');
     let mv=null;
@@ -2747,7 +2980,7 @@ function parsePrintData(t){
     else if(has('defensiva'))mv=1;
     if(mv!==null)ment=['f',mv];
   }
-  if(!ment){ /* OCR espaçando as letras? último recurso no texto colado */
+  if(!ment){
     const Sx=S.replace(/contraatacar/g,'').replace(/contraataque/g,'').replace(/linhadefensiva/g,'').replace(/transicaoofensiva/g,'').replace(/transicaodefensiva/g,'');
     if(/muito(ofensiv|atacant)/.test(Sx))ment=['f',6];
     else if(Sx.includes('muitodefensiva'))ment=['f',0];
@@ -2755,59 +2988,88 @@ function parsePrintData(t){
     else if(Sx.includes('positiva'))ment=['f',4];
     else if(Sx.includes('cautelosa'))ment=['f',2];
   }
-  if(ment)set('f_ment',String(ment[1]),'🧠 Mentalidade: '+['Muito Defensiva','Defensiva','Cautelosa','Equilibrada','Positiva','Ofensiva','Muito Ofensiva'][ment[1]]);
-  else miss.push('mentalidade');
-  /* com bola */
-  const larg=findNear(t,['largura'],[['muito estreita',0],['estreita',1],['muito ampla',4],['ampla',3],['equilibrada',2]]);
-  if(larg)set('f_larg',larg[1],'📐 Largura detectada');
-  const tempo=findNear(t,['tempo'],[['muito lento',0],['lento',1],['muito rapido',4],['rapido',3],['equilibrado',2]]);
-  if(tempo)set('f_tempo',tempo[1],'⏱️ Tempo detectado');
-  const passe=findNear(t,['passe','profundidade'],[['muito curto',0],['muito direto',4],['curto',1],['direto',3],['equilibrado',2]]);
-  if(passe)set('f_passe',passe[1],'🎯 Profundidade de passe detectada');
-  const cruz=findNear(t,['cruzamento'],[['muito menos',0],['menos',1],['muito mais',4],['mais',3],['equilibrad',2]]);
-  if(cruz)set('f_cruz',cruz[1],'🥏 Cruzamentos detectados');
-  if(S.includes('jogarapartirdadefesa'))set('f_saida','sim','🏗️ Joga a partir da defesa');
-  const foco=findNear(t,['concentr'],[['esquerda','pontas'],['direita','pontas'],['meio','meio'],[ 'alas','pontas']]);
-  if(foco)set('f_foco',foco[1],'🧭 Foco de jogada detectado');
-  /* sem bola */
-  const ldef=findNear(t,['linha defensiva'],[['muito atras',0],['muito adiantada',4],['atras',1],['adiantada',3],['equilibrada',2]]);
-  if(ldef)set('f_linhadef',ldef[1],'🛡️ Linha defensiva detectada');
-  const bloco=findNear(t,['confronto','bloco'],[['muito baixo',0],['muito alto',4],['baixo',1],['alto',3],['medio',2]]);
-  if(bloco)set('f_bloco',bloco[1],'🧱 Linha de confronto detectada');
-  const press=findNear(t,['intensidade','pressao'],[['pouco intensa',0],['muito intensa',3],['intensa',2],['equilibrada',1]]);
-  if(press)set('f_press',press[1],'💨 Pressão detectada');
-  if(S.includes('impedir')&&S.includes('goleiro'))set('f_pressgr','sim','🚫 Aperta a saída do goleiro');
-  /* transição */
-  if(S.includes('contrapressao'))set('f_perda','cp','🔥 Contra-pressão');
-  else if(S.includes('recuar'))set('f_perda','recuar','↩️ Recua após perda');
-  if(S.includes('contraatacar')||S.includes('contraataque'))set('f_rec','contra','⚡ Contra-ataca');
-  if(S.includes('segurarabola'))set('f_rec','segurar','🧊 Segura a bola');
-  if(S.includes('distribuirrapidamente'))set('f_rap','sim','⚡ Reposição rápida');
-  if(S.includes('lancamento')||S.includes('distribuicaolonga'))set('f_dist','longa','🚀 Distribuição longa');
-  /* frases da tela de instruções do FM Touch (texto, não sliders) */
-  if(S.includes('marcacaoapertada'))set('f_press','2','💪 Marcação apertada');
-  if(S.includes('baterpontapescurtos')||S.includes('distribuirparaosdefesascentrais'))set('f_dist','curta','🧤 Saída curta do goleiro');
-  if(S.includes('evitardistribuicaocurta'))set('f_pressgr','sim','🚫 Pressiona a saída curta deles');
-  if(S.includes('baterpontapeslongos'))set('f_dist','longa','🚀 Pontapés longos do goleiro');
-  if(S.includes('manterformacao'))set('f_rec','segurar','🧱 Mantém a formação');
-  if(S.includes('linhamaisalta'))set('f_linhadef','3','🛡️ Linha mais alta');
-  if(S.includes('linhamaisbaixa'))set('f_linhadef','1','🛡️ Linha mais baixa');
-  /* papéis */
-  if(S.includes('falsonove')||S.includes('falso9'))set('f_ca','falso9','🎭 Atacante: Falso 9');
-  else if(S.includes('noveemeio'))set('f_ca','nove','🎭 Atacante: Nove e Meio');
-  else if(S.includes('atacantedepressao'))set('f_ca','pressing','🎭 Atacante: Pressão');
-  else if(S.includes('referencia'))set('f_ca','referencia','🎭 Atacante: Referência');
-  else if(S.includes('poacher')||S.includes('finalizador'))set('f_ca','artilheiro','🎭 Atacante: Finalizador');
-  else if(S.includes('avancado'))set('f_ca','avancado','🎭 Atacante: Avançado');
-  if(S.includes('extremoinvertido')||S.includes('avancadointerior'))set('f_pontas','corta','💨 Pontas cortam pra dentro');
-  else if(S.includes('extremo'))set('f_pontas','cruza','💨 Pontas cruzam');
-  if(!larg||!tempo||!passe)miss.push('algumas instruções com bola');
-  if(!ldef||!bloco)miss.push('algumas instruções sem bola');
+  if(ment)set('f_ment',String(ment[1]),'🧠 Mentalidade: '+['Muito Defensiva','Defensiva','Cautelosa','Equilibrada','Positiva','Ofensiva','Muito Ofensiva'][ment[1]],'form');
+  else if(tF) warnc.push('🔎 Print da formação: a mentalidade não apareceu na leitura — confere embaixo 👇');
 
+  /* === ⚽ COM A BOLA === */
+  const larg=findNear(tB,['largura'],[['muito estreita',0],['estreita',1],['muito ampla',4],['ampla',3],['equilibrada',2]]);
+  if(larg)set('f_larg',larg[1],'📐 Largura: '+LGN[larg[1]],'bola');
+  const tempo=findNear(tB,['tempo','ritmo'],[['muito lento',0],['lento',1],['muito rapido',4],['rapido',3],['equilibrado',2]]);
+  if(tempo)set('f_tempo',tempo[1],'⏱️ Tempo: '+TPN[tempo[1]],'bola');
+  if(any(Sb,Bb,['ritmomaisalto','jogaremritmomaisalto']))set('f_tempo','3','⏱️ Ritmo mais alto','bola');
+  if(any(Sb,Bb,['ritmomaisbaixo','jogaremritmomaisbaixo']))set('f_tempo','1','⏱️ Ritmo mais baixo','bola');
+  const passe=findNear(tB,['passe','profundidade'],[['muito curto',0],['muito direto',4],['curto',1],['direto',3],['equilibrado',2]]);
+  if(passe)set('f_passe',passe[1],'🎯 Passe: '+PSN[passe[1]],'bola');
+  const cruz=findNear(tB,['cruzamento','cruza'],[['muito menos',0],['menos',1],['muito mais',4],['mais',3],['equilibrad',2]]);
+  if(cruz)set('f_cruz',cruz[1],'🥏 Cruzamentos: '+CZN[cruz[1]],'bola');
+  if(any(Sb,Bb,['jogarapartirdadefesa','playfromtheback','playoutfromtheback','sairjogando']))set('f_saida','sim','🏗️ Joga a partir da defesa','bola');
+  const foco=findNear(tB,['concentr','aproveitar','foco'],[['esquerda','pontas'],['direita','pontas'],['meio','meio'],['central','meio'],['alas','pontas'],['lateral','pontas']]);
+  if(foco)set('f_foco',foco[1],'🧭 Foco: '+(foco[1]==='meio'?'Pelo meio':'Pelas pontas'),'bola');
+  if(any(Sb,Bb,['levabolaateaarea','levarabola','workballintobox'])){extras.lev=1;chip('🐢 Trabalha a bola até à área','bola');}
+  if(any(Sb,Bb,['corrercomabola','runatdefence','dribblemore'])){extras.corre=1;chip('🏃 Corre com a bola pra quebrar linhas','bola');}
+  if(any(Sb,Bb,['sermaisexpressivo','bemoreexpressive','maisexpre'])){extras.expr=1;chip('🎨 Liberdade criativa (mais expressivo)','bola');}
+  if(any(Sb,Bb,['sermaisdisciplinado','bemoredisciplined'])){extras.disc=1;chip('📐 Mais disciplinado com a bola','bola');}
+  if(any(Sb,Bb,['soltarabolanafrente','passintospace'])){extras.prof=1;chip('🎯 Passe em profundidade liberado','bola');}
+
+  /* === 🛡️ SEM A BOLA === */
+  const ldef=findNear(tS,['linha defensiva','linha de defesa','linha def'],[['muito atras',0],['muito adiantada',4],['atras',1],['adiantada',3],['equilibrada',2]]);
+  if(ldef)set('f_linhadef',ldef[1],'🛡️ Linha defensiva: '+LDN[ldef[1]],'sembola');
+  const bloco=findNear(tS,['confronto','bloco'],[['muito baixo',0],['muito baixa',0],['muito alto',4],['muito alta',4],['baixo',1],['baixa',1],['alto',3],['alta',3],['medio',2],['media',2]]);
+  if(bloco)set('f_bloco',bloco[1],'🧱 Linha de confronto: '+BLN[bloco[1]],'sembola');
+  const press=findNear(tS,['intensidade','pressao','marcacao'],[['pouco intensa',0],['muito intensa',3],['intensa',2],['equilibrada',1]]);
+  if(press)set('f_press',press[1],'💨 Pressão: '+PRN[press[1]],'sembola');
+  if(any(Ss,Bs,['evitardistribuicaocurta','evitardistribuicao','preventshortdistribution'])||(S.includes('impedir')&&S.includes('goleiro')))set('f_pressgr','sim','🚫 Pressiona a saída curta deles','sembola');
+  if(any(Ss,Bs,['marcacaoapertada','marktighter']))set('f_press','2','💪 Marcação apertada (pressão intensa)','sembola');
+  if(any(Ss,Bs,['armadilhadeimpedimento','usararmadilha','offsidetrap'])){extras.arm=1;chip('🪤 Armadilha de impedimento','sembola');}
+  if(any(Ss,Bs,['carrinhoscommaisforca','getstuckin'])){extras.carrinho=1;chip('🦵 Carrinho com mais força','sembola');}
+  if(any(Ss,Bs,['carrinhoscommenosforca','stayonfeet'])){extras.carrinhoLeve=1;chip('🐾 Carrinho econômico (sem afobamento)','sembola');}
+  if(any(Ss,Bs,['impedircruzamentos','bloquearcruzamentos','preventcrosses'])){extras.blocruz=1;chip('🚫 Bloqueia os cruzamentos deles','sembola');}
+  if(any(Ss,Bs,['marcacaoindividual','manmark'])){extras.marc=1;chip('🧲 Marcação individual em referências','sembola');}
+  if(any(Ss,Bs,['linhamaisalta','higherline']))set('f_linhadef','3','🛡️ Linha mais alta','sembola');
+  if(any(Ss,Bs,['linhamaisbaixa','lowerline']))set('f_linhadef','1','🛡️ Linha mais baixa','sembola');
+
+  /* === 🔄 EM TRANSIÇÃO === */
+  if(any(St,Bt,['contrapressao','counterpress']))set('f_perda','cp','🔥 Contra-pressão','trans');
+  else if(any(St,Bt,['reagrupar','recuar','regroup']))set('f_perda','recuar','↩️ Reagrupa após perder a bola','trans');
+  if(any(St,Bt,['contraatacar','contraataque','counterattack']))set('f_rec','contra','⚡ Contra-ataca na recuperação','trans');
+  if(any(St,Bt,['segurarabola','manterformacao','holdshape']))set('f_rec','segurar','🧱 Manter formação / segurar a bola','trans');
+  if(any(St,Bt,['distribuirrapidamente','distributequickly','reposicaorapida']))set('f_rap','sim','⚡ Reposição rápida do goleiro','trans');
+  if(any(St,Bt,['distribuicaolonga','baterpontapeslongos','pontapeslongos','lancamentolongo','lancamento']))set('f_dist','longa','🚀 Distribuição longa do goleiro','trans');
+  if(any(St,Bt,['baterpontapescurtos','distribuirparaosdefesascentrais','rolarabola']))set('f_dist','curta','🧤 Saída curta do goleiro','trans');
+
+  /* === 🎭 PAPÉIS (texto completo) === */
+  if(any(S,Ball,['falsonove','falso9','false9']))set('f_ca','falso9','🎭 Atacante: Falso 9','form');
+  else if(any(S,Ball,['noveemeio']))set('f_ca','nove','🎭 Atacante: Nove e Meio','form');
+  else if(any(S,Ball,['atacantedepressao','pressingforward']))set('f_ca','pressing','🎭 Atacante: Pressão','form');
+  else if(any(S,Ball,['referencia','targetman']))set('f_ca','referencia','🎭 Atacante: Referência','form');
+  else if(any(S,Ball,['poacher','finalizador']))set('f_ca','artilheiro','🎭 Atacante: Finalizador','form');
+  else if(any(S,Ball,['avancado','advancedforward','completeforward']))set('f_ca','avancado','🎭 Atacante: Avançado','form');
+  if(any(S,Ball,['extremoinvertido','avancadointerior','insideforward','invertedwinger']))set('f_pontas','corta','🌪️ Pontas cortam pra dentro','form');
+  else if(any(S,Ball,['extremo','winger']))set('f_pontas','cruza','💨 Pontas cruzam (Extremos)','form');
+
+  /* === painéis enviados onde não li quase nada === */
+  const PANEL=[['form','Formação / Mentalidade'],['bola','Com a bola'],['trans','Em transição'],['sembola','Sem a bola']];
+  for(const [k,label] of PANEL){
+    if(slotTexts[k]&&cnt[k]===0) warnc.push('🔎 "'+label+'": li pouco nesse print — faz um corte BEM de perto, só as linhas de texto, sem ícone pequeno 🙏');
+  }
+  /* sliders que não apareceram */
+  if(!fKey&&!tF)notes.push('🧩 Sem print da tela de formação: anexa um corte com o campinho que eu leio formação e mentalidade sozinho 😉');
+  const bolaSlidersOk=[larg,tempo,passe,cruz].filter(Boolean).length;
+  const semSlidersOk=[ldef,bloco,press].filter(Boolean).length;
+  if(tB&&bolaSlidersOk===0)notes.push('🎚️ Largura/tempo/passe/cruzamentos não estavam nesse print (ficaram fora do corte) — se precisar, ajusta em 1 toque abaixo 👇');
+  if(tS&&semSlidersOk===0)notes.push('🎚️ Linha de defesa/bloco/pressão não estavam nesse print — se precisar, ajusta em 1 toque abaixo 👇');
+  const QF=[[tempo,'f_tempo','⏱️ Tempo'],[larg,'f_larg','📐 Largura'],[passe,'f_passe','🎯 Passe'],[ldef,'f_linhadef','🛡️ Linha'],[bloco,'f_bloco','🧱 Confronto'],[press,'f_press','💨 Pressão']];
+  for(const [found,id,label] of QF){if(!found)qfix.push('<span class="tag" style="cursor:pointer;background:#54ccff14;color:var(--neon2);border-color:#54ccff55" onclick="focusField(\''+id+'\')">⚡ '+label+'</span>');}
+
+  const total=Object.values(cnt).reduce((a,b)=>a+b,0);
+  window._extras=extras;
   document.getElementById('ocrOut').innerHTML=
-    got.map(g=>`<span class="tag g">✅ ${g}</span>`).join('')+
-    (miss.length?`<span class="tag" style="background:#ffb64818;color:var(--warn);border-color:#ffb64833">❓ Não li: ${[...new Set(miss)].join(', ')} (confere no formulário)</span>`:'')+
-    `<span class="tag" style="background:#2eff8f14;color:var(--neon);border-color:#2eff8f33">👇 Tudo preenchido! Confere e toca em "Analisar tática"</span>`;
+    '<span class="tag" style="background:#2eff8f14;color:var(--neon);border-color:#2eff8f55">📊 '+total+(total===1?' instrução identificada':' instruções identificadas')+'</span>'
+    +chips.join('')
+    +warnc.map(w=>'<span class="tag" style="background:#ffb64818;color:var(--warn);border-color:#ffb64833">'+w+'</span>').join('')
+    +notes.map(n=>'<span class="tag" style="background:#2eff8f0d;color:var(--sub);border-color:#2eff8f22">'+n+'</span>').join('')
+    +(qfix.length?'<span class="tag" style="background:transparent;border:none;color:var(--sub);padding-left:0">Faltou algo? Ajusta em 1 toque:</span>'+qfix.join(''):'')
+    +'<span class="tag" style="background:#2eff8f14;color:var(--neon);border-color:#2eff8f33">👇 Tudo preenchido! Confere e toca em "Analisar tática"</span>';
   toast('📸 Print lido! Confere as instruções');
   analisar(true);
 }
@@ -2818,5 +3080,5 @@ renderScout();
 renderFreeList();
 renderRoles();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a281788f6ffa7265',t:'MTc4NjIyMzAzOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2828c68d884ca14',t:'MTc4NjIzNDMzOA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
