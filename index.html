@@ -199,6 +199,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#2eff8f" stroke-width="2"/><path d="M12 7l3 2.2-1.2 3.6h-3.6L9 9.2 12 7z" fill="#2eff8f"/><path d="M12 2v5M21.6 9l-4.6 1.4M17.8 20l-3-3.6M6.2 20l3-3.6M2.4 9L7 10.4" stroke="#2eff8f" stroke-width="1.4"/></svg>
       <span>FM Touch <b>Lab</b></span>
     </div>
+    <div id="labChip" class="labchip" data-go="personal" style="display:none" title="Meu clube"></div>
     <div class="tabwrap" id="tabwrap"></div>
     <button id="menuBtn">☰ Menu</button>
   </nav>
@@ -212,7 +213,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
     <h1>Domine o <em>FM Touch 21</em> no Android</h1>
     <p>Escolha uma ferramenta no menu abaixo — cada uma abre em sua própria tela, sem rolagem infinita. 👇</p>
     <div class="stats">
-      <span class="stat"><b>9</b> ferramentas</span>
+      <span class="stat"><b>10</b> ferramentas</span>
       <span class="stat"><b>1.146</b> atletas no radar</span>
       <span class="stat"><b>31</b> papéis explicados</span>
       <span class="stat"><b>30+</b> conflitos detectáveis</span>
@@ -228,6 +229,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
     <button class="mcard" data-go="papeis"><span class="ic">📚</span><b>Papéis</b><span>31 funções do FM Touch explicadas: atributos-chave, combina e NÃO combina com quê.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="desafios"><span class="ic">💪</span><b>Desafios</b><span>Saves pra zerar o jogo: do XI de €1 mi à dinastia do interior.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="guias"><span class="ic">📖</span><b>Guias</b><span>Como instalar .fmf no Android, dicionário de termos do FM e dicas rápidas.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="personal"><span class="ic">⚙️</span><b>Clube &amp; Perfil<span class="novo">NOVO</span></b><span>Escolha teu clube do coração, deixe o Lab com a tua cara e crie teu perfil de manager estilo FM.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="ideias"><span class="ic">🚀</span><b>Novidades</b><span>O que vem por aí: tática da semana, comunidade e IA visual completa.</span><span class="go">Abrir →</span></button>
   </div>
 </main>
@@ -496,6 +498,39 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
   </details>
 </main>
 
+<!-- ============ ⚙️ CLUBE & PERFIL ============ -->
+<main class="page" id="personal">
+  <button class="crumb" data-go="home">← Menu</button>
+  <div class="h2"><span class="dot"></span> Clube &amp; Perfil</div>
+  <p class="lead">Deixe o FM Touch Lab com a tua cara: escolha teu clube do coração e, se quiser, crie teu perfil de manager estilo FM. Sem cadastro obrigatório — visitante usa TUDO normal. 😉</p>
+
+  <div class="card" style="margin-bottom:14px">
+    <h3 style="margin:0 0 4px">🛡️ Meu Clube</h3>
+    <p style="color:var(--sub);font-size:13.5px;margin:0 0 12px">O escudo aparece no topo do site e as cores do clube viram um detalhe sutil no tema — sem exagero, contraste e legibilidade sempre preservados.</p>
+    <div id="pClubNow"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn p" id="pClubChange">🔄 Alterar clube</button>
+      <button class="btn" id="pClubRemove">🚫 Remover clube</button>
+    </div>
+    <hr style="border:none;border-top:1px solid var(--line);margin:14px 0">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <span id="pThemeState" style="font-size:13.5px;color:var(--sub)">🎨 cores do clube ATIVAS</span>
+      <button class="btn" onclick="LAB.setThemeOn(!LAB.themeOn())">Alternar tema</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px">
+    <h3 style="margin:0 0 4px">🪪 Perfil de Manager</h3>
+    <p style="color:var(--sub);font-size:13.5px;margin:0 0 12px">Crie teu Manager Card estilo FM: nome, clube, país, tuas táticas publicadas, estatísticas e publicações. Público ou privado — tu escolhe e pode mudar depois.</p>
+    <div id="pProfileBody"><div style="color:var(--sub);font-size:13.5px;text-align:center;padding:10px">carregando…</div></div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 4px">🔒 Privacidade</h3>
+    <p style="color:var(--sub);font-size:13.5px;margin:0">Teu clube fica salvo <b>só no teu aparelho</b> (sem conta). Se criares cadastro, tu decide se o perfil fica <b>público</b> (com link <code>manager.html?u=teunome</code> pra compartilhar) ou <b>privado</b> — e pode alternar quando quiser nas configurações. Visitante usa o Lab inteiro de graça, sem conta. 💚</p>
+  </div>
+</main>
+
 <!-- ============ NOVIDADES ============ -->
 <main class="page" id="ideias">
   <button class="crumb" data-go="home">← Menu</button>
@@ -520,6 +555,10 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
 <div id="toast"></div>
 <div class="trealov" id="trealov" onclick="this.classList.remove('on')"><span>✕</span><img id="trealovimg" alt="Print ampliado da tática"></div>
 
+<script src="js/lab-config.js"></script>
+<script src="js/lab-clubes.js"></script>
+<script src="js/lab-auth.js"></script>
+
 <script>
 'use strict';
 /* ============ CONFIG — EDITE AQUI ============ */
@@ -538,6 +577,7 @@ const PAGES=[
  ['papeis','📚 Papéis','Guia de funções e atributos'],
  ['desafios','💪 Desafios','Saves pra zerar o jogo'],
  ['guias','📖 Guias','Tutoriais e dicas'],
+ ['personal','⚙️ Clube & Perfil','Personalização e sua conta'],
  ['ideias','🚀 Novidades','Roadmap do Lab']
 ];
 const validPages=PAGES.map(p=>p[0]);
@@ -3080,5 +3120,5 @@ renderScout();
 renderFreeList();
 renderRoles();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2828c68d884ca14',t:'MTc4NjIzNDMzOA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>

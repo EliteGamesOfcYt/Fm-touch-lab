@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manager | FM Touch Lab</title>
+<style>
+:root{
+  --bg:#0a0f1c; --card:#121a2b; --line:#1f2c44; --txt:#e8eef7; --sub:#93a4bd;
+  --neon:#2eff8f; --neon2:#37c4ff; --warn:#ffb648; --bad:#ff5d6c; --r:16px;
+  --clubA:#2eff8f; --clubB:#121a2b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt);line-height:1.5;min-height:100vh;padding-bottom:40px}
+a{color:var(--neon2);text-decoration:none}
+button{font-family:inherit}
+header{border-bottom:1px solid var(--line);background:rgba(10,15,28,.92);position:sticky;top:0;z-index:50}
+.nav{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:10px 16px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:17px;color:var(--txt);cursor:pointer}
+.logo span b{color:var(--neon)}
+.wrap{max-width:920px;margin:0 auto;padding:18px 14px 0}
+.backlink{font-size:13px;font-weight:800}
+/* ===== MANAGER CARD ===== */
+.mgcard{position:relative;border-radius:22px;overflow:hidden;border:1px solid #ffffff22;
+  background:linear-gradient(135deg,var(--clubA) 0%,#10182b 62%,var(--clubB) 100%);
+  padding:22px 18px 16px;box-shadow:0 14px 50px #0009}
+.mgcard::before{content:'FM TOUCH LAB';position:absolute;top:12px;left:0;right:0;text-align:center;font-size:10.5px;font-weight:900;letter-spacing:4px;opacity:.5}
+.mgcard::after{content:'';position:absolute;inset:0;background:radial-gradient(420px 150px at 18% -8%,#ffffff26,transparent 62%);pointer-events:none}
+.mgh{position:relative;display:flex;align-items:center;gap:16px;margin-top:10px}
+.mgface{width:64px;height:64px;border-radius:50%;background:#0a0f1c88;border:2px solid #ffffff55;display:flex;align-items:center;justify-content:center;font-size:27px;flex:none}
+.mgname{font-size:22px;font-weight:900;letter-spacing:.4px;text-shadow:0 2px 10px #0009}
+.mgclub{display:inline-flex;align-items:center;gap:8px;margin-top:6px;background:#060a12b8;border:1px solid #ffffff2e;border-radius:99px;padding:5px 13px 5px 6px;font-size:13px;font-weight:800}
+.mgmeta{font-size:11.5px;color:#ffffffcc;margin-top:7px;font-weight:700}
+.mgstats{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.mgstat{background:#060a12b8;border:1px solid #ffffff22;border-radius:14px;padding:10px 6px;text-align:center}
+.mgstat b{display:block;font-size:20px}
+.mgstat span{font-size:10.5px;font-weight:800;letter-spacing:1px;color:#ffffffbb}
+.mgtail{position:relative;text-align:center;margin-top:14px;font-size:10.5px;font-weight:900;letter-spacing:3.5px;color:#ffffffaa}
+.pubtag{position:absolute;top:14px;right:14px;z-index:2;background:#060a12b8;border:1px solid #ffffff33;border-radius:99px;font-size:10.5px;font-weight:900;padding:4px 11px;letter-spacing:1px}
+/* ===== seções ===== */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 16px;margin-top:16px}
+.card h3{font-size:15px;margin-bottom:4px}
+.slab{font-size:11.5px;font-weight:800;color:var(--sub);letter-spacing:1.2px;margin-bottom:12px;text-transform:uppercase}
+.btn{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:12px;padding:11px 16px;font-size:14px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn.p{background:var(--neon);color:#04160c;border-color:transparent}
+.btn.big{width:100%;justify-content:center;padding:13px}
+.btn.mini{padding:6px 11px;font-size:12px;border-radius:9px}
+.trow{display:flex;align-items:center;gap:12px;background:#0d1526;border:1px solid var(--line);border-radius:14px;padding:12px 13px;margin-bottom:9px}
+.tf{background:var(--neon);color:#04160c;font-size:11px;font-weight:900;border-radius:8px;padding:4px 8px;flex:none}
+.trow .nm{font-weight:800;font-size:14.5px}
+.trow .mt{font-size:12px;color:var(--sub);margin-top:2px}
+.stars{color:var(--warn);font-weight:900;font-size:13px;white-space:nowrap;margin-left:auto}
+.votebox{margin-left:auto;display:flex;gap:1px;flex:none}
+.votebox button{background:none;border:none;font-size:19px;cursor:pointer;filter:grayscale(1);opacity:.5;padding:2px}
+.votebox button.on{filter:none;opacity:1}
+.trash{margin-left:auto;background:none;border:1px solid #ff5d6c55;color:var(--bad);border-radius:9px;padding:6px 10px;font-size:13px;cursor:pointer}
+.empty{color:var(--sub);font-size:13px;text-align:center;padding:16px 6px;line-height:1.7}
+/* forms */
+.lab{display:block;font-size:12.5px;color:var(--sub);font-weight:800;margin:0 2px 6px;letter-spacing:.3px}
+.inp{width:100%;background:#0d1526;border:1px solid var(--line);color:var(--txt);border-radius:12px;padding:12px 14px;font-size:15px}
+.inp:focus{outline:none;border-color:var(--neon)}
+.f{margin-bottom:13px}
+.clubrow{display:flex;align-items:center;gap:10px;background:#0d1526;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.chipbtn{margin-left:auto;background:#ffffff0d;border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:7px 11px;font-size:12px;font-weight:800;cursor:pointer}
+.chk{display:flex;align-items:flex-start;gap:10px;background:#0d1526;border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer}
+.chk input{width:20px;height:20px;accent-color:var(--neon);flex:none;margin-top:2px}
+.chk small{display:block;color:var(--sub);font-size:12px;line-height:1.5}
+.modal{position:fixed;inset:0;background:#060b14ee;z-index:300;display:none;align-items:flex-start;justify-content:center;padding:18px 14px;overflow-y:auto}
+.modal.on{display:flex}
+.mcard2{width:100%;max-width:430px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 18px;margin:auto;position:relative}
+.mclose{position:absolute;top:10px;right:12px;background:none;border:none;color:var(--sub);font-size:22px;cursor:pointer;padding:4px}
+.center{text-align:center}
+.lockbox{max-width:430px;margin:60px auto;text-align:center}
+.lockbox .ic{font-size:44px;display:block;margin-bottom:12px}
+.share{background:#0d1526;border:1px dashed var(--neon2);border-radius:12px;padding:12px;font-size:12.5px;color:var(--sub);margin-top:12px;word-break:break-all}
+.share b{color:var(--neon2)}
+</style>
+</head>
+<body>
+<header>
+  <nav class="nav">
+    <a class="logo" href="index.html">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#2eff8f" stroke-width="2"/><path d="M12 7l3 2.2-1.2 3.6h-3.6L9 9.2 12 7z" fill="#2eff8f"/><path d="M12 2v5M21.6 9l-4.6 1.4M17.8 20l-3-3.6M6.2 20l3-3.6M2.4 9L7 10.4" stroke="#2eff8f" stroke-width="1.4"/></svg>
+      <span>FM Touch <b>Lab</b></span>
+    </a>
+    <a class="backlink" style="margin-left:auto" href="index.html">← Voltar ao Lab</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="lockbox" id="loading"><span class="ic">⏳</span><span style="color:var(--sub)">Carregando…</span></div>
+  <div class="lockbox" id="locked" style="display:none">
+    <span class="ic">🔒</span>
+    <h2 style="font-size:19px;margin-bottom:8px">Perfil privado ou não encontrado</h2>
+    <p style="color:var(--sub);font-size:13.5px" id="lockMsg">Esse manager não existe — ou escolheu manter o perfil privado.</p>
+    <p style="margin-top:14px"><a class="btn" href="index.html">← Voltar ao Lab</a></p>
+  </div>
+  <div id="main" style="display:none"></div>
+</div>
+
+<!-- modal publicar tática -->
+<div class="modal" id="tacModal">
+  <div class="mcard2">
+    <button class="mclose" id="tacClose">✕</button>
+    <h3 style="margin-bottom:14px">📋 Publicar tática</h3>
+    <div class="f"><label class="lab">NOME DA TÁTICA</label><input class="inp" id="tNome" maxlength="46" placeholder="ex: 4-2-3-1 Pressão Alta"></div>
+    <div class="f"><label class="lab">FORMAÇÃO</label>
+      <select class="inp" id="tForm"><option>4-2-3-1</option><option>4-3-3</option><option>4-4-2</option><option>4-1-4-1</option><option>3-5-2</option><option>5-3-2</option><option>4-2-4</option><option>3-4-3</option><option>Outra</option></select></div>
+    <div class="f"><label class="lab">DESCRIÇÃO (opcional)</label><textarea class="inp" id="tDesc" rows="3" maxlength="280" placeholder="Conta o estilo: posse, contra-ataque, gegenpress…"></textarea></div>
+    <button class="btn p big" id="tacSend">Publicar no meu perfil 🚀</button>
+    <div class="hint" style="font-size:12px;color:var(--sub);margin-top:8px">Aparece no teu Manager Card e, se o perfil for público, todo mundo vê e avalia. ⭐</div>
+  </div>
+</div>
+
+<script>window.LAB_NO_WELCOME=1;</script>
+<script src="js/lab-config.js"></script>
+<script src="js/lab-clubes.js"></script>
+<script src="js/lab-auth.js"></script>
+<script>
+(function(){
+var A=LAB.auth, sb=null, me=null, prof=null, isOwn=false, myVotes={};
+var $=function(id){return document.getElementById(id);};
+function esc(s){return (s||'').replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function clubOf(p){
+  if(p.club_id&&LAB.CLUBES){var c=LAB.CLUBES.find(function(x){return x.id===p.club_id;});if(c)return c;}
+  return {id:p.club_id||'',n:p.club_nome||'Sem clube',c1:p.club_cor1||'#2eff8f',c2:p.club_cor2||'#121a2b',d:''};
+}
+function crestOf(p,c,size){
+  if(c.d)return LAB.crest(c,size);
+  return '<span class="lbcrest" data-i="'+(p.club_nome||'?').charAt(0)+'" style="width:'+size+'px;height:'+size+'px;background:'+(p.club_cor1||'#2eff8f')+'"></span>';
+}
+function cardHTML(p,c,st){
+  var pub=p.publico?'<span class="pubtag">🌎 PÚBLICO</span>':'<span class="pubtag">🔒 PRIVADO</span>';
+  return '<div class="mgcard">'+pub+
+   '<div class="mgh"><div class="mgface">'+(p.nome||'👤').charAt(0).toUpperCase()+'</div>'+
+    '<div><div class="mgname">'+esc(p.nome)+'</div>'+
+    '<div class="mgclub">'+crestOf(p,c,20)+'<span>'+esc(p.club_nome||'Sem clube')+'</span></div>'+
+    '<div class="mgmeta">'+(p.pais?'🌎 '+esc(p.pais)+' · ':'')+'@'+esc(p.username)+'</div></div></div>'+
+   '<div class="mgstats">'+
+    '<div class="mgstat"><b>'+st.t+'</b><span>TÁTICAS</span></div>'+
+    '<div class="mgstat"><b>'+st.p+'</b><span>PUBLICAÇÕES</span></div>'+
+    '<div class="mgstat"><b>'+st.f+'</b><span>FAVORITOS</span></div></div>'+
+   '<div class="mgtail">FM TOUCH MANAGER'+(st.avg?(' · ⭐ '+st.avg):'')+'</div></div>';
+}
+function trowHTML(t,own){
+  var avg=t.votes_n?(t.votes_s/t.votes_n).toFixed(1):null;
+  var right='';
+  if(own)right='<button class="trash" data-del="'+t.id+'" title="Apagar">🗑</button>';
+  else if(me)right='<span class="votebox" data-tid="'+t.id+'">'+[1,2,3,4,5].map(function(i){return '<button data-v="'+i+'" class="'+((myVotes[t.id]||0)>=i?'on':'')+'">⭐</button>';}).join('')+'</span>';
+  else right='<span class="stars">'+(avg?('⭐ '+avg):'—')+'</span>';
+  return '<div class="trow"><span class="tf">'+esc(t.formacao)+'</span>'+
+   '<div style="min-width:0"><div class="nm">'+esc(t.nome)+'</div>'+
+   '<div class="mt">'+(avg?('⭐ '+avg+' · '+t.votes_n+' voto'+(t.votes_n>1?'s':'')):'sem votos ainda')+(t.descricao?(' · '+esc(t.descricao)):'')+'</div></div>'+right+'</div>';
+}
+function render(){
+  var c=clubOf(prof);
+  document.documentElement.style.setProperty('--clubA',prof.club_cor1||'#2eff8f');
+  document.documentElement.style.setProperty('--clubB',prof.club_cor2||'#121a2b');
+  if(isOwn&&prof.club_id){ /* sincroniza tema local se o usuário ainda não tem clube */ if(!LAB.getClub()){var lc=LAB.CLUBES.find(function(x){return x.id===prof.club_id;});if(lc)LAB.setClub(lc);} }
+  Promise.all([
+    sb.from('tactics').select('*').eq('owner',prof.id).order('criado',{ascending:false}),
+    sb.from('posts').select('id,titulo,corpo,criado').eq('owner',prof.id).order('criado',{ascending:false}),
+    sb.from('tactic_votes').select('tactic,stars,voter')
+  ]).then(function(rs){
+    var tacs=rs[0].data||[], posts=rs[1].data||[], votes=(rs[2].data||[]);
+    var ids={};tacs.forEach(function(t){ids[t.id]=1;t.votes_n=0;t.votes_s=0;});
+    votes=votes.filter(function(v){return ids[v.tactic];});
+    votes.forEach(function(v){tacs.forEach(function(t){if(t.id===v.tactic){t.votes_n++;t.votes_s+=v.stars;}});});
+    myVotes={};if(me)votes.forEach(function(v){if(v.voter===me.id)myVotes[v.tactic]=v.stars;});
+    var totalV=votes.length, sumV=votes.reduce(function(a,v){return a+v.stars;},0);
+    var st={t:tacs.length,p:posts.length,f:totalV,avg:totalV?(sumV/totalV).toFixed(1):null};
+    var h=cardHTML(prof,c,st);
+    if(isOwn){
+      h+='<div class="card"><div class="slab">📋 Minhas táticas</div><div id="tacList">'+
+        (tacs.length?tacs.map(function(t){return trowHTML(t,true);}).join(''):'<div class="empty">Nenhuma tática publicada ainda.<br>Aperta o botão abaixo e lança a primeira! 🚀</div>')+
+        '</div><button class="btn p big" id="tacNew">+ Publicar tática</button></div>';
+      h+='<div class="card"><div class="slab">📚 Publicações</div>'+(posts.length?posts.map(function(p2){return '<div class="trow"><div><div class="nm">'+esc(p2.titulo)+'</div><div class="mt">'+new Date(p2.criado).toLocaleDateString('pt-BR')+'</div></div></div>';}).join(''):'<div class="empty">As tuas publicações vão aparecer aqui em breve. ✍️</div>')+'</div>';
+      h+='<div class="card"><div class="slab">⚙️ Configurações do perfil</div>'+
+        '<div class="f"><label class="lab">NOME DE MANAGER</label><input class="inp" id="cNome" maxlength="30" value="'+esc(prof.nome)+'"></div>'+
+        '<div class="f"><label class="lab">PAÍS</label><select class="inp" id="cPais"><option value="">Prefiro não dizer</option>'+['Brasil','Portugal','Argentina','Chile','Uruguaia','Paraguai','Espanha','Alemanha','Inglaterra','Outro'].map(function(x){return '<option'+(prof.pais===x?' selected':'')+'>'+x+'</option>';}).join('')+'</select></div>'+
+        '<div class="f"><label class="lab">🛡️ MEU CLUBE</label><div class="clubrow" id="cClub">'+(prof.club_id?crestOf(prof,c,30)+'<b>'+esc(prof.club_nome)+'</b>':'<span style="color:var(--sub);font-size:13px">Sem clube</span>')+'<button class="chipbtn" id="cClubBtn">Alterar clube</button></div></div>'+
+        '<label class="chk f"><input type="checkbox" id="cPub"'+(prof.publico?' checked':'')+'><span><b>Perfil público</b><small>Ligado: qualquer um vê teu card e táticas. Desligado: só tu vês. E-mail nunca aparece.</small></span></label>'+
+        (prof.publico?'<div class="share">🌎 Teu perfil público: <b>'+location.origin+location.pathname+'?u='+esc(prof.username)+'</b></div>':'')+
+        '<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn p" style="flex:1;justify-content:center" id="cSave">💾 Salvar</button>'+
+        '<button class="btn" style="flex:1;justify-content:center" id="cOut">Sair da conta</button></div></div>';
+    }else{
+      h+='<div class="card"><div class="slab">📋 Táticas de '+esc(prof.nome)+'</div>'+
+        (tacs.length?tacs.map(function(t){return trowHTML(t,false);}).join(''):'<div class="empty">Esse manager ainda não publicou táticas.</div>')+'</div>';
+      if(posts.length)h+='<div class="card"><div class="slab">📚 Publicações</div>'+posts.map(function(p2){return '<div class="trow"><div><div class="nm">'+esc(p2.titulo)+'</div><div class="mt">'+new Date(p2.criado).toLocaleDateString('pt-BR')+'</div></div></div>';}).join('')+'</div>';
+      h+='<p class="center" style="margin-top:16px"><a class="btn" href="index.html">⚽ Explorar o FM Touch Lab</a></p>';
+    }
+    $('main').innerHTML=h;
+    bind();
+  });
+}
+function bind(){
+  if(isOwn){
+    $('tacNew').addEventListener('click',function(){$('tacModal').classList.add('on');});
+    $('tacClose').addEventListener('click',function(){$('tacModal').classList.remove('on');});
+    $('tacSend').addEventListener('click',function(){
+      var n=$('tNome').value.trim();if(n.length<3){$('tNome').focus();return;}
+      var b=this;b.disabled=true;
+      sb.from('tactics').insert({owner:me.id,nome:n,formacao:$('tForm').value,descricao:$('tDesc').value.trim()})
+       .then(function(r){b.disabled=false;if(r.error){alert(r.error.message);return;}$('tNome').value='';$('tDesc').value='';$('tacModal').classList.remove('on');render();});
+    });
+    document.querySelectorAll('[data-del]').forEach(function(b){
+      b.addEventListener('click',function(){
+        if(!confirm('Apagar essa tática do teu perfil?'))return;
+        sb.from('tactics').delete().eq('id',b.dataset.del).then(render);
+      });
+    });
+    $('cClubBtn').addEventListener('click',function(){
+      LAB.openClubPicker(function(c){
+        if(c===undefined)return;
+        var row={username:prof.username,nome:$('cNome').value.trim()||prof.nome,pais:$('cPais').value||null,publico:$('cPub').checked,
+          club_id:c?c.id:null,club_nome:c?c.nome:null,club_cor1:c?c.c1:null,club_cor2:c?c.c2:null,
+          club_escudo:c?('https://www.google.com/s2/favicons?domain='+c.d+'&sz=128'):null};
+        A.saveProfile(row).then(function(p){prof=p;render();});
+      });
+    });
+    $('cSave').addEventListener('click',function(){
+      var b=this;b.disabled=true;
+      A.saveProfile({username:prof.username,nome:$('cNome').value.trim()||prof.nome,pais:$('cPais').value||null,publico:$('cPub').checked,
+        club_id:prof.club_id,club_nome:prof.club_nome,club_cor1:prof.club_cor1,club_cor2:prof.club_cor2,club_escudo:prof.club_escudo})
+       .then(function(p){b.disabled=false;prof=p;render();});
+    });
+    $('cOut').addEventListener('click',function(){A.signOut().then(function(){location.replace('entrar.html');});});
+  }else{
+    document.querySelectorAll('.votebox button').forEach(function(b){
+      b.addEventListener('click',function(){
+        var tid=b.parentNode.dataset.tid,v=+b.dataset.v;
+        sb.from('tactic_votes').upsert({tactic:+tid,voter:me.id,stars:v},{onConflict:'tactic,voter'}).then(function(r){
+          if(r.error){alert(r.error.message);return;}render();
+        });
+      });
+    });
+  }
+}
+/* ---------- boot ---------- */
+A.ready().then(function(sess){
+  sb=window.LAB.sb;
+  var qs=new URLSearchParams(location.search), u=qs.get('u');
+  me=sess&&sess.user?sess.user:null;
+  $('loading').style.display='none';
+  if(!A.backendOk()||!sb){$('locked').style.display='block';$('lockMsg').innerHTML='A plataforma de perfis ainda não foi configurada pelo dono do site. 🔧<br><br><a href="index.html">← Voltar ao Lab</a>';return;}
+  if(u){
+    A.profileByUsername(u).then(function(p){
+      if(!p){$('locked').style.display='block';return;}
+      isOwn=!!(me&&me.id===p.id);
+      prof=p;$('main').style.display='block';render();
+    }).catch(function(){$('locked').style.display='block';});
+    return;
+  }
+  if(!me){location.replace('entrar.html');return;}
+  isOwn=true;
+  A.profile().then(function(p){
+    if(!p){location.replace('entrar.html');return;}
+    prof=p;$('main').style.display='block';render();
+  });
+});
+})();
+</script>
+</body>
+</html>

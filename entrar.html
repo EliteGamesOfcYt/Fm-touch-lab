@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrar | FM Touch Lab</title>
+<style>
+:root{
+  --bg:#0a0f1c; --card:#121a2b; --line:#1f2c44; --txt:#e8eef7; --sub:#93a4bd;
+  --neon:#2eff8f; --neon2:#37c4ff; --warn:#ffb648; --bad:#ff5d6c; --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt);line-height:1.5;min-height:100vh}
+a{color:var(--neon2);text-decoration:none}
+button{font-family:inherit}
+header{border-bottom:1px solid var(--line);background:rgba(10,15,28,.92)}
+.nav{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:10px 16px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:17px;color:var(--txt);cursor:pointer}
+.logo span b{color:var(--neon)}
+.wrap{max-width:440px;margin:26px auto;padding:0 14px 40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 16px;margin-bottom:14px}
+.tabs{display:flex;background:#0d1526;border-radius:12px;padding:4px;gap:4px;margin-bottom:16px}
+.tabs button{flex:1;background:none;border:none;color:var(--sub);font-weight:800;font-size:14px;padding:10px;border-radius:9px;cursor:pointer}
+.tabs button.on{background:var(--neon);color:#04160c}
+.lab{display:block;font-size:12.5px;color:var(--sub);font-weight:800;margin:0 2px 6px;letter-spacing:.3px}
+.inp{width:100%;background:#0d1526;border:1px solid var(--line);color:var(--txt);border-radius:12px;padding:12px 14px;font-size:15px}
+.inp:focus{outline:none;border-color:var(--neon)}
+.f{margin-bottom:13px}
+.btn{background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:12px;padding:11px 16px;font-size:14px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn.p{background:var(--neon);color:#04160c;border-color:transparent}
+.btn.p:disabled{opacity:.5}
+.btn.big{width:100%;justify-content:center;padding:13px}
+.hint{font-size:12px;color:var(--sub);margin-top:6px;line-height:1.6}
+.err{background:#ff5d6c1a;border:1px solid #ff5d6c66;color:#ffb9c0;border-radius:10px;padding:10px 12px;font-size:13px;font-weight:700;margin-bottom:12px;display:none}
+.okm{background:#2eff8f14;border:1px solid #2eff8f55;color:var(--neon);border-radius:10px;padding:10px 12px;font-size:13px;font-weight:700;margin-bottom:12px;display:none}
+.clubrow{display:flex;align-items:center;gap:10px;background:#0d1526;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.clubrow b{font-size:14px}
+.chipbtn{margin-left:auto;background:#ffffff0d;border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:7px 11px;font-size:12px;font-weight:800;cursor:pointer}
+.chk{display:flex;align-items:flex-start;gap:10px;background:#0d1526;border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer}
+.chk input{width:20px;height:20px;accent-color:var(--neon);flex:none;margin-top:2px}
+.chk small{display:block;color:var(--sub);font-size:12px;line-height:1.5}
+</style>
+</head>
+<body>
+<header>
+  <nav class="nav">
+    <a class="logo" href="index.html">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#2eff8f" stroke-width="2"/><path d="M12 7l3 2.2-1.2 3.6h-3.6L9 9.2 12 7z" fill="#2eff8f"/><path d="M12 2v5M21.6 9l-4.6 1.4M17.8 20l-3-3.6M6.2 20l3-3.6M2.4 9L7 10.4" stroke="#2eff8f" stroke-width="1.4"/></svg>
+      <span>FM Touch <b>Lab</b></span>
+    </a>
+    <a style="margin-left:auto;font-size:13px;font-weight:800" href="index.html">← Voltar ao Lab</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="card" id="noBackend" style="display:none">
+    <h2 style="font-size:18px;margin-bottom:8px">🔧 Plataforma em preparação</h2>
+    <p style="color:var(--sub);font-size:13.5px;line-height:1.7">O sistema de perfis ainda não foi ligado ao banco de dados. O dono do site precisa configurar o Supabase seguindo o <b>GUIA-PERFIL.md</b> (arquivo <b>js/lab-config.js</b>).</p>
+    <p style="color:var(--sub);font-size:13.5px;line-height:1.7;margin-top:8px">Enquanto isso, dá pra usar todo o Lab como visitante — inclusive escolher teu clube e deixar o site com as cores dele! 🎨 <a href="index.html#personal">Abrir personalização →</a></p>
+  </div>
+
+  <div class="card" id="authCard" style="display:none">
+    <div class="tabs">
+      <button id="tabLogin" class="on">Entrar</button>
+      <button id="tabReg">👤 Criar perfil</button>
+    </div>
+    <div class="err" id="err"></div>
+    <div class="okm" id="okm"></div>
+
+    <!-- LOGIN -->
+    <div id="fLogin">
+      <div class="f"><label class="lab">E-MAIL</label><input class="inp" id="lEmail" type="email" placeholder="teu@email.com" autocomplete="email"></div>
+      <div class="f"><label class="lab">SENHA</label><input class="inp" id="lPass" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+      <button class="btn p big" id="doLogin">Entrar →</button>
+      <div class="hint">🔒 Autenticação real e segura. Tua senha nunca é salva em texto puro.</div>
+    </div>
+
+    <!-- CADASTRO -->
+    <div id="fReg" style="display:none">
+      <div class="f"><label class="lab">E-MAIL</label><input class="inp" id="rEmail" type="email" placeholder="teu@email.com" autocomplete="email"></div>
+      <div class="f"><label class="lab">SENHA (mín. 6 caracteres)</label><input class="inp" id="rPass" type="password" placeholder="escolhe uma senha forte" autocomplete="new-password"></div>
+      <div class="f"><label class="lab">NOME DE MANAGER (aparece nas publicações)</label><input class="inp" id="rNome" type="text" maxlength="30" placeholder="ex: Coach Lucas"></div>
+      <div class="f"><label class="lab">USUÁRIO ÚNICO (link do teu perfil público)</label><input class="inp" id="rUser" type="text" maxlength="20" placeholder="ex: coach_lucas">
+        <div class="hint">Só letras minúsculas, números e _ — vira o link: manager.html?u=<b id="uPrev">...</b></div></div>
+      <div class="f"><label class="lab">PAÍS (opcional)</label>
+        <select class="inp" id="rPais">
+          <option value="">Prefiro não dizer</option>
+          <option>Brasil</option><option>Portugal</option><option>Argentina</option><option>Chile</option>
+          <option>Uruguaia</option><option>Paraguai</option><option>Espanha</option><option>Alemanha</option>
+          <option>Inglaterra</option><option>Outro</option>
+        </select></div>
+      <div class="f"><label class="lab">🛡️ MEU CLUBE</label>
+        <div class="clubrow" id="rClubRow"></div></div>
+      <label class="chk f"><input type="checkbox" id="rPub" checked>
+        <span><b>Tornar meu perfil público</b><small>Qualquer pessoa poderá ver teu Manager Card e tuas táticas (e-mail e dados da conta NUNCA são mostrados). Podes mudar isso depois nas configurações.</small></span></label>
+      <button class="btn p big" id="doReg">Criar meu Manager Card 🪪</button>
+    </div>
+  </div>
+
+  <div style="text-align:center;color:var(--sub);font-size:12.5px">Sem pressa: o Lab inteiro funciona sem conta. ⚽</div>
+</div>
+
+<script>window.LAB_NO_WELCOME=1;</script>
+<script src="js/lab-config.js"></script>
+<script src="js/lab-clubes.js"></script>
+<script src="js/lab-auth.js"></script>
+<script>
+(function(){
+  var A=LAB.auth;
+  function showErr(m){var e=document.getElementById('err');e.textContent=m;e.style.display=m?'block':'none';}
+  function showOk(m){var e=document.getElementById('okm');e.textContent=m;e.style.display=m?'block':'none';}
+  function busy(b,txt){b.disabled=true;var t=b.textContent;b.textContent='⏳ Aguenta aí…';return function(){b.disabled=false;b.textContent=t;};}
+  function regClubRow(){
+    var row=document.getElementById('rClubRow'),c=LAB.getClub();
+    row.innerHTML=c?(LAB.crest(c,30)+'<b>'+c.n+'</b>'):'<span style="color:var(--sub);font-size:13px">Nenhum clube escolhido</span>';
+    var btn=document.createElement('button');btn.className='chipbtn';btn.textContent=c?'Trocar':'Escolher';
+    btn.addEventListener('click',function(){LAB.openClubPicker(function(){regClubRow();});});
+    row.appendChild(btn);
+  }
+  function boot(){
+    if(!A.backendOk()){document.getElementById('noBackend').style.display='block';return;}
+    document.getElementById('authCard').style.display='block';
+    regClubRow();
+    /* já logado? vai direto */
+    A.ready().then(function(s){ if(s) location.replace('manager.html'); });
+    document.getElementById('tabLogin').addEventListener('click',function(){this.classList.add('on');document.getElementById('tabReg').classList.remove('on');document.getElementById('fLogin').style.display='block';document.getElementById('fReg').style.display='none';showErr('');});
+    document.getElementById('tabReg').addEventListener('click',function(){this.classList.add('on');document.getElementById('tabLogin').classList.remove('on');document.getElementById('fReg').style.display='block';document.getElementById('fLogin').style.display='none';showErr('');});
+    /* sugestão de username */
+    document.getElementById('rNome').addEventListener('input',function(){
+      var s=A.slugify(this.value);
+      var u=document.getElementById('rUser');
+      if(!u.dataset.touched)u.value=s;
+      document.getElementById('uPrev').textContent=(u.value||'...');
+    });
+    document.getElementById('rUser').addEventListener('input',function(){this.dataset.touched='1';this.value=A.slugify(this.value);document.getElementById('uPrev').textContent=(this.value||'...');});
+    /* LOGIN */
+    document.getElementById('doLogin').addEventListener('click',function(){
+      showErr('');
+      var e=document.getElementById('lEmail').value.trim(),p=document.getElementById('lPass').value;
+      if(!e||!p)return showErr('Preenche e-mail e senha 👀');
+      var rb=busy(this);
+      A.signIn(e,p).then(function(){location.replace('manager.html');})
+       .catch(function(x){rb();showErr(x&&x.message&&/Invalid login/i.test(x.message)?'E-mail ou senha errados 😕':(x.message||'Erro ao entrar'));});
+    });
+    /* CADASTRO */
+    document.getElementById('doReg').addEventListener('click',function(){
+      showErr('');
+      var e=document.getElementById('rEmail').value.trim(),p=document.getElementById('rPass').value;
+      var nome=document.getElementById('rNome').value.trim(),user=document.getElementById('rUser').value.trim();
+      var pais=document.getElementById('rPais').value,pub=document.getElementById('rPub').checked;
+      var c=LAB.getClub();
+      if(!e||!p)return showErr('Preenche e-mail e senha 👀');
+      if(p.length<6)return showErr('A senha precisa de pelo menos 6 caracteres 🔒');
+      if(nome.length<2)return showErr('Escolhe um nome de manager ✍️');
+      if(!/^[a-z0-9_]{3,20}$/.test(user))return showErr('Usuário: 3-20 chars, só letras minúsculas, números e _ 😅');
+      var rb=busy(this);
+      A.usernameFree(user).then(function(free){
+        if(!free)throw new Error('Esse usuário já tá em uso — tenta outro 😅');
+        return A.signUp(e,p);
+      }).then(function(data){
+        if(!data||!data.session){showOk('Quase lá! 📩 Confere teu e-mail pra confirmar a conta e depois entra aqui de novo.');rb();return null;}
+        var row={username:user,nome:nome,pais:pais||null,publico:pub,
+          club_id:c?c.id:null,club_nome:c?c.nome:null,club_cor1:c?c.c1:null,club_cor2:c?c.c2:null,
+          club_escudo:c?('https://www.google.com/s2/favicons?domain='+c.d+'&sz=128'):null};
+        return A.saveProfile(row).then(function(){location.replace('manager.html');});
+      }).catch(function(x){
+        rb();
+        var m=(x&&x.message)||'Erro ao criar perfil';
+        if(/already registered/i.test(m))m='Esse e-mail já tem conta — tenta ENTRAR 😉';
+        if(/duplicate key|profiles_username/i.test(m))m='Esse usuário já tá em uso — tenta outro 😅';
+        showErr(m);
+      });
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
+</script>
+</body>
+</html>
