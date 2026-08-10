@@ -29,6 +29,45 @@ function clubById(id) {
   return null;
 }
 
+/* ---------- clubes: achar por texto + fallback p/ clube fora da base ---------- */
+function squish(s) { return (s || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]/g, ''); }
+/* casa um nome digitado com a base — ex: "boca" → Boca Juniors (com escudo) */
+function matchClub(q) {
+  var s = squish(q);
+  if (!s) return null;
+  var list = LAB.CLUBES || [], i, c, n;
+  for (i = 0; i < list.length; i++) { c = list[i]; if (squish(c.n) === s || squish(c.id) === s) return c; }
+  for (i = 0; i < list.length; i++) { c = list[i]; n = squish(c.n);
+    if ((s.length >= 3 && n.indexOf(s) > -1) || (n.length >= 3 && s.indexOf(n) > -1)) return c; }
+  return null;
+}
+/* resolve O QUE ESTIVER SALVO: id da base (com escudo) ou texto cru (🏳️) */
+function anyClub(v) {
+  if (!v) return null;
+  var c = clubById(v);
+  return { c: c, n: c ? c.n : v };
+}
+function sideHTML(v, cls) {
+  var a = anyClub(v);
+  if (!a) return '<span class="utliv">💼 livre</span>';
+  if (!a.c) return '<span class="utside ' + cls + '" style="opacity:.85">🏳️ ' + esc(a.n) + '</span>';
+  return '<span class="utside ' + cls + '">' + LAB.crest(a.c, 22) + '<span style="overflow:hidden;text-overflow:ellipsis">' + esc(a.n) + '</span></span>';
+}
+/* "Enner valência ➡️ boca" · "Filip jorgensen ex Chelsea ➡️ Strasbourg" → {jog,org,dst} */
+var ARROW = /\s*(?:➡️|➡|→|↦|›|»|->|=>|—>)\s*/;
+function parseTransferLine(ln) {
+  ln = (ln || '').trim();
+  if (!ln) return null;
+  var parts = ln.split(ARROW);
+  if (parts.length < 2) return null;
+  var dst = (parts[parts.length - 1] || '').trim();
+  var left = parts.slice(0, parts.length - 1).join(' ').trim();
+  if (!dst || !left) return null;
+  var jog = left, org = null, m = left.match(/^(.*?)\s+ex\s+(.+)$/i);
+  if (m) { jog = m[1].trim(); org = m[2].trim(); }
+  return { jog: jog, org: org, dst: dst };
+}
+
 /* ---------- FAVORITOS (⭐ Meus clubes) ---------- */
 function favsLocalGet() { try { var a = JSON.parse(localStorage.getItem('fmtl.favclubes') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
 function favsLocalSet(a) { try { localStorage.setItem('fmtl.favclubes', JSON.stringify(a)); } catch (e) {} }
@@ -99,7 +138,18 @@ var CSS = '' +
 '.ucgrid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-height:260px;overflow-y:auto;padding-right:2px;margin-bottom:12px}' +
 '.ucopt{display:flex;align-items:center;gap:8px;background:#0d1526;border:1.5px solid var(--line);border-radius:11px;padding:8px 9px;cursor:pointer;font-size:12.5px;font-weight:700;text-align:left;color:var(--txt)}' +
 '.ucopt.sel{border-color:var(--warn);background:#ffb64814}' +
-'.ucopt .lbcrest{width:20px;height:20px;border:none}';
+'.ucopt .lbcrest{width:20px;height:20px;border:none}' +
+/* 🛬 faixa de transferência (origem ➡ destino) */
+'.utp{font-size:18px;font-weight:900;letter-spacing:.3px;margin:2px 0 10px;line-height:1.2}' +
+'.utband{display:flex;align-items:center;gap:9px;flex-wrap:wrap}' +
+'.utside{display:inline-flex;align-items:center;gap:7px;background:#0d1526;border:1.5px solid var(--line);border-radius:99px;padding:6px 12px 6px 7px;font-size:13px;font-weight:800;max-width:150px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}' +
+'.utside .lbcrest{width:22px;height:22px;border:none;flex:none}' +
+'.utside.dst{border-color:var(--neon);background:#2eff8f12;box-shadow:0 0 14px #2eff8f1f}' +
+'.utarrow{color:var(--neon);font-size:16px;font-weight:900;letter-spacing:1px}' +
+'.utliv{color:var(--sub);font-size:12px;font-weight:800;border:1.5px dashed var(--line);border-radius:99px;padding:6px 12px}' +
+'.ucbulk{width:100%;background:#0d1526;border:1px solid var(--line);color:var(--txt);border-radius:12px;padding:12px;font-size:14px;font-family:inherit;min-height:150px}' +
+'.ucblrow{display:flex;align-items:center;gap:6px;font-size:12.5px;padding:7px 4px;border-bottom:1px dashed #ffffff14;flex-wrap:wrap}' +
+'.ucblrow .lbcrest{width:18px;height:18px;border:none}';
 
 /* ---------- overlays (favoritos + lightbox) ---------- */
 function ensureOverlays() {
@@ -167,6 +217,7 @@ function updStats(list) {
   var clubs = {}, jogadores = {}, trans = 0;
   list.forEach(function (it) {
     if (it.club_id) clubs[it.club_id] = 1;
+    if (it.clube_origem) clubs[it.clube_origem] = 1;
     if (it.jogador) jogadores[it.jogador.toLowerCase()] = 1;
     if (it.categoria === 'transferencias') trans++;
   });
@@ -174,13 +225,13 @@ function updStats(list) {
 }
 function matchesQ(it, q) {
   if (!q) return true;
-  var c = clubById(it.club_id), cat = catOf(it.categoria);
-  var hay = ((it.titulo || '') + ' ' + (it.descricao || '') + ' ' + (it.jogador || '') + ' ' + (c ? c.n : '') + ' ' + cat.n).toLowerCase();
+  var c = anyClub(it.club_id), o = anyClub(it.clube_origem), cat = catOf(it.categoria);
+  var hay = ((it.titulo || '') + ' ' + (it.descricao || '') + ' ' + (it.jogador || '') + ' ' + (c ? c.n : '') + ' ' + (o ? o.n : '') + ' ' + cat.n).toLowerCase();
   return hay.indexOf(q.toLowerCase()) > -1;
 }
 function filtered() {
   return items.filter(function (it) {
-    if (ui.mode === 'mine' && favs.indexOf(it.club_id) < 0) return false;
+    if (ui.mode === 'mine' && favs.indexOf(it.club_id) < 0 && favs.indexOf(it.clube_origem) < 0) return false;
     if (ui.cat !== 'all' && it.categoria !== ui.cat) return false;
     return matchesQ(it, ui.q);
   });
@@ -202,17 +253,39 @@ function heroHTML(s) {
       '<div class="ucstat"><b>' + s.trans + '</b><span>🔄 TRANSF.</span></div>' +
     '</div></div>';
 }
+function itemAdminBtns(it) {
+  return isAdmin ? '<div class="uadm" style="margin-top:8px"><button data-uedit="' + it.id + '">✏️ editar</button><button data-udel="' + it.id + '">🗑</button></div>' : '';
+}
+function itemThumb(it) {
+  return it.imagem ? '<img class="ucthumb" data-img="' + esc(it.imagem) + '" src="' + esc(it.imagem) + '" loading="lazy" alt="Print da alteração">' : '';
+}
+/* 🔄 card especial de transferência: JOGADOR + faixa origem ➡ destino */
+function itemTransHTML(it, cat) {
+  var dst = anyClub(it.club_id);
+  return '<div class="ucard">' +
+    '<div class="uchead"><span class="ucbadge">' + cat.ic + ' ' + cat.n.toUpperCase() + '</span></div>' +
+    '<div class="utp">👤 ' + esc(it.jogador || it.titulo) + '</div>' +
+    '<div class="utband">' + sideHTML(it.clube_origem, '') +
+      '<span class="utarrow">➡</span>' +
+      (dst ? sideHTML(it.club_id, 'dst') : '<span class="utliv">❓ sem destino</span>') + '</div>' +
+    (it.descricao ? '<div class="ucdesc">' + esc(it.descricao) + '</div>' : '') +
+    itemThumb(it) +
+    '<div class="ucfoot">🗞️ Update ' + ed.numero + ' · mercado da bola 🔁</div>' +
+    itemAdminBtns(it) +
+  '</div>';
+}
 function itemHTML(it) {
   var cat = catOf(it.categoria), c = clubById(it.club_id);
+  if (it.categoria === 'transferencias') return itemTransHTML(it, cat);
   return '<div class="ucard">' +
     '<div class="uchead"><span class="ucbadge">' + cat.ic + ' ' + cat.n.toUpperCase() + '</span>' +
     (c ? '<span class="ucclub">' + LAB.crest(c, 18) + esc(c.n) + '</span>' : '') + '</div>' +
     '<div class="ucname">' + esc(it.titulo) + '</div>' +
     (it.descricao ? '<div class="ucdesc">' + esc(it.descricao) + '</div>' : '') +
     (it.jogador ? '<div class="ucjog">👤 ' + esc(it.jogador) + '</div>' : '') +
-    (it.imagem ? '<img class="ucthumb" data-img="' + esc(it.imagem) + '" src="' + esc(it.imagem) + '" loading="lazy" alt="Print da alteração">' : '') +
-    '<div class="ucfoot">🗞️ Update ' + ed.numero + (it.jogador ? '' : '') + '</div>' +
-    (isAdmin ? '<div class="uadm" style="margin-top:6px"><button data-uedit="' + it.id + '">✏️ editar</button><button data-udel="' + it.id + '">🗑</button></div>' : '') +
+    itemThumb(it) +
+    '<div class="ucfoot">🗞️ Update ' + ed.numero + '</div>' +
+    itemAdminBtns(it) +
   '</div>';
 }
 function listHTML() {
@@ -240,6 +313,7 @@ function adminHTML() {
     '<div style="font-size:12px;font-weight:900;color:var(--warn);letter-spacing:1px;margin-bottom:10px">👑 ÁREA DO ADMIN</div>' +
     '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
       '<button class="ucbtn mini" id="ucAddItem">+ Nova alteração</button>' +
+      '<button class="ucbtn mini ghost" id="ucBulk">⚡ Colar lista</button>' +
       '<button class="ucbtn mini ghost" id="ucNewEd">🆕 Novo update (edição)</button>' +
     '</div></div>';
 }
@@ -288,8 +362,12 @@ function itemModal(it) {
       '<h3 style="margin-bottom:12px">' + (it ? '✏️ Editar alteração' : '➕ Nova alteração') + ' — Update ' + ed.numero + '</h3>' +
       '<div class="ucf"><label class="uclab">CATEGORIA</label><select class="ucsel" id="aiCat">' +
         CATS.map(function (c) { return '<option value="' + c.id + '"' + (it && it.categoria === c.id ? ' selected' : '') + '>' + c.ic + ' ' + c.n + '</option>'; }).join('') + '</select></div>' +
-      '<div class="ucf"><label class="uclab">CLUBE RELACIONADO</label><select class="ucsel" id="aiClub"><option value="">— nenhum —</option>' +
+      /* 🔄 modo transferência: origem ➡ destino com prévia ao vivo */
+      '<div class="ucf tronly" style="display:none"><label class="uclab">🛫 CLUBE DE ORIGEM (ex — opcional)</label><select class="ucsel" id="aiOrg"><option value="">— livre / não informado —</option>' +
+        (LAB.CLUBES || []).map(function (c) { return '<option value="' + c.id + '"' + (it && it.clube_origem === c.id ? ' selected' : '') + '>' + c.n + '</option>'; }).join('') + '</select></div>' +
+      '<div class="ucf"><label class="uclab" id="aiClubLab">CLUBE RELACIONADO</label><select class="ucsel" id="aiClub"><option value="">— nenhum —</option>' +
         (LAB.CLUBES || []).map(function (c) { return '<option value="' + c.id + '"' + (it && it.club_id === c.id ? ' selected' : '') + '>' + c.n + '</option>'; }).join('') + '</select></div>' +
+      '<div class="trprev"></div>' +
       '<div class="ucf"><label class="uclab">TÍTULO</label><input class="ucinp" id="aiTit" style="width:100%" maxlength="90" value="' + esc(it ? it.titulo : '') + '" placeholder="ex: Jogador X → Corinthians"></div>' +
       '<div class="ucf"><label class="uclab">JOGADOR (opcional)</label><input class="ucinp" id="aiJog" style="width:100%" maxlength="50" value="' + esc(it && it.jogador ? it.jogador : '') + '" placeholder="ex: Endrick"></div>' +
       '<div class="ucf"><label class="uclab">DESCRIÇÃO</label><textarea class="ucta" id="aiDesc" maxlength="400" placeholder="Detalhes da mudança...">' + esc(it ? it.descricao : '') + '</textarea></div>' +
@@ -309,22 +387,64 @@ function itemModal(it) {
     r.onload = function () { $('aiPrev').src = r.result; $('aiPrev').style.display = 'block'; prevUrl = '__new__'; };
     r.readAsDataURL(f);
   });
+  /* 🔄 modo transferência: mostra origem + prévia ao vivo */
+  var ov2 = $('ucItemOv');
+  function isTr() { return $('aiCat').value === 'transferencias'; }
+  function clubSelName(sel) { return sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : ''; }
+  function syncTransUI() {
+    var tr = isTr();
+    ov2.querySelectorAll('.tronly').forEach(function (el) { el.style.display = tr ? '' : 'none'; });
+    $('aiClubLab').textContent = tr ? '📍 CLUBE DE DESTINO' : 'CLUBE RELACIONADO';
+    $('aiTit').placeholder = tr ? 'vazio = monto sozinho: Jogador ➡ Destino' : 'ex: Jogador X → Corinthians';
+    var pv = ov2.querySelector('.trprev');
+    if (!tr) { pv.innerHTML = ''; return; }
+    var jog = $('aiJog').value.trim(), org = $('aiOrg').value, dst = $('aiClub').value;
+    pv.innerHTML = '<div class="uclab" style="margin:8px 2px 6px;color:var(--neon)">👀 PRÉVIA (é assim que aparece no site)</div>' +
+      '<div style="background:#0d1526;border:1.5px dashed var(--line);border-radius:14px;padding:12px 11px">' +
+        '<div class="utp" style="margin:0 0 8px">👤 ' + esc(jog || 'Nome do jogador') + '</div>' +
+        '<div class="utband">' + sideHTML(org, '') + '<span class="utarrow">➡</span>' + (dst ? sideHTML(dst, 'dst') : '<span class="utliv">escolhe o destino 👇</span>') + '</div></div>';
+  }
+  $('aiCat').addEventListener('change', syncTransUI);
+  $('aiOrg').addEventListener('change', syncTransUI);
+  $('aiClub').addEventListener('change', syncTransUI);
+  $('aiJog').addEventListener('input', syncTransUI);
+  syncTransUI();
+
   $('aiSave').addEventListener('click', function () {
+    var tr = isTr();
+    var jog = $('aiJog').value.trim(), org = $('aiOrg').value || null, dst = $('aiClub').value || null;
     var tit = $('aiTit').value.trim();
+    if (tr) {
+      /* transferência: monta o título sozinho se estiver vazio; exige jogador + destino */
+      if (!jog) { alert('Cadê o nome do jogador? 😄'); $('aiJog').focus(); return; }
+      if (!dst) { alert('Escolhe o clube de DESTINO! 📍'); $('aiClub').focus(); return; }
+      if (!tit) tit = jog + ' ➡ ' + clubSelName($('aiClub'));
+    }
     if (tit.length < 3) { $('aiTit').focus(); return; }
     var b = this; b.disabled = true; b.textContent = '⏳ salvando…';
     saveImage(it).then(function (imgUrl) {
-      var row = { edition: ed.id, categoria: $('aiCat').value, club_id: $('aiClub').value || null,
-        titulo: tit, jogador: $('aiJog').value.trim() || null, descricao: $('aiDesc').value.trim(),
+      var row = { edition: ed.id, categoria: $('aiCat').value, club_id: dst,
+        clube_origem: tr ? org : null,
+        titulo: tit, jogador: jog || null, descricao: $('aiDesc').value.trim(),
         ordem: parseInt($('aiOrd').value, 10) || 0, imagem: imgUrl };
-      var p = editId ? sb.from('update_items').update(row).eq('id', editId) : sb.from('update_items').insert(row);
-      return p;
+      return saveItemRow(row, editId);
     }).then(function (r) {
       b.disabled = false;
-      if (r.error) { alert('Erro ao salvar: ' + r.error.message); return; }
+      if (r.error) { alert('Erro ao salvar: ' + r.error.message); b.textContent = editId ? '💾 Salvar alteração' : '🚀 Cadastrar alteração'; return; }
       var ov = $('ucItemOv'); if (ov) ov.remove();
       loadData();
-    }).catch(function (e) { b.disabled = false; b.textContent = '🚀 Cadastrar alteração'; alert('Falhou: ' + (e && e.message ? e.message : e)); });
+    }).catch(function (e) { b.disabled = false; b.textContent = editId ? '💾 Salvar alteração' : '🚀 Cadastrar alteração'; alert('Falhou: ' + (e && e.message ? e.message : e)); });
+  });
+}
+/* grava item; se o banco ainda não tiver a coluna clube_origem (SQL v4), tenta de novo sem ela */
+function saveItemRow(row, id) {
+  var q = id ? sb.from('update_items').update(row).eq('id', id) : sb.from('update_items').insert(row);
+  return q.then(function (r) {
+    if (r.error && /clube_origem/i.test(r.error.message || '')) {
+      delete row.clube_origem;
+      return id ? sb.from('update_items').update(row).eq('id', id) : sb.from('update_items').insert(row);
+    }
+    return r;
   });
 }
 /* sobe imagem (reduz tamanho p/ celular) — devolve a URL pública */
@@ -364,10 +484,81 @@ function imgPathOf(url) {
   var m = (url || '').match(/\/update-images\/(.+)$/);
   return m ? m[1] : null;
 }
+/* ⚡ importar lista colada (uma transferência por linha, estilo WhatsApp) */
+function bulkModal() {
+  var o = $('ucBulkOv'); if (o) o.remove();
+  var d = document.createElement('div');
+  d.innerHTML =
+    '<div class="ucov on" id="ucBulkOv"><div class="uccard">' +
+      '<button class="mclose" id="ucBulkClose">✕</button>' +
+      '<h3 style="margin-bottom:6px">⚡ Colar lista do mercado</h3>' +
+      '<p style="color:var(--sub);font-size:12.5px;margin-bottom:10px;line-height:1.55">Uma por linha, igual tu manda no WhatsApp:<br>' +
+      '<b style="color:var(--txt)">Enner Valencia ➡️ Boca Juniors</b><br>' +
+      '<b style="color:var(--txt)">Filip Jorgensen ex Chelsea ➡️ Strasbourg</b><br>' +
+      'O site acha o clube e monta o card bonito sozinho. 😉</p>' +
+      '<textarea class="ucbulk" id="bkTxt" placeholder="Jogador ➡ Clube&#10;Jogador ex ClubeDeOrigem ➡ ClubeDeDestino&#10;..."></textarea>' +
+      '<div class="uclab" style="margin:10px 2px 6px">👀 PRÉVIA</div>' +
+      '<div id="bkPrev" style="max-height:220px;overflow-y:auto;background:#0d1526;border:1px solid var(--line);border-radius:12px;padding:4px 10px"></div>' +
+      '<button class="ucbtn" id="bkSave" style="width:100%;margin-top:12px">🚀 Cadastrar tudo no Update ' + ed.numero + '</button>' +
+    '</div></div>';
+  while (d.firstChild) document.body.appendChild(d.firstChild);
+  $('ucBulkClose').addEventListener('click', function () { $('ucBulkOv').remove(); });
+
+  var rows = []; /* {jog, orgTxt, orgId, dstTxt, dstId} */
+  function refresh() {
+    var lines = ($('bkTxt').value || '').split('\n');
+    rows = [];
+    var html = lines.map(function (ln) {
+      var t = parseTransferLine(ln);
+      if (!t) return ln.trim() ? '<div class="ucblrow" style="color:var(--bad)">⚠️ não entendi: "' + esc(ln.trim()) + '"</div>' : '';
+      var oc = t.org ? matchClub(t.org) : null, dc = matchClub(t.dst);
+      rows.push({ jog: t.jog, orgTxt: t.org, orgId: oc ? oc.id : null, dstTxt: t.dst, dstId: dc ? dc.id : null });
+      return '<div class="ucblrow"><b>' + esc(t.jog) + '</b>' +
+        '<span style="color:var(--sub)">' + (oc ? LAB.crest(oc, 18) + ' ' + esc(oc.n) : (t.org ? '🏳️ ' + esc(t.org) : '💼')) + '</span>' +
+        '<span class="utarrow">➡</span>' +
+        (dc ? LAB.crest(dc, 18) + ' <b style="color:var(--neon)">' + esc(dc.n) + '</b>' : '<span style="color:var(--warn)">🏳️ ' + esc(t.dst) + ' (sem escudo)</span>') +
+      '</div>';
+    }).join('');
+    $('bkPrev').innerHTML = html || '<div style="color:var(--sub);font-size:12.5px;padding:10px 2px">Cola a lista ali em cima 👆</div>';
+  }
+  $('bkTxt').addEventListener('input', refresh);
+  refresh();
+
+  $('bkSave').addEventListener('click', function () {
+    if (!rows.length) { $('bkTxt').focus(); return; }
+    var b = this; b.disabled = true; b.textContent = '⏳ cadastrando ' + rows.length + ' itens…';
+    var base = items.length ? Math.max.apply(null, items.map(function (i) { return i.ordem || 0; })) : 0;
+    var batch = rows.map(function (r, i) {
+      /* clube fora da base? guarda o texto mesmo — o card mostra 🏳️ + nome */
+      var dstV = r.dstId || r.dstTxt, orgV = r.orgId || r.orgTxt || null;
+      return { edition: ed.id, categoria: 'transferencias',
+        club_id: dstV, clube_origem: orgV,
+        titulo: r.jog + ' ➡ ' + (r.dstId ? clubById(r.dstId).n : r.dstTxt),
+        jogador: r.jog, descricao: '',
+        ordem: base + i + 1, imagem: null };
+    });
+    sb.from('update_items').insert(batch).then(function (r) {
+      if (r.error && /clube_origem/i.test(r.error.message || '')) { /* banco sem SQL v4 → tenta sem a coluna */
+        batch.forEach(function (x) { delete x.clube_origem; });
+        return sb.from('update_items').insert(batch);
+      }
+      return r;
+    }).then(function (r) {
+      b.disabled = false; b.textContent = '🚀 Cadastrar tudo';
+      if (r.error) { alert('Erro: ' + r.error.message); return; }
+      var ov = $('ucBulkOv'); if (ov) ov.remove();
+      loadData();
+    });
+  });
+}
 function bindAdmin() {
   $('ucAddItem').addEventListener('click', function () {
     if (!ed) { alert('Primeiro cria o update (edição) com o botão 🆕 Novo update — aí cadastras as alterações nele!'); return; }
     itemModal(null);
+  });
+  $('ucBulk').addEventListener('click', function () {
+    if (!ed) { alert('Primeiro cria o update (edição) com o botão 🆕 Novo update — aí colas a lista nele!'); return; }
+    bulkModal();
   });
   $('ucNewEd').addEventListener('click', function () {
     var n = prompt('Número do NOVO update (ex: 27):', (ed ? ed.numero + 1 : 1));
@@ -478,7 +669,8 @@ function badgeInit() {
 /* ---------- API ---------- */
 window.LAB.updates = {
   CATS: CATS, catOf: catOf, updStats: updStats, matchesQ: matchesQ,
-  favsLocalGet: favsLocalGet, favsLocalSet: favsLocalSet, favIdsOfProfile: favIdsOfProfile
+  favsLocalGet: favsLocalGet, favsLocalSet: favsLocalSet, favIdsOfProfile: favIdsOfProfile,
+  matchClub: matchClub, anyClub: anyClub, parseTransferLine: parseTransferLine, squish: squish
 };
 function boot() {
   ROOT = $('ucRoot');
