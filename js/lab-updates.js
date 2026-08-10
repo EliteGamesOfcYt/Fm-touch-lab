@@ -41,10 +41,10 @@ function matchClub(q) {
     if ((s.length >= 3 && n.indexOf(s) > -1) || (n.length >= 3 && s.indexOf(n) > -1)) return c; }
   return null;
 }
-/* resolve O QUE ESTIVER SALVO: id da base (com escudo) ou texto cru (🏳️) */
+/* resolve O QUE ESTIVER SALVO: id da base → texto que bate com a base → texto cru (🏳️) */
 function anyClub(v) {
   if (!v) return null;
-  var c = clubById(v);
+  var c = clubById(v) || matchClub(v);
   return { c: c, n: c ? c.n : v };
 }
 function sideHTML(v, cls) {
