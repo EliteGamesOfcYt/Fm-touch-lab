@@ -188,6 +188,11 @@ function filtered() {
 
 /* ---------- render ---------- */
 function heroHTML(s) {
+  if (!ed) {
+    /* sem edição cadastrada ainda — página tem que abrir mesmo assim! */
+    return '<div class="uchero">📰<h2>UPDATE CENTER</h2>' +
+      '<div class="dt">' + (isAdmin ? 'Nenhuma edição criada ainda — cria o primeiro update ali embaixo (🆕)! 👇' : 'O chefe tá preparando o primeiro update. 🌱 Volta já!') + '</div></div>';
+  }
   var dt = new Date(ed.publicado + 'T12:00:00').toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
   return '<div class="uchero">🔥<h2>UPDATE ' + ed.numero + '</h2>' +
     '<div class="dt">Última atualização · ' + dt + '</div>' +
@@ -212,6 +217,7 @@ function itemHTML(it) {
 }
 function listHTML() {
   var list = filtered();
+  if (!ed) return ''; /* sem edição: o herói já explica tudo */
   if (!items.length) {
     return isAdmin ?
       '<div class="ucempty">O Update ' + ed.numero + ' ainda não tem alterações cadastradas.<br>Cadastra a primeira ali embaixo! 👇</div>' :
@@ -298,7 +304,7 @@ function itemModal(it) {
   if (prevUrl) { $('aiPrev').src = prevUrl; $('aiPrev').style.display = 'block'; }
   $('aiImg').addEventListener('change', function () {
     var f = this.files && this.files[0];
-    if (!f)return;
+    if (!f) return;
     var r = new FileReader();
     r.onload = function () { $('aiPrev').src = r.result; $('aiPrev').style.display = 'block'; prevUrl = '__new__'; };
     r.readAsDataURL(f);
@@ -359,7 +365,10 @@ function imgPathOf(url) {
   return m ? m[1] : null;
 }
 function bindAdmin() {
-  $('ucAddItem').addEventListener('click', function () { itemModal(null); });
+  $('ucAddItem').addEventListener('click', function () {
+    if (!ed) { alert('Primeiro cria o update (edição) com o botão 🆕 Novo update — aí cadastras as alterações nele!'); return; }
+    itemModal(null);
+  });
   $('ucNewEd').addEventListener('click', function () {
     var n = prompt('Número do NOVO update (ex: 27):', (ed ? ed.numero + 1 : 1));
     if (!n) return;
@@ -478,4 +487,3 @@ function boot() {
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
-        
