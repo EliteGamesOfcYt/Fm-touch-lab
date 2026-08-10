@@ -227,7 +227,8 @@ function relTime(d){
 function rowPatch(over){
   var r={username:prof.username,nome:prof.nome,pais:prof.pais,publico:prof.publico,
     club_id:prof.club_id,club_nome:prof.club_nome,club_cor1:prof.club_cor1,club_cor2:prof.club_cor2,
-    club_escudo:prof.club_escudo,estilo:prof.estilo,formacao:prof.formacao||'4-2-3-1'};
+    club_escudo:prof.club_escudo,estilo:prof.estilo,formacao:prof.formacao||'4-2-3-1',
+    fav_clubes:prof.fav_clubes||[],is_admin:!!prof.is_admin}; /* passthrough p/ upsert não apagar */
   if(over)for(var k in over)r[k]=over[k];
   return r;
 }
@@ -235,8 +236,8 @@ function rowPatch(over){
    (upgrade v2 não rodado), tenta de novo sem essas colunas */
 function saveRow(over){
   return A.saveProfile(rowPatch(over)).catch(function(err){
-    if(err&&/estilo|formacao|column/i.test(err.message||'')){
-      var r=rowPatch(over);delete r.estilo;delete r.formacao;
+    if(err&&/estilo|formacao|fav_clubes|is_admin|column/i.test(err.message||'')){
+      var r=rowPatch(over);delete r.estilo;delete r.formacao;delete r.fav_clubes;delete r.is_admin;
       return A.saveProfile(r);
     }
     throw err;
@@ -305,6 +306,20 @@ function trowHTML(t,own,p,c){
    (t.descricao?('<br>'+esc(t.descricao)):'')+'</div></div>'+right+'</div>';
 }
 
+/* ⭐ clubes acompanhados (Update Center) — separado do "Meu Clube" */
+function favSecHTML(p){
+  var raw=p.fav_clubes;
+  if(typeof raw==='string'){try{raw=JSON.parse(raw);}catch(e){raw=[];}}
+  if(!Array.isArray(raw)||!raw.length)return'';
+  var chips=raw.map(function(id){
+    var c=null;
+    if(LAB.CLUBES)for(var i=0;i<LAB.CLUBES.length;i++)if(LAB.CLUBES[i].id===id){c=LAB.CLUBES[i];break;}
+    return c?'<span style="display:inline-flex;align-items:center;gap:6px;background:#0d1526;border:1px solid var(--line);border-radius:99px;padding:5px 11px 5px 6px;font-size:12px;font-weight:800">'+LAB.crest(c,18)+esc(c.n)+'</span>':'';
+  }).join('');
+  if(!chips)return'';
+  return '<div class="card"><div class="slab">⭐ Clubes acompanhados</div><div style="display:flex;flex-wrap:wrap;gap:8px">'+chips+'</div>'+(isOwn?'<div style="font-size:11.5px;color:var(--sub);margin-top:8px">Gerencia em <a href="updates.html">📰 Update Center</a></div>':'')+'</div>';
+}
+
 /* ============ RENDER principal ============ */
 function render(){
   var c=clubOf(prof);
@@ -362,7 +377,7 @@ function render(){
         '<button class="btn mini" id="syncNo">Agora não</button></div>';
     }
 
-    h+=estiloHTML(prof,isOwn);
+    h+=estiloHTML(prof,isOwn)+favSecHTML(prof);
 
     if(isOwn){
       h+='<div class="card"><div class="slab">📋 Minhas táticas</div><div id="tacList">'+

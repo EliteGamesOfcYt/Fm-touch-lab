@@ -213,7 +213,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
     <h1>Domine o <em>FM Touch 21</em> no Android</h1>
     <p>Escolha uma ferramenta no menu abaixo — cada uma abre em sua própria tela, sem rolagem infinita. 👇</p>
     <div class="stats">
-      <span class="stat"><b>10</b> ferramentas</span>
+      <span class="stat"><b>11</b> ferramentas</span>
       <span class="stat"><b>1.146</b> atletas no radar</span>
       <span class="stat"><b>31</b> papéis explicados</span>
       <span class="stat"><b>30+</b> conflitos detectáveis</span>
@@ -230,6 +230,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
     <button class="mcard" data-go="desafios"><span class="ic">💪</span><b>Desafios</b><span>Saves pra zerar o jogo: do XI de €1 mi à dinastia do interior.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="guias"><span class="ic">📖</span><b>Guias</b><span>Como instalar .fmf no Android, dicionário de termos do FM e dicas rápidas.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="personal"><span class="ic">⚙️</span><b>Clube &amp; Perfil<span class="novo">NOVO</span></b><span>Escolha teu clube do coração, deixe o Lab com a tua cara e crie teu perfil de manager estilo FM.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="updates"><span class="ic">📰</span><b>Update Center<span class="novo">NOVO</span></b><span>Tudo que mudou no update: transferências, jogadores, clubes e mais — filtrado pelos TEUS clubes favoritos.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="ideias"><span class="ic">🚀</span><b>Novidades</b><span>O que vem por aí: tática da semana, comunidade e IA visual completa.</span><span class="go">Abrir →</span></button>
   </div>
 </main>
@@ -558,6 +559,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
 <script src="js/lab-config.js"></script>
 <script src="js/lab-clubes.js"></script>
 <script src="js/lab-auth.js"></script>
+<script src="js/lab-updates.js"></script>
 
 <script>
 'use strict';
@@ -578,6 +580,7 @@ const PAGES=[
  ['desafios','💪 Desafios','Saves pra zerar o jogo'],
  ['guias','📖 Guias','Tutoriais e dicas'],
  ['personal','⚙️ Clube & Perfil','Personalização e sua conta'],
+ ['updates','📰 Update Center','O que mudou no update'],
  ['ideias','🚀 Novidades','Roadmap do Lab']
 ];
 const validPages=PAGES.map(p=>p[0]);
@@ -590,6 +593,7 @@ PAGES.forEach(([id,label,desc])=>{
   drop.appendChild(d);
 });
 function go(id){
+  if(id==='updates'){location.href='updates.html';return;}
   if(!validPages.includes(id)) id='home';
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===id));
   document.querySelectorAll('[data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
