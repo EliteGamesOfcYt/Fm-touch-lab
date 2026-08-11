@@ -356,7 +356,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
     </div>
 
     <div>
-      <div class="card" style="margin-bottom:14px"><div class="pitch" id="pitchBox" style="margin:0"></div></div>
+      <div class="card" style="margin-bottom:14px"><div class="pitch" id="pitchBox" style="margin:0"></div><div style="text-align:center;font-size:11.5px;color:var(--sub);margin:8px 2px 4px;line-height:1.5">👆 Toca num jogador pra ver as <b style="color:var(--neon)">funções ideais</b> da posição no FM Touch</div></div>
       <div class="card" id="resultBox">
         <div class="slab">Ajuste as instruções e toque em <b style="color:var(--txt)">"Analisar tática"</b> — ou carregue um exemplo acima.</div>
       </div>
@@ -661,7 +661,8 @@ function pitchSVG(formKey, labels, color){
     const nums=KITNUM[p[2]]||[seen[p[2]]+1];
     const num=nums[Math.min(seen[p[2]],nums.length-1)];
     seen[p[2]]++;
-    dots += `<g transform="translate(${PX(p[0]).toFixed(1)},${PY(p[1]).toFixed(1)})">`
+    dots += `<g transform=\"translate(${PX(p[0]).toFixed(1)},${PY(p[1]).toFixed(1)})\"${labels?` data-pos=\"${p[2]}\" style=\"cursor:pointer\"`:``}>`
+      + (labels?`<circle r=\"8.4\" fill=\"transparent\"/>`:``)
       + (labels?`<text y="-6.6" font-size="4.2" font-weight="700" fill="#cfe8d8" text-anchor="middle">${p[2]}</text>`:'')
       + `<path d="M-3.4,-2.6 L-1.6,-4.3 Q-1.1,-4.8 -0.5,-4.5 Q0,-4.2 0.5,-4.5 Q1.1,-4.8 1.6,-4.3 L3.4,-2.6 L2.3,-0.7 L1.7,-1.2 L1.7,3.5 L-1.7,3.5 L-1.7,-1.2 L-2.3,-0.7 Z" fill="${color}" stroke="#00000055" stroke-width=".55"/>`
       + `<text y="1.9" font-size="4" font-weight="800" text-anchor="middle" fill="${numCol}">${num}</text></g>`;
@@ -676,6 +677,64 @@ function pitchSVG(formKey, labels, color){
     <rect x="40" y="104" width="20" height="8" fill="none" stroke="#ffffff22" stroke-width=".8"/>
     ${dots}</svg>`;
 }
+
+
+/* ============ TOQUE NO JOGADOR → FUNÇÕES DO FM ============ */
+const POSFULL={GR:'Goleiro',LD:'Lateral Direito',LE:'Lateral Esquerdo',ALD:'Ala Direito',ALE:'Ala Esquerdo',ZAG:'Zagueiro',VOL:'Volante',MC:'Meio-campo Central',MD:'Meia Direita',ME:'Meia Esquerda',PE:'Ponta Esquerda',PD:'Ponta Direita',MEI:'Meia Ofensivo',SA:'Segundo Atacante',ATA:'Centroavante'};
+const FMROLES={
+ GR:[['🧤 Goleiro','Defende e distribui simples, sem risco. Segurança total.'],['🧤➡️ Goleiro Líbero','Sai jogando curto e participa da construção, quase um líbero. Pede boa saída de bola.']],
+ ZAG:[['🧱 Zagueiro Central','Só defende: corta, afasta, sem invenção.'],['🧠 Zagueiro Construtor','Sai com a bola e quebra linhas com passe. Pra saída de bola de qualidade.'],['⚡ Cobertura','Zagueiro rápido que cobre a profundidade atrás da linha. Pra linha adiantada.'],['🎲 Líbero','Sai da zaga e vira meia quando o time ataca. Raro — só se o atributo manda.']],
+ LD:[['🛡️ Lateral Defensivo','Fecha o lado e quase não sobe. Bom contra ponta rápido deles.'],['⚖️ Lateral (Apoio)','Apoia o ataque com critério, sem abrir o corredor.'],['🚀 Ala Ofensivo (Wing-Back)','Sobe e cruza o tempo todo — o pulmão do lado. Pede Vigor alto!'],['🧠 Lateral Invertido','Fecha por dentro e vira volante extra na saída de bola. Estilo Guardiola 😎']],
+ LE:[['🛡️ Lateral Defensivo','Fecha o lado e quase não sobe. Bom contra ponta rápido deles.'],['⚖️ Lateral (Apoio)','Apoia o ataque com critério, sem abrir o corredor.'],['🚀 Ala Ofensivo (Wing-Back)','Sobe e cruza o tempo todo — o pulmão do lado. Pede Vigor alto!'],['🧠 Lateral Invertido','Fecha por dentro e vira volante extra na saída de bola. Estilo Guardiola 😎']],
+ ALD:[['🚀 Ala Ofensivo','Corredor inteiro: defende a linha de 5 e ainda cruza. Exige muito Vigor.'],['⚖️ Ala (Apoio)','Sobe na hora certa, sem se perder. Equilíbrio.']],
+ ALE:[['🚀 Ala Ofensivo','Corredor inteiro: defende a linha de 5 e ainda cruza. Exige muito Vigor.'],['⚖️ Ala (Apoio)','Sobe na hora certa, sem se perder. Equilíbrio.']],
+ VOL:[['🛡️ Âncora','Para-raios na frente da zaga: não sai dali por nada.'],['🐕 Trinco','Caça a bola o jogo inteiro. Pede Força, Esforço e Agressividade.'],['🎩 Regista (Construtor Recuado)','O metrônomo: recebe da zaga e dita o ritmo do time. Marcador? Que marcador? 😄'],['🏃 Volante Box-to-Box','Da área à área: rouba atrás e chega finalizando na frente.']],
+ MC:[['⚖️ Meia Central (Apoio)','Circula a bola e equilibra o meio.'],['🏃 Box-to-Box','Rouba atrás, chega na frente — pulmão infinito.'],['🎯 Mezzala','Ataca o corredor meio-lateral (half-space) e bate de fora da área.'],['🚂 Carrilero','Carrega o jogo em condução pelo corredor.']],
+ MD:[['🛡️ Meia Aberto','Marca desde a frente e cruza quando sobra espaço.'],['📏 Ponta Clássica','Cola na linha e cruza rasteiro pra área.'],['✂️ Extremo Invertido','Corta pra dentro no pé forte e arma ou finaliza.']],
+ ME:[['🛡️ Meia Aberto','Marca desde a frente e cruza quando sobra espaço.'],['📏 Ponta Clássica','Cola na linha e cruza rasteiro pra área.'],['✂️ Extremo Invertido','Corta pra dentro no pé forte e arma ou finaliza.']],
+ PE:[['📏 Ponta (Winger)','Linha de fundo e cruzamento, sempre colado na faixa.'],['✂️ Extremo Invertido','Dribla, corta pra dentro no pé direito e BATE. O driblador clássico.'],['🎩 Construtor Aberto','Ponta-armador: flutua por dentro criando o jogo.'],['👻 Raumdeuter','Some do radar e aparece na cara do gol pra finalizar.']],
+ PD:[['📏 Ponta (Winger)','Linha de fundo e cruzamento, sempre colado na faixa.'],['✂️ Extremo Invertido','Dribla, corta pra dentro no pé esquerdo e BATE. O driblador clássico.'],['🎩 Construtor Aberto','Ponta-armador: flutua por dentro criando o jogo.'],['👻 Raumdeuter','Some do radar e aparece na cara do gol pra finalizar.']],
+ MEI:[['🎩 Armador Avançado','O maestro: toda jogada passa nos pés dele.'],['⚡ Meia-Atacante','Cria entre linhas e ainda chega batendo.'],['🥷 Atacante Sombra','Meia que vira 2º centroavante quando o time recupera a bola.'],['🎨 Trequartista','Liberdade TOTAL: não marca, só cria. Só escala com craque kk']],
+ SA:[['🤝 Segundo Atacante (Apoio)','Liga meio e ataque com movimentação inteligente.'],['🥷 Atacante Sombra','Aparece nas costas do 9 como artilheiro surpresa.'],['🧠 Falso Nove','Recua pro meio, vira armador e bagunça a marcação adversária.']],
+ ATA:[['⭐ Avançado Completo','Finaliza, cruza, faz pivô e corre. O pacote completo — pra craque.'],['🎯 Caça-Gols','Vive dentro da área: qualquer sobra vira gol.'],['🗿 Pivô (Target Man)','Ganha pelo alto, domina e toca pra quem chega de frente.'],['🔥 Atacante de Pressão','O primeiro marcador: caça a saída de bola deles lá em cima.'],['🧠 Falso Nove','Recua e vira armador — deixa os zagueiros sem referência nenhuma.']]
+};
+document.addEventListener('click',function(e){
+  const d=e.target.closest('#pitchBox [data-pos]');
+  if(d){ e.preventDefault(); e.stopPropagation(); openRoleSheet(d.dataset.pos); }
+},true);
+function openRoleSheet(pos){
+  let o=document.getElementById('posSheet');
+  if(!o){
+    o=document.createElement('div'); o.id='posSheet';
+    o.innerHTML='<div class="psh-bk"></div><div class="psh-sheet"><button class="psh-x" aria-label="Fechar">✕</button><div class="psh-body"></div></div>';
+    document.body.appendChild(o);
+    o.querySelector('.psh-bk').addEventListener('click',()=>o.classList.remove('on'));
+    o.querySelector('.psh-x').addEventListener('click',()=>o.classList.remove('on'));
+  }
+  const roles=FMROLES[pos]||[];
+  o.querySelector('.psh-body').innerHTML=
+    '<div class="psh-pos">📍 '+(POSFULL[pos]||pos)+' <em>'+pos+'</em></div>'
+   +'<div class="psh-sub">Funções ideais pra essa posição no FM Touch 👇<br>No jogo: toca no jogador → <b style="color:var(--txt)">Função</b> e escolhe uma dessas:</div>'
+   +roles.map(r=>'<div class="psh-r"><b>'+r[0]+'</b><span>'+r[1]+'</span></div>').join('')
+   +'<div class="psh-tip">💡 A função certa depende dos atributos do jogador — e a página <b>📚 Papéis</b> do Lab explica cada função em detalhe!</div>';
+  o.classList.add('on');
+}
+(function(){
+  const st=document.createElement('style');
+  st.textContent='#posSheet{display:none;position:fixed;inset:0;z-index:595}'
+   +'#posSheet.on{display:block}'
+   +'#posSheet .psh-bk{position:absolute;inset:0;background:#060b14d9}'
+   +'#posSheet .psh-sheet{position:absolute;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;max-height:74vh;overflow-y:auto;background:var(--card);border-top:1.5px solid var(--neon);border-radius:18px 18px 0 0;padding:18px 16px 26px;transform:translateY(105%);transition:transform .25s ease}'
+   +'#posSheet.on .psh-sheet{transform:none}'
+   +'.psh-x{position:absolute;top:8px;right:12px;background:none;border:none;color:var(--sub);font-size:22px;cursor:pointer;padding:4px;z-index:2}'
+   +'.psh-pos{font-size:17px;font-weight:900}.psh-pos em{font-style:normal;color:var(--neon2);font-size:12px;font-weight:800;margin-left:6px}'
+   +'.psh-sub{color:var(--sub);font-size:12px;margin:6px 0 10px;line-height:1.55}'
+   +'.psh-r{background:#0d1526;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}'
+   +'.psh-r b{font-size:13.5px;display:block}'
+   +'.psh-r span{font-size:12px;color:var(--sub);display:block;margin-top:2px;line-height:1.5}'
+   +'.psh-tip{font-size:11.5px;color:var(--warn);margin-top:4px;line-height:1.55}';
+  document.head.appendChild(st);
+})();
 
 /* ============ TOAST / COPIAR ============ */
 function zoomT(src){
