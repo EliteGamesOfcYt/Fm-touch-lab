@@ -273,9 +273,18 @@ function generate() {
     stageStop(); busy = false;
     btn.disabled = false; btn.textContent = '✨ GERAR TREINADOR';
     if (r.error) {
-      var m = (r.data && r.data.error) || r.error.message || 'erro desconhecido';
-      $('mpStage').innerHTML = '<div class="mperr">😵 Deu ruim na geração:<br><b>' + esc(m) + '</b></div>';
-      return;
+      var say = function (m) {
+        $('mpStage').innerHTML = '<div class="mperr">😵 Deu ruim na geração:<br><b>' + esc(m || 'erro desconhecido') + '</b><br><span style="font-size:11.5px;opacity:.8">Tenta de novo — se repetir, fala com o chefe no Update Center 📰</span></div>';
+      };
+      if (r.data && r.data.error) { say(r.data.error); return; }
+      /* erro HTTP genérico: tenta ler a MENSAGEM REAL do corpo da resposta */
+      if (r.error && r.error.context && r.error.context.json) {
+        r.error.context.json()
+          .then(function (t) { say((t && t.error) || r.error.message); })
+          .catch(function () { say(r.error.message); });
+        return;
+      }
+      say(r.error && r.error.message); return;
     }
     if (!r.data || !r.data.image) {
       $('mpStage').innerHTML = '<div class="mperr">😵 A IA não devolveu imagem. Repete o pedido!</div>';
