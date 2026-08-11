@@ -712,10 +712,11 @@ function openRoleSheet(pos){
     o.querySelector('.psh-x').addEventListener('click',()=>o.classList.remove('on'));
   }
   const roles=FMROLES[pos]||[];
+  const hit=(window._lastSug&&window._lastSug[pos])||null;
   o.querySelector('.psh-body').innerHTML=
     '<div class="psh-pos">📍 '+(POSFULL[pos]||pos)+' <em>'+pos+'</em></div>'
-   +'<div class="psh-sub">Funções ideais pra essa posição no FM Touch 👇<br>No jogo: toca no jogador → <b style="color:var(--txt)">Função</b> e escolhe uma dessas:</div>'
-   +roles.map(r=>'<div class="psh-r"><b>'+r[0]+'</b><span>'+r[1]+'</span></div>').join('')
+   +'<div class="psh-sub">Funções ideais pra essa posição no FM Touch 👇<br>No jogo: toca no jogador → <b style="color:var(--txt)">Função</b> e escolhe uma dessas:</div>'+(hit?'<div style="font-size:11.5px;color:var(--neon);margin:-4px 0 10px;font-weight:700">⭐ = a função que o Analisador recomendou pra TUA tática nessa posição</div>':'')
+   +roles.map(r=>{const on=hit&&r[0].toLowerCase().indexOf(hit)>-1;return '<div class="psh-r"'+(on?' style="border-color:var(--neon);background:#0d2016;box-shadow:0 0 0 1px var(--neon) inset"':'')+'><b>'+(on?'⭐ ':'')+r[0]+(on?' <em style="font-style:normal;color:var(--neon);font-size:10px;font-weight:900">✓ RECOMENDADO</em>':'')+'</b><span>'+r[1]+'</span></div>'}).join('')
    +'<div class="psh-tip">💡 A função certa depende dos atributos do jogador — e a página <b>📚 Papéis</b> do Lab explica cada função em detalhe!</div>';
   o.classList.add('on');
 }
@@ -888,6 +889,141 @@ function applyPreset(key){
 }
 window.applyPreset=applyPreset;
 document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>applyPreset(b.dataset.preset)));
+
+
+/* ============ 🧠 MOTOR DE ESCALAÇÃO DE FUNÇÕES (sugestão posição a posição) ============ */
+function funcsSugeridas(c){
+  const cnt={}; c.F.pts.forEach(p=>{cnt[p[2]]=(cnt[p[2]]||0)+1});
+  const posse=c.best==='posse',contra=c.best==='contra',gegen=c.best==='gegen',direto=c.best==='direto',retranca=c.best==='retranca';
+  const rows=[],byPos={};
+  const say=(pos,role,why,hit,warn)=>{
+    rows.push({pos:pos,role:role,why:why,warn:!!warn});
+    if(hit) pos.split(' · ').forEach(p=>{ if(!byPos[p]) byPos[p]=hit; });
+  };
+
+  /* 🧤 GOLEIRO */
+  if(cnt.GR){
+    if(c.linhadef>=3) say('GR','🧤➡️ Goleiro Líbero (Apo)','linha adiantada deixa campo atrás da zaga — ele varre tudo que passa por cima.','goleiro líbero');
+    else if(c.saida==='sim'||posse) say('GR','🧤➡️ Goleiro Líbero (Apo)','a saída curta só funciona se ele for o 1º passe confiável.','goleiro líbero');
+    else say('GR','🧤 Goleiro (Def)','defende e repõe simples — risco zero com os pés.',null);
+  }
+
+  /* 🧱 ZAGUEIROS */
+  if(cnt.ZAG){
+    if(posse||c.saida==='sim') say('ZAG','🧠 Zagueiro Construtor (Apo)','alguém tem que entregar a bola no pé do meio: é ele. Só escala se Tomada de Decisão e Passe forem bons.','construtor');
+    else if(c.linhadef>=3||gegen) say('ZAG','⚡ Zagueiro de Cobertura (Def)','com a linha lá em cima, o zagueiro lento vira meme. Precisa de Arrancada e Velocidade.','cobertura');
+    else if(retranca||direto) say('ZAG','🧱 Zagueiro Central (Def)','corta, afasta e não inventa — a segurança que esse plano pede.','zagueiro central');
+    else say('ZAG','⚖️ Zagueiro Central (Apo)','sai jogando com critério, sem chutão nem firula.','zagueiro central');
+  }
+
+  /* 🛡️ LATERAIS (linha de 4) */
+  if(cnt.LD){
+    if(c.pontas==='corta'&&c.F.wide) say('LD · LE','🚀 Ala Ofensivo (Apo)','teus pontas cortam pra dentro e somem da ponta — então a amplitude do time é DELE. Sobe e cruza.','ala ofensivo');
+    else if(c.pontas==='corta') say('LD · LE','🧠 Lateral Invertido (Apo)','com os pontas cortando, o lateral fecha por dentro e vira volante extra na saída de bola. Estilo Guardiola 😎','lateral invertido');
+    else if(contra||retranca) say('LD · LE','🛡️ Lateral Defensivo (Def)','o contra-ataque só sai se o corredor não vazar atrás. Ele segura a casinha.','lateral defensivo');
+    else if(gegen) say('LD · LE','🚀 Ala Ofensivo (Apo)','bloco alto pede lado do campo povoado: ele dobra com o ponta no sufoco.','ala ofensivo');
+    else if(c.cruz>=3) say('LD · LE','🚀 Ala Ofensivo (Apo)','tua arma é cruzamento — o lateral é a 2ª fonte dela, além dos pontas.','ala ofensivo');
+    else say('LD · LE','⚖️ Lateral (Apo)','apoia com critério e volta correndo — equilíbrio puro.','apoio');
+  }
+
+  /* 🏃 ALAS (linha de 5/3 zagueiros) */
+  if(cnt.ALD){
+    if(c.cruz>=2||c.foco==='pontas') say('ALD · ALE','🚀 Ala Ofensivo (Atq)','nessa formação ele é o DONO do corredor: sobe e cruza o jogo inteiro. (Vigor em dia!)','ala ofensivo');
+    else say('ALD · ALE','⚖️ Ala (Apo)','sobe na hora certa e ocupa o corredor — sem deixar a linha de 3 pendurada.',null);
+  }
+
+  /* ⚓ VOLANTES */
+  if(cnt.VOL===1){
+    if(posse) say('VOL','🎩 Regista (Def)','o metrônomo: recebe da zaga e dita o ritmo de todo o time. Calma e Passe nele!','regista');
+    else if(direto) say('VOL','🐕 Trinco (Def)','caça a 2ª bola dos lançamentos e trava o meio — Força e Esforço em primeiro.','trinco');
+    else if(retranca||contra) say('VOL','🛡️ Âncora (Def)','para-raios na frente da zaga: não sai de lá por nada. O muro do contra-ataque.','âncora');
+    else say('VOL','⚖️ Volante (Def)','segura a frente da zaga e recicla a bola simples.','âncora');
+  }
+  else if(cnt.VOL===2){
+    if(posse){
+      say('VOL (1º)','🛡️ Âncora (Def)','um segura: fica colado na frente da zaga protegendo a transição.','âncora');
+      say('VOL (2º)','🎩 Regista (Apo)','o outro constrói: dita o ritmo saindo de trás, estilo Busquets. (1º = o mais marcador, 2º = o mais técnico)','regista');
+    } else if(gegen||contra){
+      say('VOL (1º)','🐕 Trinco (Def)','o caçador: primeira onda do sufoco/roubo de bola no meio.','trinco');
+      say('VOL (2º)','🏃 Volante Box-to-Box (Apo)','o pulmão: rouba atrás e chega finalizando quando o time ataca.','box-to-box');
+    } else {
+      say('VOL (1º)','🛡️ Âncora (Def)','um fica: protege a zaga e não sai por nada. É o mais marcador dos dois.','âncora');
+      say('VOL (2º)','⚖️ Volante Box-to-Box (Apo)','o outro transita: apoia a saída e chega de trás no ataque.','box-to-box');
+    }
+  }
+
+  /* ⚙️ MEIAS CENTRAIS */
+  if(cnt.MC){
+    const nMC=cnt.MC;
+    if(posse){
+      if(nMC>=3) say('MC', '🎯 Mezzala (Atq) + 🚂 Carrilero (Apo) + ⚖️ Meia Central (Apo)','trio de ouro da posse: um ataca o corredor meio-lateral, um carrega a bola, um equilibra.','mezzala');
+      else say('MC','🎯 Mezzala (Atq) + ⚖️ Meia Central (Apo)','posse sem infiltração vira chute de 30m: a Mezzala ataca o half-space enquanto o outro equilibra. Sem meia em grau Ataque aqui, a posse estaciona.','mezzala');
+    }
+    else if(gegen) say('MC','🏃 Box-to-Box (Apo) + 🎯 Mezzala (Atq)','o sufoco pede um pisante que rouba e chega (B2B) e um que aparece no corredor pra receber a bola roubada (Mezzala).','box-to-box');
+    else if(contra) say('MC','🏃 Box-to-Box (Apo)','segura na hora de defender e chega TARDE na área pra finalizar o raio — ninguém espera ele lá.','box-to-box');
+    else if(direto) say('MC','🏃 Box-to-Box (Apo)','vive da 2ª bola que o Pivô desvia — é o caçador de sobras do meio.','box-to-box');
+    else if(retranca) say('MC','🛡️ Meia Central (Def)','duas linhas de 4 fechadas: o meio cede a bola, não o espaço.','meia central');
+    else say('MC','⚖️ Meia Central (Apo)','circula, equilibra e aparece pro passe — o engrenagem silenciosa.','meia central');
+  }
+
+  /* ↔️ MEIAS ABERTOS (MD/ME de linha de 4 no meio) */
+  if(cnt.MD){
+    if(c.foco==='pontas'||c.cruz>=3) say('MD · ME','📏 Ponta Clássica (Atq)','jogo direcionado pro lado deles: cola na linha e manda cruzamento rasteiro e no 2º pau.','ponta clássica');
+    else if(contra) say('MD · ME','🚀 Meia Aberto (Atq)','marca em 4-4-2 sem bola e DISPARA no lado cego quando recupera — o raio começa nele.','meia aberto');
+    else say('MD · ME','🛡️ Meia Aberto (Apo)','ajuda o lateral a fechar o corredor e chega no ataque com o bloco subido.','meia aberto');
+  }
+
+  /* 🎩 MEIA OFENSIVO / ENGANCHE */
+  if(cnt.MEI){
+    if(posse) say('MEI','🎩 Armador Avançado (Apo)','TODA jogada morre e renasce no pé dele. Desmarque e Tomada de Decisão em primeiro lugar.','armador');
+    else if(gegen) say('MEI','⚡ Meia-Atacante (Atq)','cria E chega batendo — no bloco alto ele é quem finaliza a jogada que a pressão fabrica.','meia-atacante');
+    else if(contra) say('MEI','🥷 Atacante Sombra (Atq)','recuperou a bola? Ele vira 2º centroavante na hora — o raio ganha um 2º finalizador.','sombra');
+    else if(direto) say('MEI','⚡ Meia-Atacante (Apo)','gruda no Pivô pra caçar os desvios e 2ªs bolas. Dupla de ouro do jogo direto.','meia-atacante');
+    else say('MEI','🎩 Armador Avançado (Apo)','o cérebro entre linhas: recebe de costas e vira o jogo.','armador');
+  }
+
+  /* 🤝 SEGUNDO ATACANTE */
+  if(cnt.SA){
+    if(contra) say('SA','🥷 Atacante Sombra (Atq)','some atrás do 9 e aparece finalizando no espaço que o recuo dele abre.','sombra');
+    else if(posse) say('SA','🤝 Segundo Atacante (Apo)','a cola do time: liga meio e ataque com toque de 1ª e movimentação.','segundo atacante');
+    else say('SA','🧠 Falso Nove (Apo)','recua, puxa um zagueiro junto e abre a avenida pras costas dele.','falso nove');
+  }
+
+  /* ⚡ PONTAS */
+  if(cnt.PE){
+    if(c.pontas==='corta'){
+      say('PE · PD','✂️ Extremo Invertido (Atq)','dribla e corta no pé forte batendo pro gol — é ELE o teu 2º artilheiro, não o cruzador.'+(c.ca==='falso9'?' Com o Falso 9 recuando, a área fica LIVRE pro corte dele. Combo mortal.':''),'extremo invertido');
+    }
+    else if(c.pontas==='cruza'){
+      if(c.ca==='falso9'||c.ca==='nove') say('PE · PD','⚠️ TROCA PRA: ✂️ Extremo Invertido (Atq)','conflito lindo detectado kk: teu 9 RECUA (fora da área) e os pontas CRUZAM... pra ninguém. Ou muda os pontas pra EI (que cortam e finalizam), ou muda o 9 pra Avançado/Caça-Gols.','extremo invertido',true);
+      else say('PE · PD','📏 Ponta / Extremo (Atq)','linha de fundo e cruzamento — o garçom oficial da área.'+(c.ca==='referencia'?' Com a Referência lá, é gol de graça.':' Casa perfeito com Caça-Gols ou Referência na área.'),'ponta');
+    }
+    else{
+      say('PE · PD','✂️ de um lado, 📏 do outro (Atq)','um corta pra finalizar, o outro cruza — o adversário não consegue ajustar a marcação pros dois.','extremo invertido');
+    }
+  }
+
+  /* ⚽ CENTROAVANTE */
+  if(cnt.ATA){
+    const CA={
+      avancado:['⭐ Avançado Completo (Atq)','corre as costas da zaga o jogo todo e finaliza de tudo. Pede Velocidade + Finalização brabas.','avançado completo'],
+      artilheiro:['🎯 Caça-Gols (Atq)','vive DENTRO da área: o time constrói e ele resolve. Qualquer sobra é gol.'+(c.pontas==='corta'?' O Extremo Invertido cruza rasteiro de fora pra dentro — é o prato favorito dele.':''),'caça-gols'],
+      referencia:['🗿 Pivô / Target Man (Apo)','domina de costas, ganha pelo alto e traz os meias pro lance. Todo o jogo aéreo passa por ele.','pivô'],
+      falso9:['🧠 Falso Nove (Apo)','recua pro meio e vira armador — os zagueiros ficam sem referência nenhuma. ⚠️ Só funciona se os pontas CORTAREM pra dentro (Extremo Invertido) ocupando a área que ele deixa.','falso nove'],
+      nove:['🎭 Nove e Meio (Atq)','pressiona, cria e finaliza — função pra craque completo (Firmino feelings). Se faltar atributo, volta pro Avançado.',null],
+      pressing:['🔥 Atacante de Pressão (Atq)','o 1º zagueiro do time: caça a saída de bola adversária lá em cima e inicia o sufoco.','atacante de pressão']
+    };
+    const rw=CA[c.ca]||CA.avancado;
+    let warn=false, why=rw[1], role=rw[0];
+    if(c.ca==='pressing'&&c.press===0){ warn=true; why='⚠️ Atacante de Pressão com o time marcando em pé NÃO rola — ele corre por 5 e morre aos 60min. Liga a pressão do time, ou troca pra ⭐ Avançado.'; }
+    else if(c.ca==='referencia'&&c.cruz<=1){ warn=true; why='⚠️ Pivô sem cruzamento passa FOME na área. Ou sobe os cruzamentos (extremos clássicos ajudam), ou troca pra ⭐ Avançado.'; }
+    else if(c.ca==='falso9'&&c.pontas!=='corta'&&cnt.PE){ warn=true; why='⚠️ Falso 9 com pontas que cruzam = bola na área vazia. Muda os pontas pra ✂️ Extremo Invertido — aí o combo engrena: ele sai, eles entram.'; }
+    else if(posse&&c.ca==='avancado'){ why+=' 💡 Com essa posse toda, o 🧠 Falso Nove é um upgrade tentador — testa nas duas versões!'; }
+    else if(c.ca==='avancado'&&(contra||direto)){ why+=' No teu plano ele é o homem do raio/bola longa — o cara mais importante da escalação.'; }
+    say('ATA',role,why,rw[2],warn);
+  }
+  return {rows:rows,byPos:byPos};
+}
 
 function analisar(scroll){
   const v=id=>document.getElementById(id).value;
@@ -1097,6 +1233,10 @@ function analisar(scroll){
   const PAPMIX=['🧭 <b>Um armador definido</b> (Construtor ou Meia Móvel) pra ser a primeira saída do seu plano.','🛡️ Dois zagueiros confiáveis: qualquer estilo paga caro por erro individual na zaga.','⚡ Um jogador de aceleração pura (ponta ou avançado) pra destravar jogo feio.','📋 Cola nos relatórios do assistente: ele aponta o que a SUA identidade tá pedindo em campo.'];
   const papList=tipSrc?PAPTIPS[tipSrc]:PAPMIX;
 
+  /* 🧠 escalação de funções sugerida (posição a posição) */
+  const sugData=funcsSugeridas({F:F,best:best,ment:ment,larg:larg,tempo:tempo,passe:passe,cruz:cruz,foco:foco,saida:saida,linhadef:linhadef,bloco:bloco,press:press,perda:perda,rec:rec,ca:ca,pontas:pontas});
+  window._lastSug=sugData.byPos;
+
   document.getElementById('resultBox').innerHTML=
     '<div style="display:flex;align-items:center;gap:16px">'
     +'<div class="score" style="color:'+sColor+'">'+score+'</div>'
@@ -1112,6 +1252,10 @@ function analisar(scroll){
     +((err.length||wrn.length)?secH('⚠️ RISCOS E CONFLITOS')+item(err,'❌')+item(wrn,'⚠️'):'<div class="find ok" style="margin-top:14px"><span class="ic">✅</span><div><div class="t">Sem conflitos internos</div><div class="d">A tática não contradiz nenhuma instrução. Tá protegida!</div></div></div>')
     +secH('🛠️ PLANO DE AJUSTE (na ordem de prioridade)')
     +plan4.map(function(p,i){return '<div class="find"><span class="ic" style="font-weight:900;color:var(--neon2)">'+(i+1)+'º</span><div><div class="t">'+p[0]+'</div><div class="d">'+p[1]+'</div></div></div>';}).join('')
+    +secH('🧠 ESCALA AS FUNÇÕES ASSIM — O PAPEL IDEAL DE CADA UM')
+    +'<div style="font-size:12px;color:var(--sub);margin-bottom:8px;line-height:1.55">Montado pra formação <b style="color:var(--txt)">'+F.label+'</b> com o teu plano. (Atq/Apo/Def = o grau no detalhe do jogador.) E no campinho lá em cima, toca num jogador pra ver <b>todas</b> as funções da posição 👆</div>'
+    +sugData.rows.map(function(s){return '<div class="find '+(s.warn?'err':'')+'"><span class="ic">'+(s.warn?'🔄':'▸')+'</span><div><div class="t">'+s.pos+' → '+s.role+'</div><div class="d">'+s.why+'</div></div></div>';}).join('')
+    + (sugData.rows.some(function(s){return s.warn})?'<div class="find ok" style="margin-top:4px"><span class="ic">💡</span><div><div class="d" style="color:#c7d5e8">Os itens com 🔄 são as trocas que mais mudam o jogo — começa por eles e roda a análise de novo pra ver a nota subir!</div></div></div>':'')
     +secH('🎽 OS PAPÉIS CERTOS PRA ESSA IDEIA')
     +papList.map(x=>'<div class="find"><span class="ic" style="font-size:13px">▸</span><div><div class="d" style="color:#c7d5e8">'+x+'</div></div></div>').join('')
     +secH('🆚 NO CONFRONTO — AMOR E ÓDIO DO SEU ESTILO')
@@ -1119,7 +1263,7 @@ function analisar(scroll){
     +secH('🧠 COMO EU CHEGUEI NESSA NOTA')
     +'<div style="font-size:12px;color:var(--sub);line-height:1.6">Base de 100 pontos: desconto 15 por conflito real (instruções que se anulam) e 7 por ajuste fino. A nota mede <b>coerência interna</b> — até uma retranca feiosa pode ser 100 coerente 😄. O resto se resolve em campo: resultados, xG e olho no jogo.</div>'
     +'<div class="row" style="display:flex;gap:8px;margin-top:14px"><button class="btn g" style="flex:1;justify-content:center" onclick="copyAnalysis()">📋 Copiar análise completa</button></div>';
-  window._lastAn={best,bv,score,sLabel,err,wrn,ok,labels,styleName,dnaTxt,xb,xs,xt,plan4,vs,brk,pap:papList};
+  window._lastAn={best,bv,score,sLabel,err,wrn,ok,labels,styleName,dnaTxt,xb,xs,xt,plan4,vs,brk,pap:papList,sug:sugData.rows};
   if(scroll&&window.innerWidth<920) document.getElementById('resultBox').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function copyAnalysis(){
@@ -1127,7 +1271,7 @@ function copyAnalysis(){
   const strip=s=>String(s).replace(/<[^>]+>/g,'');
   const t=(arr,p)=>arr.length?('\n\n'+p+'\n'+arr.map(x=>'  • '+x[0]+': '+strip(x[1])).join('\n')):'';
   const pap=a.pap?('\n\n🎽 Papéis e ajustes finos:\n'+a.pap.map(x=>'  • '+strip(x)).join('\n')):'';
-  copyText('🧪 RAIO-X DE TÁTICA — FM Touch Lab\nNota de coerência: '+a.score+'/100 ('+a.sLabel+')\n'+a.brk+'\n\n🎭 DNA tático: '+strip(a.styleName)+'\n'+strip(a.dnaTxt)+'\n\n📖 Como esse time joga:\n⚽ Com a bola: '+strip(a.xb)+'\n🛡️ Sem a bola: '+strip(a.xs)+'\n🔄 Nas transições: '+strip(a.xt)+t(a.ok,'✅ Pontos fortes:')+t(a.err,'❌ Conflitos:')+t(a.wrn,'⚠️ Atenção:')+'\n\n🛠️ Plano de ajuste:\n'+a.plan4.map((p,i)=>'  '+(i+1)+'. '+strip(p[0])+' '+strip(p[1])).join('\n')+'\n\n🆚 No confronto:\n'+a.vs.map(v=>'  • '+strip(v)).join('\n')+pap);
+  copyText('🧪 RAIO-X DE TÁTICA — FM Touch Lab\nNota de coerência: '+a.score+'/100 ('+a.sLabel+')\n'+a.brk+'\n\n🎭 DNA tático: '+strip(a.styleName)+'\n'+strip(a.dnaTxt)+'\n\n📖 Como esse time joga:\n⚽ Com a bola: '+strip(a.xb)+'\n🛡️ Sem a bola: '+strip(a.xs)+'\n🔄 Nas transições: '+strip(a.xt)+t(a.ok,'✅ Pontos fortes:')+t(a.err,'❌ Conflitos:')+t(a.wrn,'⚠️ Atenção:')+'\n\n🛠️ Plano de ajuste:\n'+a.plan4.map((p,i)=>'  '+(i+1)+'. '+strip(p[0])+' '+strip(p[1])).join('\n')+'\n\n🆚 No confronto:\n'+a.vs.map(v=>'  • '+strip(v)).join('\n')+'\n\n🧠 Funções sugeridas (posição a posição):\n'+((a.sug||[]).map(s=>'  • '+s.pos+' → '+strip(s.role)+' — '+strip(s.why)).join('\n'))+pap);
 }
 function focusField(id){const el=document.getElementById(id);if(!el)return;el.scrollIntoView({behavior:'smooth',block:'center'});el.style.outline='2px solid var(--neon)';el.style.outlineOffset='3px';el.style.borderRadius='10px';setTimeout(()=>{el.style.outline='';el.style.outlineOffset='';el.style.borderRadius='';},2400);}
 window.analisar=analisar; window.copyAnalysis=copyAnalysis; window.copyTactic=copyTactic; window.focusField=focusField;
