@@ -45,6 +45,8 @@ header{position:sticky;top:0;z-index:60;background:rgba(10,15,28,.92);backdrop-f
 .qres .tags{justify-content:center}
 /* roles */
 .role{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:#0d152655}
+.gimg{width:100%;border-radius:12px;border:1px solid var(--line);margin-bottom:4px;cursor:zoom-in;display:block}
+.gcap{font-size:11px;color:var(--sub);margin:0 0 12px;line-height:1.45}
 .role b{font-size:14px}
 .role p{font-size:13px;color:var(--sub);margin:4px 0 2px}
 .rline{font-size:12.5px;color:var(--sub);margin-top:6px}
@@ -226,7 +228,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
     <button class="mcard" data-go="analisador"><span class="ic">🧪</span><b>Analisador</b><span>Monte sua tática e descubra o que não bate — com nota de coerência e correções.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="taticas"><span class="ic">📤</span><b>Táticas</b><span>Galeria .fmf da comunidade separada por estilo: posse, contra-ataque, gegenpress...</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="scout"><span class="ic">💎</span><b>Scout</b><span>Database com 1.146 atletas base 2026: busque por papel, preço, idade e tipo de achado.</span><span class="go">Abrir →</span></button>
-    <button class="mcard" data-go="papeis"><span class="ic">📚</span><b>Papéis</b><span>31 funções do FM Touch explicadas: atributos-chave, combina e NÃO combina com quê.</span><span class="go">Abrir →</span></button>
+    <button class="mcard" data-go="papeis"><span class="ic">📚</span><b>Papéis</b><span>33 funções do FM TOUCH 21 explicadas com as siglas do jogo: atributos-chave, combina e NÃO combina com quê.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="desafios"><span class="ic">💪</span><b>Desafios</b><span>Saves pra zerar o jogo: do XI de €1 mi à dinastia do interior.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="guias"><span class="ic">📖</span><b>Guias</b><span>Como instalar .fmf no Android, dicionário de termos do FM e dicas rápidas.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="personal"><span class="ic">⚙️</span><b>Clube &amp; Perfil<span class="novo">NOVO</span></b><span>Escolha teu clube do coração, deixe o Lab com a tua cara e crie teu perfil de manager estilo FM.</span><span class="go">Abrir →</span></button>
@@ -345,9 +347,9 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
       <div class="subh b">🎭 Papéis e graus</div>
       <div class="fgrid">
         <div><label class="lab">Atacante principal</label>
-          <select id="f_ca"><option value="avancado" selected>Avançado</option><option value="artilheiro">Finalizador (Poacher)</option><option value="referencia">Referência (Pivot)</option><option value="falso9">Falso 9</option><option value="nove">Nove e Meio</option><option value="pressing">Atacante de Pressão</option></select></div>
+          <select id="f_ca"><option value="avancado" selected>PL · Ponta-de-Lança</option><option value="artilheiro">PPL · Ponta-de-Lança Fixo</option><option value="referencia">JA · Jogador Alvo (Pivô)</option><option value="falso9">F9 · Falso 9</option><option value="nove">AC · Avançado Completo</option><option value="pressing">AP · Avançado Pressionante</option></select></div>
         <div><label class="lab">Pontas</label>
-          <select id="f_pontas"><option value="cruza" selected>Cruzam (Extremos)</option><option value="corta">Cortam pra dentro (EI/AI)</option><option value="misto">Misto</option></select></div>
+          <select id="f_pontas"><option value="cruza" selected>Cruzam (Extremo EI/ED)</option><option value="corta">Cortam pra dentro (AI)</option><option value="misto">Misto</option></select></div>
         <div><label class="lab">Nº de jogadores em Ataque</label><select id="f_ga"></select></div>
         <div><label class="lab">Nº em Apoio</label><select id="f_gs"></select></div>
         <div><label class="lab">Nº em Defesa</label><select id="f_gd"></select></div>
@@ -420,7 +422,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
 <main class="page" id="papeis">
   <button class="crumb" data-go="home">← Menu</button>
   <div class="h2"><span class="dot"></span> Guia de Papéis & Funções</div>
-  <p class="lead">Cada papel do FM Touch explicado: o que faz, quais <b>atributos-chave</b> olhar no scout, com o que <b style="color:var(--neon)">combina</b> e o que <b style="color:var(--bad)">evitar</b>. Toque num setor pra abrir.</p>
+  <p class="lead">Cada função do FM Touch 21 explicada <b>com a sigla igualzinha ao jogo</b>: o que faz, quais <b>atributos-chave</b> olhar no scout, com o que <b style="color:var(--neon)">combina</b> e o que <b style="color:var(--bad)">evitar</b>. Toque num setor pra abrir.</p>
   <div id="rolesBox"></div>
 </main>
 
@@ -540,7 +542,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
   <p class="lead">O que estamos preparando pro Lab (da comunidade pra comunidade):</p>
   <div class="grid">
     <div class="card rcard" data-go="quiz"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Ferramenta</div><h3>🎭 Quiz de Estilo</h3><p>Descubra sua alma tática em 6 perguntas e saia com instruções prontas. Já disponível!</p></div>
-    <div class="card rcard" data-go="papeis"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Conteúdo</div><h3>📚 Guia de Papéis</h3><p>31 funções explicadas com atributos-chave e combinações. Já disponível!</p></div>
+    <div class="card rcard" data-go="papeis"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Conteúdo</div><h3>📚 Guia de Papéis</h3><p>As 33 funções do guia oficial FT21: siglas, atributos-chave e imagens ilustradas. Já disponível!</p></div>
     <div class="card rcard" data-go="desafios"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Conteúdo</div><h3>💪 Saves Desafio</h3><p>Seis desafios com nível de dificuldade pra zerar o jogo. Já disponível!</p></div>
     <div class="card rcard" data-go="analisador"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ TURBINADO</span><div class="num">Fase 2A</div><h3>📸 Raio-X por Print</h3><p>Leitura turbinada e relatório COMPLETO: DNA tático, raio-x em texto, plano de ajuste passo a passo, papéis certos e matchups do seu estilo. Sem cadastro, sem chave, sem custo!</p></div>
     <div class="card rcard soon"><span class="pill">Em breve</span><div class="num">Fase 2B</div><h3>🤖 IA visual completa</h3><p>Uma IA que literalmente ENXERGA o print (posições, setas e papéis desenhados) e dá conselhos em texto. Essa precisa de um servidorzinho — chega em breve.</p></div>
@@ -682,21 +684,61 @@ function pitchSVG(formKey, labels, color){
 /* ============ TOQUE NO JOGADOR → FUNÇÕES DO FM ============ */
 const POSFULL={GR:'Goleiro',LD:'Lateral Direito',LE:'Lateral Esquerdo',ALD:'Ala Direito',ALE:'Ala Esquerdo',ZAG:'Zagueiro',VOL:'Volante',MC:'Meio-campo Central',MD:'Meia Direita',ME:'Meia Esquerda',PE:'Ponta Esquerda',PD:'Ponta Direita',MEI:'Meia Ofensivo',SA:'Segundo Atacante',ATA:'Centroavante'};
 const FMROLES={
- GR:[['🧤 Goleiro','Defende e distribui simples, sem risco. Segurança total.'],['🧤➡️ Goleiro Líbero','Sai jogando curto e participa da construção, quase um líbero. Pede boa saída de bola.']],
- ZAG:[['🧱 Zagueiro Central','Só defende: corta, afasta, sem invenção.'],['🧠 Zagueiro Construtor','Sai com a bola e quebra linhas com passe. Pra saída de bola de qualidade.'],['⚡ Cobertura','Zagueiro rápido que cobre a profundidade atrás da linha. Pra linha adiantada.'],['🎲 Líbero','Sai da zaga e vira meia quando o time ataca. Raro — só se o atributo manda.']],
- LD:[['🛡️ Lateral Defensivo','Fecha o lado e quase não sobe. Bom contra ponta rápido deles.'],['⚖️ Lateral (Apoio)','Apoia o ataque com critério, sem abrir o corredor.'],['🚀 Ala Ofensivo (Wing-Back)','Sobe e cruza o tempo todo — o pulmão do lado. Pede Vigor alto!'],['🧠 Lateral Invertido','Fecha por dentro e vira volante extra na saída de bola. Estilo Guardiola 😎']],
- LE:[['🛡️ Lateral Defensivo','Fecha o lado e quase não sobe. Bom contra ponta rápido deles.'],['⚖️ Lateral (Apoio)','Apoia o ataque com critério, sem abrir o corredor.'],['🚀 Ala Ofensivo (Wing-Back)','Sobe e cruza o tempo todo — o pulmão do lado. Pede Vigor alto!'],['🧠 Lateral Invertido','Fecha por dentro e vira volante extra na saída de bola. Estilo Guardiola 😎']],
- ALD:[['🚀 Ala Ofensivo','Corredor inteiro: defende a linha de 5 e ainda cruza. Exige muito Vigor.'],['⚖️ Ala (Apoio)','Sobe na hora certa, sem se perder. Equilíbrio.']],
- ALE:[['🚀 Ala Ofensivo','Corredor inteiro: defende a linha de 5 e ainda cruza. Exige muito Vigor.'],['⚖️ Ala (Apoio)','Sobe na hora certa, sem se perder. Equilíbrio.']],
- VOL:[['🛡️ Âncora','Para-raios na frente da zaga: não sai dali por nada.'],['🐕 Trinco','Caça a bola o jogo inteiro. Pede Força, Esforço e Agressividade.'],['🎩 Regista (Construtor Recuado)','O metrônomo: recebe da zaga e dita o ritmo do time. Marcador? Que marcador? 😄'],['🏃 Volante Box-to-Box','Da área à área: rouba atrás e chega finalizando na frente.']],
- MC:[['⚖️ Meia Central (Apoio)','Circula a bola e equilibra o meio.'],['🏃 Box-to-Box','Rouba atrás, chega na frente — pulmão infinito.'],['🎯 Mezzala','Ataca o corredor meio-lateral (half-space) e bate de fora da área.'],['🚂 Carrilero','Carrega o jogo em condução pelo corredor.']],
- MD:[['🛡️ Meia Aberto','Marca desde a frente e cruza quando sobra espaço.'],['📏 Ponta Clássica','Cola na linha e cruza rasteiro pra área.'],['✂️ Extremo Invertido','Corta pra dentro no pé forte e arma ou finaliza.']],
- ME:[['🛡️ Meia Aberto','Marca desde a frente e cruza quando sobra espaço.'],['📏 Ponta Clássica','Cola na linha e cruza rasteiro pra área.'],['✂️ Extremo Invertido','Corta pra dentro no pé forte e arma ou finaliza.']],
- PE:[['📏 Ponta (Winger)','Linha de fundo e cruzamento, sempre colado na faixa.'],['✂️ Extremo Invertido','Dribla, corta pra dentro no pé direito e BATE. O driblador clássico.'],['🎩 Construtor Aberto','Ponta-armador: flutua por dentro criando o jogo.'],['👻 Raumdeuter','Some do radar e aparece na cara do gol pra finalizar.']],
- PD:[['📏 Ponta (Winger)','Linha de fundo e cruzamento, sempre colado na faixa.'],['✂️ Extremo Invertido','Dribla, corta pra dentro no pé esquerdo e BATE. O driblador clássico.'],['🎩 Construtor Aberto','Ponta-armador: flutua por dentro criando o jogo.'],['👻 Raumdeuter','Some do radar e aparece na cara do gol pra finalizar.']],
- MEI:[['🎩 Armador Avançado','O maestro: toda jogada passa nos pés dele.'],['⚡ Meia-Atacante','Cria entre linhas e ainda chega batendo.'],['🥷 Atacante Sombra','Meia que vira 2º centroavante quando o time recupera a bola.'],['🎨 Trequartista','Liberdade TOTAL: não marca, só cria. Só escala com craque kk']],
- SA:[['🤝 Segundo Atacante (Apoio)','Liga meio e ataque com movimentação inteligente.'],['🥷 Atacante Sombra','Aparece nas costas do 9 como artilheiro surpresa.'],['🧠 Falso Nove','Recua pro meio, vira armador e bagunça a marcação adversária.']],
- ATA:[['⭐ Avançado Completo','Finaliza, cruza, faz pivô e corre. O pacote completo — pra craque.'],['🎯 Caça-Gols','Vive dentro da área: qualquer sobra vira gol.'],['🗿 Pivô (Target Man)','Ganha pelo alto, domina e toca pra quem chega de frente.'],['🔥 Atacante de Pressão','O primeiro marcador: caça a saída de bola deles lá em cima.'],['🧠 Falso Nove','Recua e vira armador — deixa os zagueiros sem referência nenhuma.']]
+ GR:[['🧤 Goleiro — GL','Fica na área, defende chutes e cruzamentos. Segurança total. (Tarefa: Defesa)'],
+  ['🧤➡️ Goleiro-Líbero — GO','Sai da área pra apoiar a defesa e INICIAR as jogadas com os pés. Ideal pra saída curta de bola. (Tarefa: Apoio)'],
+  ['🧤🚀 Goleiro Avançado — GOL','Fica mais adiantado, antecipa jogadas e corta o espaço nas costas da linha alta. (Tarefa: Apoio)']],
+ ZAG:[['🧱 Zagueiro Central — ZAG','Defende a área central, ganha duelos e corta cruzamentos. Sem invenção. (Defesa/Apoio)'],
+  ['🧠 Zagueiro com Bola — ZAGL','Defende e participa da construção, carregando a bola e fazendo passes. Pra saída de bola de qualidade. (Defesa/Apoio)'],
+  ['🛡️ Líbero — LÍB','Joga atrás da linha de defesa, antecipando jogadas e cobrindo os espaços. O varredor da linha alta. (Defesa/Apoio)']],
+ LD:[['🛡️ Defensor Lateral — DCD','Defende por fora e apoia o ataque pela lateral com critério. Equilíbrio. (Defesa/Apoio)'],
+  ['⚖️ Ala — ALA','Joga aberto e apoia bastante o ataque, voltando pra defender quando precisa. (Apoio/Ataque)'],
+  ['🧠 Ala Inverso — ALA INV','Entra por dentro a partir da lateral e cria superioridade no meio. Estilo Guardiola 😎 (Apoio/Ataque)'],
+  ['🚀 Lateral Ofensivo — LAD','Muito ofensivo pela lateral: busca o fundo e cruza, apoiando o ataque o tempo todo. (Ataque)']],
+ LE:[['🛡️ Defensor Lateral — DCE','Defende por fora e apoia o ataque pela lateral com critério. Equilíbrio. (Defesa/Apoio)'],
+  ['⚖️ Ala — ALA','Joga aberto e apoia bastante o ataque, voltando pra defender quando precisa. (Apoio/Ataque)'],
+  ['🧠 Ala Inverso — ALA INV','Entra por dentro a partir da lateral e cria superioridade no meio. Estilo Guardiola 😎 (Apoio/Ataque)'],
+  ['🚀 Lateral Ofensivo — LAE','Muito ofensivo pela lateral: busca o fundo e cruza, apoiando o ataque o tempo todo. (Ataque)']],
+ ALD:[['⚖️ Ala — ALA','Joga aberto e apoia bastante o ataque, voltando pra defender quando precisa. (Apoio/Ataque)'],
+  ['🧠 Ala Inverso — ALA INV','Entra por dentro e vira meia extra na construção. (Apoio/Ataque)'],
+  ['🚀 Lateral Ofensivo — LAD','Busca o fundo e cruza sem parar — o dono do corredor. Exige fôlego! (Ataque)']],
+ ALE:[['⚖️ Ala — ALA','Joga aberto e apoia bastante o ataque, voltando pra defender quando precisa. (Apoio/Ataque)'],
+  ['🧠 Ala Inverso — ALA INV','Entra por dentro e vira meia extra na construção. (Apoio/Ataque)'],
+  ['🚀 Lateral Ofensivo — LAE','Busca o fundo e cruza sem parar — o dono do corredor. Exige fôlego! (Ataque)']],
+ VOL:[['🎩 Construtor de Jogo Recuado — CJR','Fica mais atrás e organiza a saída de bola com passes seguros. O metrônomo do time. (Defesa/Apoio)'],
+  ['⚖️ Médio Centro — MCR','Função equilibrada: faz um pouco de tudo dependendo da tarefa. (Defesa/Apoio/Ataque)'],
+  ['🚀 Segundo Volante — SV','Começa mais atrás, ajuda a marcar e depois INVADE o ataque, chegando na área. (Apoio/Ataque)'],
+  ['🏃 Médio Área-a-Área — MCH','O box-to-box: vai de uma área à outra, ajuda na defesa e chega ao ataque. (Apoio/Ataque)']],
+ MC:[['⚖️ Médio Centro — MCR/MCL','Faz um pouco de tudo, dependendo da tarefa. O coringa equilibrado. (Defesa/Apoio/Ataque)'],
+  ['🏃 Médio Área-a-Área — MCH','Box-to-box puro: rouba atrás e aparece finalizando na frente. Pedê fôlego. (Apoio/Ataque)'],
+  ['🎯 Mezzala — MEZ','Parte do centro e desloca pros lados (meio-espaços), chegando perto da área. (Apoio/Ataque)'],
+  ['🚂 Carrilero — CARR','Cobre a largura do meio-campo, equilibrando defesa e ataque no corredor. (Apoio/Ataque)'],
+  ['🎨 Médio Criativo — MCriat','Atua mais recuado, mas com liberdade pra criar jogadas e avançar. (Apoio/Ataque)'],
+  ['🧭 Organizador Móvel — ORG MÓV','Procura a bola, se movimenta pelo campo inteiro e dita o ritmo do jogo. (Apoio/Ataque)']],
+ MD:[['⚖️ Médio Ala — MA','Atua aberto como meia de lado: ajuda na construção e nos cruzamentos. (Apoio)'],
+  ['📏 Extremo — ED','Fica aberto na linha lateral, dribla e cruza pra área. (Ataque)'],
+  ['✂️ Avançado Interior — AI','Parte aberto mas CORTA PRA DENTRO, procurando finalizar ou criar. O ponta de pé trocado. (Ataque)']],
+ ME:[['⚖️ Médio Ala — MA','Atua aberto como meia de lado: ajuda na construção e nos cruzamentos. (Apoio)'],
+  ['📏 Extremo — EI','Fica aberto na linha lateral, dribla e cruza pra área. (Ataque)'],
+  ['✂️ Avançado Interior — AI','Parte aberto mas CORTA PRA DENTRO, procurando finalizar ou criar. O ponta de pé trocado. (Ataque)']],
+ PE:[['📏 Extremo — EI','Fica aberto pela linha lateral, dribla e cruza pra área. (Ataque)'],
+  ['✂️ Avançado Interior — AI','Corta pra dentro no pé forte e finaliza ou cria. O "extremo invertido". (Ataque)'],
+  ['⚖️ Médio Ala — MA','Meia de lado: constrói e cruza com mais responsabilidade. (Apoio)']],
+ PD:[['📏 Extremo — ED','Fica aberto pela linha lateral, dribla e cruza pra área. (Ataque)'],
+  ['✂️ Avançado Interior — AI','Corta pra dentro no pé forte e finaliza ou cria. O "extremo invertido". (Ataque)'],
+  ['⚖️ Médio Ala — MA','Meia de lado: constrói e cruza com mais responsabilidade. (Apoio)']],
+ MEI:[['🎩 Construtor de Jogo Avançado — CJA','O armador clássico: recebe entre linhas e cria com passes e bolas enfiadas. (Apoio/Ataque)'],
+  ['🎭 Enganche — ES','O camisa 10 raiz: fica central, concentra a criação e participa menos da pressão. Só com craque! (Apoio)'],
+  ['🥷 Segundo Atacante — SS','Parte de trás e ataca a área, chegando pra finalizar. O meia que vira 9. (Ataque)'],
+  ['🎨 Trequartista — TQ','Muito livre pra se movimentar e receber a bola — prioriza criatividade e ataque. (Ataque)']],
+ SA:[['🥷 Segundo Atacante — SS','Parte de trás e ataca a área chegando pra finalizar. (Ataque)'],
+  ['🧠 Falso 9 — F9','Recua pro meio, participa da criação e abre espaço pros companheiros entrarem na área. (Apoio)'],
+  ['🎨 Trequartista — TQ','Liberdade total de criação entre meio e ataque. (Ataque)']],
+ ATA:[['⭐ Ponta-de-Lança — PL','Atacante completo de área: ataca o espaço e vive de finalizar. (Ataque)'],
+  ['🎯 Ponta-de-Lança Fixo — PPL','Fica mais fixo na linha, esperando a bola pra finalizar. O matador de área. (Ataque)'],
+  ['🗿 Jogador Alvo — JA','O pivô: recebe bolas longas, disputa pelo alto e segura a bola pros companheiros. (Ataque)'],
+  ['🔥 Avançado Pressionante — AP','Pressiona os zagueiros e atrapalha a saída de bola deles. O primeiro marcador. (Ataque)'],
+  ['💪 Avançado Completo — AC','Faz praticamente tudo: finaliza, cria, segura a bola, cai pelos lados e ataca espaços. Função de craque. (Ataque)'],
+  ['🧠 Falso 9 — F9','Recua pro meio, participa da criação e abre espaço pros companheiros entrarem na área. (Apoio)']]
 };
 document.addEventListener('click',function(e){
   const d=e.target.closest('#pitchBox [data-pos]');
@@ -715,7 +757,7 @@ function openRoleSheet(pos){
   const hit=(window._lastSug&&window._lastSug[pos])||null;
   o.querySelector('.psh-body').innerHTML=
     '<div class="psh-pos">📍 '+(POSFULL[pos]||pos)+' <em>'+pos+'</em></div>'
-   +'<div class="psh-sub">Funções ideais pra essa posição no FM Touch 👇<br>No jogo: toca no jogador → <b style="color:var(--txt)">Função</b> e escolhe uma dessas:</div>'+(hit?'<div style="font-size:11.5px;color:var(--neon);margin:-4px 0 10px;font-weight:700">⭐ = a função que o Analisador recomendou pra TUA tática nessa posição</div>':'')
+   +'<div class="psh-sub">Funções 100% do <b style="color:var(--txt)">FM TOUCH 21</b> (com a sigla igual do jogo!) 👇<br>No jogo: toca no jogador → <b style="color:var(--txt)">Função</b> e escolhe uma dessas:</div>'+(hit?'<div style="font-size:11.5px;color:var(--neon);margin:-4px 0 10px;font-weight:700">⭐ = a função que o Analisador recomendou pra TUA tática nessa posição</div>':'')
    +roles.map(r=>{const on=hit&&r[0].toLowerCase().indexOf(hit)>-1;return '<div class="psh-r"'+(on?' style="border-color:var(--neon);background:#0d2016;box-shadow:0 0 0 1px var(--neon) inset"':'')+'><b>'+(on?'⭐ ':'')+r[0]+(on?' <em style="font-style:normal;color:var(--neon);font-size:10px;font-weight:900">✓ RECOMENDADO</em>':'')+'</b><span>'+r[1]+'</span></div>'}).join('')
    +'<div class="psh-tip">💡 A função certa depende dos atributos do jogador — e a página <b>📚 Papéis</b> do Lab explica cada função em detalhe!</div>';
   o.classList.add('on');
@@ -891,7 +933,7 @@ window.applyPreset=applyPreset;
 document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>applyPreset(b.dataset.preset)));
 
 
-/* ============ 🧠 MOTOR DE ESCALAÇÃO DE FUNÇÕES (sugestão posição a posição) ============ */
+/* ============ 🧠 MOTOR DE ESCALAÇÃO DE FUNÇÕES (sugestão posição a posição — funções 100% FM TOUCH 21) ============ */
 function funcsSugeridas(c){
   const cnt={}; c.F.pts.forEach(p=>{cnt[p[2]]=(cnt[p[2]]||0)+1});
   const posse=c.best==='posse',contra=c.best==='contra',gegen=c.best==='gegen',direto=c.best==='direto',retranca=c.best==='retranca';
@@ -903,52 +945,52 @@ function funcsSugeridas(c){
 
   /* 🧤 GOLEIRO */
   if(cnt.GR){
-    if(c.linhadef>=3) say('GR','🧤➡️ Goleiro Líbero (Apo)','linha adiantada deixa campo atrás da zaga — ele varre tudo que passa por cima.','goleiro líbero');
-    else if(c.saida==='sim'||posse) say('GR','🧤➡️ Goleiro Líbero (Apo)','a saída curta só funciona se ele for o 1º passe confiável.','goleiro líbero');
-    else say('GR','🧤 Goleiro (Def)','defende e repõe simples — risco zero com os pés.',null);
+    if(c.linhadef>=3) say('GR','🧤🚀 Goleiro Avançado (Apo) — GOL','linha adiantada deixa campo atrás da zaga — ele sai do gol e varre tudo que passa por cima.','goleiro avançado');
+    else if(c.saida==='sim'||posse) say('GR','🧤➡️ Goleiro-Líbero (Apo) — GO','a saída curta só funciona se ele for o 1º passe confiável, apoiando a defesa com os pés.','goleiro-líbero');
+    else say('GR','🧤 Goleiro (Def) — GL','defende e repõe simples — risco zero com os pés.',null);
   }
 
   /* 🧱 ZAGUEIROS */
   if(cnt.ZAG){
-    if(posse||c.saida==='sim') say('ZAG','🧠 Zagueiro Construtor (Apo)','alguém tem que entregar a bola no pé do meio: é ele. Só escala se Tomada de Decisão e Passe forem bons.','construtor');
-    else if(c.linhadef>=3||gegen) say('ZAG','⚡ Zagueiro de Cobertura (Def)','com a linha lá em cima, o zagueiro lento vira meme. Precisa de Arrancada e Velocidade.','cobertura');
-    else if(retranca||direto) say('ZAG','🧱 Zagueiro Central (Def)','corta, afasta e não inventa — a segurança que esse plano pede.','zagueiro central');
-    else say('ZAG','⚖️ Zagueiro Central (Apo)','sai jogando com critério, sem chutão nem firula.','zagueiro central');
+    if(posse||c.saida==='sim') say('ZAG','🧠 Zagueiro com Bola (Apo) — ZAGL','alguém tem que entregar a bola no pé do meio: é ele, saindo da defesa com passe. Só escala se Passe e Decisões forem bons.','zagueiro com bola');
+    else if(c.linhadef>=3||gegen) say('ZAG','🛡️ Líbero (Def) — LÍB','com a linha lá em cima, alguém cobre os espaços atrás antecipando os lançamentos. O varredor.','líbero');
+    else if(retranca||direto) say('ZAG','🧱 Zagueiro Central (Def) — ZAG','marca, desarma e corta tudo — zero firula atrás.','zagueiro central');
+    else say('ZAG','⚖️ Zagueiro Central (Apo) — ZAG','defende firme e apoia a saída com critério, sem chutão nem firula.','zagueiro central');
   }
 
   /* 🛡️ LATERAIS (linha de 4) */
   if(cnt.LD){
-    if(c.pontas==='corta'&&c.F.wide) say('LD · LE','🚀 Ala Ofensivo (Apo)','teus pontas cortam pra dentro e somem da ponta — então a amplitude do time é DELE. Sobe e cruza.','ala ofensivo');
-    else if(c.pontas==='corta') say('LD · LE','🧠 Lateral Invertido (Apo)','com os pontas cortando, o lateral fecha por dentro e vira volante extra na saída de bola. Estilo Guardiola 😎','lateral invertido');
-    else if(contra||retranca) say('LD · LE','🛡️ Lateral Defensivo (Def)','o contra-ataque só sai se o corredor não vazar atrás. Ele segura a casinha.','lateral defensivo');
-    else if(gegen) say('LD · LE','🚀 Ala Ofensivo (Apo)','bloco alto pede lado do campo povoado: ele dobra com o ponta no sufoco.','ala ofensivo');
-    else if(c.cruz>=3) say('LD · LE','🚀 Ala Ofensivo (Apo)','tua arma é cruzamento — o lateral é a 2ª fonte dela, além dos pontas.','ala ofensivo');
-    else say('LD · LE','⚖️ Lateral (Apo)','apoia com critério e volta correndo — equilíbrio puro.','apoio');
+    if(c.pontas==='corta'&&c.F.wide) say('LD · LE','🚀 Lateral Ofensivo (Apo) — LAD/LAE','teus pontas cortam pra dentro (AI) e somem da ponta — então a amplitude do time é DELE. Sobe, busca o fundo e cruza.','lateral ofensivo');
+    else if(c.pontas==='corta') say('LD · LE','🧠 Ala Inverso (Apo) — ALA INV','com os pontas cortando, o lateral entra por dentro e cria superioridade no meio. Estilo Guardiola 😎','ala inverso');
+    else if(contra||retranca) say('LD · LE','🛡️ Defensor Lateral (Def) — DCD/DCE','o contra só sai se o corredor não vazar atrás. Ele defende por fora e segura a casinha.','defensor lateral');
+    else if(gegen) say('LD · LE','⚖️ Ala (Apo) — ALA','bloco alto pede lado do campo povoado: ele joga aberto, apoia o sufoco e volta correndo.','⚖️ ala');
+    else if(c.cruz>=3) say('LD · LE','🚀 Lateral Ofensivo (Apo) — LAD/LAE','tua arma é cruzamento — o lateral é a 2ª fonte dela, além dos pontas.','lateral ofensivo');
+    else say('LD · LE','🛡️ Defensor Lateral (Apo) — DCD/DCE','defende por fora e apoia com critério — equilíbrio puro.','defensor lateral');
   }
 
   /* 🏃 ALAS (linha de 5/3 zagueiros) */
   if(cnt.ALD){
-    if(c.cruz>=2||c.foco==='pontas') say('ALD · ALE','🚀 Ala Ofensivo (Atq)','nessa formação ele é o DONO do corredor: sobe e cruza o jogo inteiro. (Vigor em dia!)','ala ofensivo');
-    else say('ALD · ALE','⚖️ Ala (Apo)','sobe na hora certa e ocupa o corredor — sem deixar a linha de 3 pendurada.',null);
+    if(c.cruz>=2||c.foco==='pontas') say('ALD · ALE','🚀 Lateral Ofensivo (Atq) — LAD/LAE','nessa formação ele é o DONO do corredor: sobe, busca o fundo e cruza o jogo inteiro. (Fôlego em dia!)','lateral ofensivo');
+    else say('ALD · ALE','⚖️ Ala (Apo) — ALA','apoia aberto na hora certa sem deixar a linha de 3 pendurada.','⚖️ ala');
   }
 
   /* ⚓ VOLANTES */
   if(cnt.VOL===1){
-    if(posse) say('VOL','🎩 Regista (Def)','o metrônomo: recebe da zaga e dita o ritmo de todo o time. Calma e Passe nele!','regista');
-    else if(direto) say('VOL','🐕 Trinco (Def)','caça a 2ª bola dos lançamentos e trava o meio — Força e Esforço em primeiro.','trinco');
-    else if(retranca||contra) say('VOL','🛡️ Âncora (Def)','para-raios na frente da zaga: não sai de lá por nada. O muro do contra-ataque.','âncora');
-    else say('VOL','⚖️ Volante (Def)','segura a frente da zaga e recicla a bola simples.','âncora');
+    if(posse) say('VOL','🎩 Construtor de Jogo Recuado (Apo) — CJR','o metrônomo: fica atrás, organiza a saída e dita o ritmo de todo o time. Passe e Visão nele!','construtor de jogo recuado');
+    else if(direto) say('VOL','⚖️ Médio Centro (Def) — MCR','vive da 2ª bola dos lançamentos e trava o meio — equilíbrio defensivo em primeiro.','médio centro');
+    else if(retranca||contra) say('VOL','🛡️ Construtor de Jogo Recuado (Def) — CJR','fica atrás, travado na frente da zaga, e sai só com passe seguro. O muro do contra-ataque.','construtor de jogo recuado');
+    else say('VOL','⚖️ Médio Centro (Def) — MCR','segura a frente da zaga e recicla a bola simples.','médio centro');
   }
   else if(cnt.VOL===2){
     if(posse){
-      say('VOL (1º)','🛡️ Âncora (Def)','um segura: fica colado na frente da zaga protegendo a transição.','âncora');
-      say('VOL (2º)','🎩 Regista (Apo)','o outro constrói: dita o ritmo saindo de trás, estilo Busquets. (1º = o mais marcador, 2º = o mais técnico)','regista');
+      say('VOL (1º)','🛡️ Construtor de Jogo Recuado (Def) — CJR','um segura: fica atrás organizando a saída com passes seguros.','construtor de jogo recuado');
+      say('VOL (2º)','⚖️ Médio Centro (Apo) — MCR','o outro transita: apoia a saída e chega de trás no ataque. (1º = o mais seguro, 2º = o mais móvel)','médio centro');
     } else if(gegen||contra){
-      say('VOL (1º)','🐕 Trinco (Def)','o caçador: primeira onda do sufoco/roubo de bola no meio.','trinco');
-      say('VOL (2º)','🏃 Volante Box-to-Box (Apo)','o pulmão: rouba atrás e chega finalizando quando o time ataca.','box-to-box');
+      say('VOL (1º)','🛡️ Médio Centro (Def) — MCR','o caçador: primeira onda do sufoco/roubo de bola no meio.','médio centro');
+      say('VOL (2º)','🚀 Segundo Volante (Apo) — SV','começa atrás ajudando a marcar e depois INVADE o ataque chegando na área.','segundo volante');
     } else {
-      say('VOL (1º)','🛡️ Âncora (Def)','um fica: protege a zaga e não sai por nada. É o mais marcador dos dois.','âncora');
-      say('VOL (2º)','⚖️ Volante Box-to-Box (Apo)','o outro transita: apoia a saída e chega de trás no ataque.','box-to-box');
+      say('VOL (1º)','🛡️ Construtor de Jogo Recuado (Def) — CJR','um fica: protege a zaga e sai jogando seguro. É o mais posicional dos dois.','construtor de jogo recuado');
+      say('VOL (2º)','🚀 Segundo Volante (Apo) — SV','o outro equilibra: marca e ainda chega ao ataque na hora certa.','segundo volante');
     }
   }
 
@@ -956,74 +998,75 @@ function funcsSugeridas(c){
   if(cnt.MC){
     const nMC=cnt.MC;
     if(posse){
-      if(nMC>=3) say('MC', '🎯 Mezzala (Atq) + 🚂 Carrilero (Apo) + ⚖️ Meia Central (Apo)','trio de ouro da posse: um ataca o corredor meio-lateral, um carrega a bola, um equilibra.','mezzala');
-      else say('MC','🎯 Mezzala (Atq) + ⚖️ Meia Central (Apo)','posse sem infiltração vira chute de 30m: a Mezzala ataca o half-space enquanto o outro equilibra. Sem meia em grau Ataque aqui, a posse estaciona.','mezzala');
+      if(nMC>=3) say('MC', '🎯 Mezzala (Atq) — MEZ + 🚂 Carrilero (Apo) — CARR + ⚖️ Médio Centro (Def/Apo) — MCR','trio de ouro da posse: a Mezzala ataca os meio-espaços, o Carrilero cobre a largura e o Médio Centro equilibra.','mezzala');
+      else say('MC','🎯 Mezzala (Atq) — MEZ + ⚖️ Médio Centro (Apo) — MCR','posse sem infiltração vira chute de 30m: a Mezzala ataca o meio-espaço enquanto o outro equilibra. Sem meia em grau Ataque aqui, a posse estaciona.','mezzala');
     }
-    else if(gegen) say('MC','🏃 Box-to-Box (Apo) + 🎯 Mezzala (Atq)','o sufoco pede um pisante que rouba e chega (B2B) e um que aparece no corredor pra receber a bola roubada (Mezzala).','box-to-box');
-    else if(contra) say('MC','🏃 Box-to-Box (Apo)','segura na hora de defender e chega TARDE na área pra finalizar o raio — ninguém espera ele lá.','box-to-box');
-    else if(direto) say('MC','🏃 Box-to-Box (Apo)','vive da 2ª bola que o Pivô desvia — é o caçador de sobras do meio.','box-to-box');
-    else if(retranca) say('MC','🛡️ Meia Central (Def)','duas linhas de 4 fechadas: o meio cede a bola, não o espaço.','meia central');
-    else say('MC','⚖️ Meia Central (Apo)','circula, equilibra e aparece pro passe — o engrenagem silenciosa.','meia central');
+    else if(gegen) say('MC','🏃 Médio Área-a-Área (Apo) — MCH + 🎯 Mezzala (Atq) — MEZ','o sufoco pede um pisante área-a-área que rouba e chega, e uma Mezzala que aparece no meio-espaço pra receber a bola roubada.','médio área-a-área');
+    else if(contra) say('MC','🏃 Médio Área-a-Área (Apo) — MCH','segura na hora de defender e chega TARDE na área pra finalizar o raio — ninguém espera ele lá.','médio área-a-área');
+    else if(direto) say('MC','🏃 Médio Área-a-Área (Apo) — MCH','vive da 2ª bola que o Jogador Alvo desvia — o caçador de sobras do meio.','médio área-a-área');
+    else if(retranca) say('MC','🛡️ Médio Centro (Def) — MCR','duas linhas fechadas: o meio cede a bola, não o espaço.','médio centro');
+    else say('MC','⚖️ Médio Centro (Apo) — MCR','circula, equilibra e aparece pro passe — a engrenagem silenciosa.','médio centro');
   }
 
   /* ↔️ MEIAS ABERTOS (MD/ME de linha de 4 no meio) */
   if(cnt.MD){
-    if(c.foco==='pontas'||c.cruz>=3) say('MD · ME','📏 Ponta Clássica (Atq)','jogo direcionado pro lado deles: cola na linha e manda cruzamento rasteiro e no 2º pau.','ponta clássica');
-    else if(contra) say('MD · ME','🚀 Meia Aberto (Atq)','marca em 4-4-2 sem bola e DISPARA no lado cego quando recupera — o raio começa nele.','meia aberto');
-    else say('MD · ME','🛡️ Meia Aberto (Apo)','ajuda o lateral a fechar o corredor e chega no ataque com o bloco subido.','meia aberto');
+    if(c.foco==='pontas'||c.cruz>=3) say('MD · ME','📏 Extremo (Atq) — EI/ED','jogo direcionado pro lado deles: aberto na linha, drible e cruzamento pra área.','extremo');
+    else if(contra) say('MD · ME','📏 Extremo (Atq) — EI/ED','marca no 4-4-2 sem bola e DISPARA no lado cego quando recupera — o raio começa nele.','extremo');
+    else say('MD · ME','⚖️ Médio Ala (Apo) — MA','ajuda o lateral a fechar o corredor e constrói aberto, com cruzamentos na medida.','médio ala');
   }
 
   /* 🎩 MEIA OFENSIVO / ENGANCHE */
   if(cnt.MEI){
-    if(posse) say('MEI','🎩 Armador Avançado (Apo)','TODA jogada morre e renasce no pé dele. Desmarque e Tomada de Decisão em primeiro lugar.','armador');
-    else if(gegen) say('MEI','⚡ Meia-Atacante (Atq)','cria E chega batendo — no bloco alto ele é quem finaliza a jogada que a pressão fabrica.','meia-atacante');
-    else if(contra) say('MEI','🥷 Atacante Sombra (Atq)','recuperou a bola? Ele vira 2º centroavante na hora — o raio ganha um 2º finalizador.','sombra');
-    else if(direto) say('MEI','⚡ Meia-Atacante (Apo)','gruda no Pivô pra caçar os desvios e 2ªs bolas. Dupla de ouro do jogo direto.','meia-atacante');
-    else say('MEI','🎩 Armador Avançado (Apo)','o cérebro entre linhas: recebe de costas e vira o jogo.','armador');
+    if(posse) say('MEI','🎩 Construtor de Jogo Avançado (Apo) — CJA','TODA jogada passa no pé dele: recebe entre linhas e enfia a bola decisiva. Visão e Passe em primeiro.','construtor de jogo avançado');
+    else if(gegen) say('MEI','🥷 Segundo Atacante (Atq) — SS','parte de trás e ataca a área — no bloco alto ele finaliza a jogada que a pressão fabrica.','segundo atacante');
+    else if(contra) say('MEI','🥷 Segundo Atacante (Atq) — SS','recuperou a bola? Ele vira 2º atacante na hora — o raio ganha um 2º finalizador.','segundo atacante');
+    else if(direto) say('MEI','🥷 Segundo Atacante (Atq) — SS','gruda no Jogador Alvo pra caçar os desvios e as 2ªs bolas. Dupla de ouro do jogo direto.','segundo atacante');
+    else say('MEI','🎩 Construtor de Jogo Avançado (Apo) — CJA','o cérebro entre linhas: recebe de costas e vira o jogo.','construtor de jogo avançado');
   }
 
   /* 🤝 SEGUNDO ATACANTE */
   if(cnt.SA){
-    if(contra) say('SA','🥷 Atacante Sombra (Atq)','some atrás do 9 e aparece finalizando no espaço que o recuo dele abre.','sombra');
-    else if(posse) say('SA','🤝 Segundo Atacante (Apo)','a cola do time: liga meio e ataque com toque de 1ª e movimentação.','segundo atacante');
-    else say('SA','🧠 Falso Nove (Apo)','recua, puxa um zagueiro junto e abre a avenida pras costas dele.','falso nove');
+    if(contra) say('SA','🥷 Segundo Atacante (Atq) — SS','parte de trás e ataca a área no espaço que o recuo do 9 abre.','segundo atacante');
+    else if(posse) say('SA','🧠 Falso 9 (Apo) — F9','recua pro meio, cria e arrasta o zagueiro — a avenida fica pros companheiros.','falso 9');
+    else say('SA','🥷 Segundo Atacante (Atq) — SS','agrada qualquer plano: marca de frente e chega finalizando.','segundo atacante');
   }
 
   /* ⚡ PONTAS */
   if(cnt.PE){
     if(c.pontas==='corta'){
-      say('PE · PD','✂️ Extremo Invertido (Atq)','dribla e corta no pé forte batendo pro gol — é ELE o teu 2º artilheiro, não o cruzador.'+(c.ca==='falso9'?' Com o Falso 9 recuando, a área fica LIVRE pro corte dele. Combo mortal.':''),'extremo invertido');
+      say('PE · PD','✂️ Avançado Interior (Atq) — AI','parte aberto e CORTA PRA DENTRO no pé forte pra finalizar — é ELE o teu 2º artilheiro, não o cruzador.'+(c.ca==='falso9'?' Com o Falso 9 recuando, a área fica LIVRE pro corte dele. Combo mortal.':''),'avançado interior');
     }
     else if(c.pontas==='cruza'){
-      if(c.ca==='falso9'||c.ca==='nove') say('PE · PD','⚠️ TROCA PRA: ✂️ Extremo Invertido (Atq)','conflito lindo detectado kk: teu 9 RECUA (fora da área) e os pontas CRUZAM... pra ninguém. Ou muda os pontas pra EI (que cortam e finalizam), ou muda o 9 pra Avançado/Caça-Gols.','extremo invertido',true);
-      else say('PE · PD','📏 Ponta / Extremo (Atq)','linha de fundo e cruzamento — o garçom oficial da área.'+(c.ca==='referencia'?' Com a Referência lá, é gol de graça.':' Casa perfeito com Caça-Gols ou Referência na área.'),'ponta');
+      if(c.ca==='falso9'||c.ca==='nove') say('PE · PD','⚠️ TROCA PRA: ✂️ Avançado Interior (Atq) — AI','conflito lindo detectado kk: teu 9 RECUA (fora da área) e os pontas CRUZAM... pra ninguém. Ou muda os pontas pra AI (que cortam e finalizam), ou muda o 9 pra PL/PPL.','avançado interior',true);
+      else say('PE · PD','📏 Extremo (Atq) — EI/ED','aberto na linha de fundo driblando e cruzando — o garçom oficial da área.'+(c.ca==='referencia'?' Com o Jogador Alvo lá, é gol de graça.':' Casa perfeito com PPL ou JA na área.'),'extremo');
     }
     else{
-      say('PE · PD','✂️ de um lado, 📏 do outro (Atq)','um corta pra finalizar, o outro cruza — o adversário não consegue ajustar a marcação pros dois.','extremo invertido');
+      say('PE · PD','✂️ AI de um lado, 📏 Extremo do outro (Atq)','um corta pra finalizar, o outro cruza — o adversário não consegue ajustar a marcação pros dois.','avançado interior');
     }
   }
 
   /* ⚽ CENTROAVANTE */
   if(cnt.ATA){
     const CA={
-      avancado:['⭐ Avançado Completo (Atq)','corre as costas da zaga o jogo todo e finaliza de tudo. Pede Velocidade + Finalização brabas.','avançado completo'],
-      artilheiro:['🎯 Caça-Gols (Atq)','vive DENTRO da área: o time constrói e ele resolve. Qualquer sobra é gol.'+(c.pontas==='corta'?' O Extremo Invertido cruza rasteiro de fora pra dentro — é o prato favorito dele.':''),'caça-gols'],
-      referencia:['🗿 Pivô / Target Man (Apo)','domina de costas, ganha pelo alto e traz os meias pro lance. Todo o jogo aéreo passa por ele.','pivô'],
-      falso9:['🧠 Falso Nove (Apo)','recua pro meio e vira armador — os zagueiros ficam sem referência nenhuma. ⚠️ Só funciona se os pontas CORTAREM pra dentro (Extremo Invertido) ocupando a área que ele deixa.','falso nove'],
-      nove:['🎭 Nove e Meio (Atq)','pressiona, cria e finaliza — função pra craque completo (Firmino feelings). Se faltar atributo, volta pro Avançado.',null],
-      pressing:['🔥 Atacante de Pressão (Atq)','o 1º zagueiro do time: caça a saída de bola adversária lá em cima e inicia o sufoco.','atacante de pressão']
+      avancado:['⭐ Ponta-de-Lança (Atq) — PL','ataca o espaço o jogo todo e finaliza de tudo. Pede Velocidade + Finalização brabas.','— pl'],
+      artilheiro:['🎯 Ponta-de-Lança Fixo (Atq) — PPL','fica fixo na linha esperando a bola: o time constrói e ele resolve dentro da área.'+(c.pontas==='corta'?' O AI cruza rasteiro de fora pra dentro — é o prato favorito dele.':''),'— ppl'],
+      referencia:['🗿 Jogador Alvo (Atq) — JA','o pivô: recebe lançamento, disputa pelo alto e segura a bola pros companheiros chegarem.','jogador alvo'],
+      falso9:['🧠 Falso 9 (Apo) — F9','recua pro meio e vira criador — os zagueiros ficam sem referência nenhuma. ⚠️ Só funciona se os pontas CORTAREM pra dentro (AI) ocupando a área que ele deixa.','falso 9'],
+      nove:['💪 Avançado Completo (Atq) — AC','faz TUDO: finaliza, cria, segura e cai pelos lados — função pra craque completo (Firmino feelings). Se faltar atributo, volta pro PL.','avançado completo'],
+      pressing:['🔥 Avançado Pressionante (Atq) — AP','o 1º marcador do time: pressiona os zagueiros e estraga a saída de bola deles lá em cima.','pressionante']
     };
     const rw=CA[c.ca]||CA.avancado;
     let warn=false, why=rw[1], role=rw[0];
-    if(c.ca==='pressing'&&c.press===0){ warn=true; why='⚠️ Atacante de Pressão com o time marcando em pé NÃO rola — ele corre por 5 e morre aos 60min. Liga a pressão do time, ou troca pra ⭐ Avançado.'; }
-    else if(c.ca==='referencia'&&c.cruz<=1){ warn=true; why='⚠️ Pivô sem cruzamento passa FOME na área. Ou sobe os cruzamentos (extremos clássicos ajudam), ou troca pra ⭐ Avançado.'; }
-    else if(c.ca==='falso9'&&c.pontas!=='corta'&&cnt.PE){ warn=true; why='⚠️ Falso 9 com pontas que cruzam = bola na área vazia. Muda os pontas pra ✂️ Extremo Invertido — aí o combo engrena: ele sai, eles entram.'; }
-    else if(posse&&c.ca==='avancado'){ why+=' 💡 Com essa posse toda, o 🧠 Falso Nove é um upgrade tentador — testa nas duas versões!'; }
+    if(c.ca==='pressing'&&c.press===0){ warn=true; why='⚠️ AP (Avançado Pressionante) com o time marcando em pé NÃO rola — ele corre por 5 e morre aos 60min. Liga a pressão do time, ou troca pra ⭐ PL.'; }
+    else if(c.ca==='referencia'&&c.cruz<=1){ warn=true; why='⚠️ JA (Jogador Alvo) sem cruzamento passa FOME na área. Ou sobe os cruzamentos (Extremos EI/ED ajudam), ou troca pra ⭐ PL.'; }
+    else if(c.ca==='falso9'&&c.pontas!=='corta'&&cnt.PE){ warn=true; why='⚠️ Falso 9 com pontas que cruzam = bola na área vazia. Muda os pontas pra ✂️ AI (Avançado Interior) — aí o combo engrena: ele sai, eles entram.'; }
+    else if(posse&&c.ca==='avancado'){ why+=' 💡 Com essa posse toda, o 🧠 F9 (Falso 9) é um upgrade tentador — testa nas duas versões!'; }
     else if(c.ca==='avancado'&&(contra||direto)){ why+=' No teu plano ele é o homem do raio/bola longa — o cara mais importante da escalação.'; }
     say('ATA',role,why,rw[2],warn);
   }
   return {rows:rows,byPos:byPos};
 }
+
 
 function analisar(scroll){
   const v=id=>document.getElementById(id).value;
@@ -1082,7 +1125,7 @@ function analisar(scroll){
     if(ca==='referencia') ok.push(['Alvo na área','Cruzamentos frequentes alimentam sua Referência: combinação clássica e letal.']);
     if(!F.wide&&!F.wb) wrn.push(['Cruzamento da onde?','Formação sem homens de lado com muitos cruzamentos: vai sobrar pro lateral cruzar, e a zaga deles agradece.']);
   }
-  if(cruz<=1&&ca==='referencia') wrn.push(['Referência faminta','Referência com "muito menos cruzamentos" fica isolada: os pontos fortes dela (alto/força) não aparecem.']);
+  if(cruz<=1&&ca==='referencia') wrn.push(['Jogador Alvo faminto','JA com "muito menos cruzamentos" fica isolado: os pontos fortes dela (alto/força) não aparecem.']);
   if(foco==='pontas'&&!F.wide&&!F.wb) err.push(['Foco pelas pontas sem pontas','O foco manda a bola pro lado, mas a formação (losango/estreita) não tem homem de amplitude. Mude o foco ou a formação.']);
   if(foco==='meio'&&!F.narrow&&cruz>=3) wrn.push(['Meio x cruzamento','Foco pelo meio com muitos cruzamentos: instruções opostas pros pontas. Defina: jogo interior ou pelos lados.']);
   if(larg<=1&&pontas==='cruza'&&F.wide) wrn.push(['Pontas sem calçada','Pontas que cruzam precisam de largura pra receber em velocidade. Com largura muito estreita, ficam espremidos no meio.']);
@@ -1111,28 +1154,28 @@ function analisar(scroll){
   /* papéis e ajustes de jogadores por estilo — a análise além das instruções de equipe */
   const PAPTIPS={
     posse:[
-     '🧠 <b>Construtor/Regista</b> regendo o ritmo + <b>Goleiro-Líbero</b> pra saída limpa — sem eles, a posse morre no goleiro.',
-     '🎭 <b>Falso 9</b> com pontas em grau Ataque cortando pra dentro (<b>Extremo Invertido/AI</b>): o 9 sai da área e abre o corredor.',
+     '🧠 <b>CJR (Construtor de Jogo Recuado)</b> regendo o ritmo + <b>GOL (Goleiro Avançado)</b> pra saída limpa — sem eles, a posse morre no goleiro.',
+     '🎭 <b>Falso 9</b> com pontas em grau Ataque cortando pra dentro (<b>AI — Avançado Interior</b>): o 9 sai da área e abre o corredor.',
      '⚙️ Pelo menos uma <b>Mezzala</b> ou meia em grau Ataque infiltrando: posse parada sem chegada vira chute de 30 metros.',
      '↔️ Se os laterais cortam pra dentro (Invertidos), os pontas precisam dar amplitude — senão o meio vira engarrafamento.'],
     contra:[
-     '⚡ <b>Avançado ou Finalizador</b> com Velocidade 15+ é inegociável: contra-ataque com 9 lento é passeio.',
+     '⚡ <b>PL ou PPL</b> com Velocidade 15+ é inegociável: contra-ataque com 9 lento é passeio.',
      '🎯 Pontas em grau <b>Ataque</b> (Extremo ou Avançado Interior): são eles que recebem a bola do raio.',
-     '🛡️ Trinco/<b>Segundo Volante</b> segurando + zaga que não sobe: o contra raramente sai sem alguém cobrindo.',
+     '🛡️ <b>CJR ou Médio Centro (Defesa)</b> segurando + zaga que não sobe: o contra raramente sai sem alguém cobrindo.',
      '🚀 Nos detalhes do Atacante, <b>"corre em profundidade"</b> e finalização simples. Nada de firula no último terço.'],
     gegen:[
      '🔥 <b>Contra-pressão pede pisantes</b>: Resistência e Esforço nos 2 meias da frente. Jogador lento marca saída de campo.',
-     '⚔️ <b>Atacante de Pressão</b> como primeiro zagueiro + meias Box-to-Box/Mezzala cercando. O enganche descansa… fora de campo.',
+     '⚔️ <b>AP (Avançado Pressionante)</b> como primeiro zagueiro + meias MCH (Área-a-Área)/MEZ cercando. O enganche descansa… fora de campo.',
      '🧤 Goleiro que <b>sai do gol</b> (Líbero) varre as bolas nas costas da linha adiantada. Sem ele: contra-gol contra você.',
      '📋 Detalhe matador: <b>marcação individual nos meias criativos</b> deles + impedimento se a zaga for rápida.'],
     direto:[
-     '🎯 <b>Referência</b> com Força/Impulsão/Jogo Aéreo segurando de costas + um 9 veloz (<b>Avançado</b>) dobrando nele.',
-     '🥏 <b>Extremos clássicos</b> cruzando: a bola precisa chegar na área de QUALQUER jeito, não bonito.',
-     '⚙️ Um meia <b>Box-to-Box</b> catando segunda bola — o pivô perde alguns, alguém tem que estar lá.',
+     '🎯 <b>JA (Jogador Alvo)</b> com Força/Cabeceio segurando de costas + um 9 veloz (<b>PL</b>) dobrando nele.',
+     '🥏 <b>Extremos (EI/ED)</b> cruzando: a bola precisa chegar na área de QUALQUER jeito, não bonito.',
+     '⚙️ Um meia <b>MCH (Área-a-Área)</b> catando segunda bola — o pivô perde alguns, alguém tem que estar lá.',
      '📋 Detalhe: laterais com instrução de <b>cruzar da intermediária</b> (sem chegar na linha de fundo) aceleram o jogo.'],
     retranca:[
-     '🧱 Dois zagueiros + trinco: <b>Sem Compromisso/Âncora</b>. Quem inventa aqui, senta no banco.',
-     '⚡ UMA válvula de escape: um veloz (<b>Avançado</b>) sozinho lá na frente pra segurar a bola do alívio.',
+     '🧱 Dois zagueiros + CJR (Defesa): <b>só passe seguro atrás</b>. Quem inventa aqui, senta no banco.',
+     '⚡ UMA válvula de escape: um veloz (<b>PL</b>) sozinho lá na frente pra segurar a bola do alívio.',
      '🎯 <b>Bola parada é jogo de jogo</b>: seus melhores cabeceadores sobem. É lá que a retranca faz gol.',
      '📋 Detalhe: tempo perdido começa aos 70 min, não aos 15 — catimba cedo demais convida o sufoco.']
   };
@@ -1200,10 +1243,10 @@ function analisar(scroll){
   err.forEach(e=>plan.push(['🔴 Corrige logo','<b>'+e[0]+':</b> '+e[1]]));
   wrn.forEach(w=>plan.push(['🟡 Ajuste fino','<b>'+w[0]+':</b> '+w[1]]));
   const NEXT={
-    posse:[['🧪 Teste evolutivo','Encaixe uma Mezzala em grau Ataque pra dar chegada de trás — posse sem infiltração vira chute de 30 metros.'],['📦 Tenha um plano B','Se o adversário se fechar todo, guarde uma Referência no banco pra mudar pro jogo de cruzamento na 2ª etapa.']],
+    posse:[['🧪 Teste evolutivo','Encaixe uma MEZ (Mezzala) em grau Ataque pra dar chegada de trás — posse sem infiltração vira chute de 30 metros.'],['📦 Tenha um plano B','Se o adversário se fechar todo, guarde uma JA (Jogador Alvo) no banco pra mudar pro jogo de cruzamento na 2ª etapa.']],
     contra:[['🧪 Teste evolutivo','Ative a distribuição rápida do goleiro e conte os gols que nascem de transição — se cair, o problema é velocidade na frente, não a instrução.'],['📦 Tenha um plano B','Adversário recuado demais? Suba um clique de mentalidade e dê grau Ataque pra um meia.']],
     gegen:[['🧪 Teste evolutivo','Teste marcação individual no armador deles + impedimento ligado se a zaga for rápida. Isso mata a construção adversária na fonte.'],['📦 Tenha um plano B','Sufoco cobra o físico: mantenha um 2º volante com Resistência alta no banco e troque pontas aos 60 min.']],
-    direto:[['🧪 Teste evolutivo','Laterais com ordem de cruzar da intermediária chegam mais rápido sem perder os homens de área.'],['📦 Tenha um plano B','Se a Referência apagar no jogo aéreo, troque por um Avançado veloz e passe em profundidade.']],
+    direto:[['🧪 Teste evolutivo','Laterais com ordem de cruzar da intermediária chegam mais rápido sem perder os homens de área.'],['📦 Tenha um plano B','Se a Referência apagar no jogo aéreo, troque por um PL veloz e passe em profundidade.']],
     retranca:[['🧪 Teste evolutivo','Bola parada ofensiva é seu ataque: treine escanteios e faltas laterais TODA semana.'],['📦 Tenha um plano B','Precisando do resultado? Suba pro bloco médio + contra-ataque aos 60 min, quando a linha dos outros cansa.']],
     misto:[['🚩 Escolhe o plano A','Olha o DNA acima 👆 e puxa os sliders pro estilo que combinou mais — a confusão some na hora.'],['🧪 Faça o quiz do Lab','O quiz do menu descobre seu estilo ideal em 6 perguntas e volta com as instruções prontas pra colar aqui.']]
   };
@@ -2880,56 +2923,55 @@ window.renderFreeList=renderFreeList;
 
 /* ============ GUIA DE PAPÉIS ============ */
 const ROLES=[
-{s:'🧤 Goleiros',items:[
- {n:'Goleiro',faz:'O clássico: defende e entrega o mais simples possível.',a:['Reflexos','Impulsão','Posicionamento'],ok:'bloco baixo e zaga mais lenta',no:'linha muito adiantada (ele não sai do gol)'},
- {n:'Goleiro-Líbero',faz:'Sai jogando com os pés e antecipa bolas nas costas da zaga adiantada.',a:['Reflexos','Primeiro Toque','Antecipação','Velocidade'],ok:'linha adiantada + jogo de posse',no:'esquemas retranqueiros de chutão'}
+{s:'🧤 Goleiros',img:'img/papeis-goleiros.jpg',items:[
+ {n:'GL · Goleiro',faz:'Fica em sua área, defende chutes e cruzamentos. O clássico seguro. (Tarefa: Defesa)',a:['Elasticidade','Reflexos','Saída de Gol'],ok:'qualquer estilo — a base de tudo',no:'linha muito alta sem ninguém varrendo as costas'},
+ {n:'GO · Goleiro-Líbero',faz:'Atua como um líbero: sai da área pra apoiar a defesa e INICIAR as jogadas com os pés. (Tarefa: Apoio)',a:['Passe','Composto','Visão de Jogo'],ok:'saída curta de bola / jogo de posse',no:'jogo direto de chutão (fica sem função)'},
+ {n:'GOL · Goleiro Avançado',faz:'Fica mais adiantado, antecipa-se às jogadas e reduz o espaço nas finalizações. Varre as costas da linha alta. (Tarefa: Apoio)',a:['Composto','Decisões','Saída de Gol'],ok:'linha adiantada + bloco alto',no:'retranca de linha baixa (arrisca demais)'}
 ]},
-{s:'🛡️ Zagueiros',items:[
- {n:'Zagueiro (Central)',faz:'Seguro e confiável: marca, desarma e não inventa com a bola.',a:['Marcação','Desarme','Impulsão','Posicionamento'],ok:'praticamente qualquer estilo',no:'esperar dele a construção de trás'},
- {n:'Zagueiro com Bola',faz:'Inicia a jogada da defesa com passes verticais e lançamentos trocados.',a:['Passe','Visão','Técnica','Desarme'],ok:'posse de bola + saída da defesa',no:'jogo direto puro (vira rifador de bola)'},
- {n:'Zagueiro Sem Compromisso',faz:'Só destrói: zero riscos com a bola, tudo que sobra ele isola.',a:['Desarme','Força','Agressividade'],ok:'retranca e contra-ataque',no:'time de posse (entrega a bola de graça)'},
- {n:'Líbero',faz:'Zagueiro que avança pro meio-campo criando superioridade numérica.',a:['Passe','Tomada de Decisão','Marcação','Mov. sem Bola'],ok:'sistemas com 3 zagueiros',no:'linha de 2 zagueiros clássica (deixa buraco)'}
+{s:'🛡️ Defensores',img:'img/papeis-defensores.jpg',items:[
+ {n:'ZAG · Zagueiro Central',faz:'Defende a área central, ganha duelos e corta cruzamentos. Simples e confiável. (Tarefas: Defesa/Apoio)',a:['Desarme','Cabeceio','Marcação'],ok:'qualquer esquema defensivo',no:'esperar dele a construção das jogadas'},
+ {n:'ZAGL · Zagueiro com Bola',faz:'Defende e participa da construção, levando a bola e fazendo passes. (Tarefas: Defesa/Apoio)',a:['Passe','Composto','Decisões'],ok:'posse de bola + saída desde a defesa',no:'time rifador de bola (vira doação)'},
+ {n:'LÍB · Líbero',faz:'Fica atrás da linha de defesa pra antecipar jogadas e cobrir espaços. (Tarefas: Defesa/Apoio)',a:['Composto','Decisões','Marcação'],ok:'linha adiantada (cobra as costas dos zagueiros)',no:'linha muito recuada (função sem espaço pra cobrir)'},
+ {n:'DCD/DCE · Defensor Lateral',faz:'Defende por fora e apoia o ataque pela lateral, com equilíbrio. (Tarefas: Defesa/Apoio)',a:['Cond. Física','Desarme','Cruzamentos'],ok:'times equilibrados e contra-ataques',no:'exigir amplitude máxima o jogo todo'},
+ {n:'ALA · Ala',faz:'Joga aberto e apoia bastante o ataque, voltando pra defender quando necessário. (Tarefas: Apoio/Ataque)',a:['Cond. Física','Cruzamentos','Passes'],ok:'posse e pressão alta (povoa o lado)',no:'defender 1x1 contra ponta ligeiro o jogo inteiro'},
+ {n:'ALA INV · Ala Inverso',faz:'Entra por dentro a partir da lateral pra criar superioridade no meio. (Tarefas: Apoio/Ataque)',a:['Passe','Visão de Jogo','Técnica'],ok:'pontas abertos (EI/ED) que seguram a amplitude',no:'ponta AI cortando pro mesmo espaço'},
+ {n:'LAD/LAE · Lateral Ofensivo',faz:'Muito ofensivo pela lateral: busca o fundo, cruza e apoia o ataque o tempo todo. (Tarefa: Ataque)',a:['Cond. Física','Cruzamento','Velocidade'],ok:'formações de 3/5 atrás + pontas AI cortando',no:'linha de 4 sem cobertura (o corredor vaza)'}
 ]},
-{s:'↔️ Laterais',items:[
- {n:'Lateral',faz:'Apoia o ataque com equilíbrio, sem se lançar o tempo todo.',a:['Cruzamento','Resistência','Desarme'],ok:'times equilibrados de posse ou transição',no:'exigir que ele decida o jogo sozinho'},
- {n:'Lateral Ofensivo / Ala',faz:'Ataca o corredor inteiro e cruza em volume. É meio lateral, meio ponta.',a:['Cruzamento','Resistência','Velocidade'],ok:'formações com 3/5 defensores',no:'linha de 4 sem cobertura (o corredor vaza)'},
- {n:'Lateral Defensivo',faz:'Quase não passa do meio-campo: segura o lado e protege o zagueiro.',a:['Marcação','Desarme','Concentração'],ok:'times que atacam pelo lado oposto',no:'esquemas que precisam de amplitude dele'},
- {n:'Lateral Invertido',faz:'Corta pro meio e vira "meio-campista extra" na saída de bola.',a:['Passe','Tomada de Decisão','Técnica','Posicionamento'],ok:'posse + pontas que dão amplitude',no:'pontas invertidas (ocupa o mesmo espaço)'}
+{s:'⚙️ Meio-Campistas Centrais',img:'img/papeis-meios.jpg',items:[
+ {n:'CJR · Construtor de Jogo Recuado',faz:'Fica mais atrás e organiza a saída de bola, procurando passes seguros. O metrônomo. (Tarefas: Defesa/Apoio)',a:['Passes','Visão de Jogo','Composto'],ok:'posse de bola + alguém protegendo ao lado',no:'sufoco sem proteção (não é caçador)'},
+ {n:'CJA · Construtor de Jogo Avançado',faz:'Armador que recebe entre linhas e cria jogadas com passes e bolas enfiadas. (Tarefas: Apoio/Ataque)',a:['Passes','Visão de Jogo','Técnica'],ok:'atacantes móveis atacando os espaços',no:'jogo direto (a bola pula ele)'},
+ {n:'MEZ · Mezzala',faz:'Parte do centro e se desloca pros lados (meio-espaços), chegando perto da área. (Tarefas: Apoio/Ataque)',a:['Passes','Técnica','Finalização'],ok:'pontas abertos + lateral que sobe do mesmo lado',no:'meio já congestionado de armadores'},
+ {n:'CARR · Carrilero',faz:'Cobre bastante a largura do meio-campo, equilibrando defesa e ataque. (Tarefas: Apoio/Ataque)',a:['Cond. Físico','Desarme','Passes'],ok:'meios estreitos (losango, 4-3-1-2)',no:'meio que já tem amplitude natural'},
+ {n:'SV · Segundo Volante',faz:'Começa mais atrás, ajuda a marcar e depois invade o ataque, chegando à área. (Tarefas: Apoio/Ataque)',a:['Passes','Desarme','Finalização'],ok:'dupla de volantes (um fica, ele vai)',no:'volante único (deixa a frente da zaga vazia)'},
+ {n:'MCR/MCL · Médio Centro',faz:'Função equilibrada que faz um pouco de tudo, dependendo da tarefa. (Tarefas: Defesa/Apoio/Ataque)',a:['Equilíbrio em tudo'],ok:'preencher qualquer buraco do meio',no:'pedir especialização extrema dele'},
+ {n:'MCH · Médio Área-a-Área',faz:'O box-to-box: vai de uma área à outra, ajudando na defesa e chegando ao ataque. (Tarefas: Apoio/Ataque)',a:['Cond. Físico','Desarme','Finalização'],ok:'contra-ataque e sufoco (chega tarde finalizando)',no:'elenco sem fôlego (morre aos 60)'},
+ {n:'MCriat · Médio Criativo',faz:'Atua mais recuado, mas com liberdade pra criar jogadas e avançar. (Tarefas: Apoio/Ataque)',a:['Passes','Visão de Jogo','Técnica'],ok:'times que precisam de um 2º armador de trás',no:'sufoco intenso (não tem a pegada)'},
+ {n:'ORG MÓV · Organizador Móvel',faz:'Procura a bola, se movimenta pelo campo inteiro e dita o ritmo do jogo. (Tarefas: Apoio/Ataque)',a:['Visão de Jogo','Passes','Técnica'],ok:'posse fluida com troca de posições',no:'tática rígida de posições fixas'}
 ]},
-{s:'⚙️ Volantes',items:[
- {n:'Volante (Âncora)',faz:'O pai da zaga: não sai da frente da área por nada nesse mundo.',a:['Posicionamento','Marcação','Força','Concentração'],ok:'meias agressivos e alas bem ofensivos',no:'esperar construção ou chegada ao ataque'},
- {n:'Cão de Guarda',faz:'Corre atrás da bola o jogo inteiro. Sua única religião é o desarme.',a:['Desarme','Esforço','Resistência','Agressividade'],ok:'gegenpress e bloco médio/alto',no:'bloco muito baixo (fica sem função)'},
- {n:'Regista',faz:'O maestro recuado: dita o ritmo do time de trás, como um Pirlo.',a:['Passe','Visão','Tomada de Decisão','Primeiro Toque'],ok:'posse de bola com proteção ao lado',no:'pressão alta sem escudo defensivo perto'},
- {n:'Segundo Zagueiro',faz:'Cai entre os zagueiros na saída de bola, formando linha de 3.',a:['Posicionamento','Marcação','Passe'],ok:'alas ofensivos + construção curta',no:'esquemas que precisam de volante agressivo à frente'}
+{s:'🎩 Meias Ofensivos (MO/MOC)',img:'img/papeis-meias.jpg',items:[
+ {n:'CJA · Construtor de Jogo Avançado',faz:'Armador clássico: arma de trás e procura o passe decisivo. (Tarefas: Apoio/Ataque)',a:['Passes','Visão de Jogo','Técnica'],ok:'atacantes móveis à frente dele',no:'esquema sem movimentação (ninguém recebe a enfiada)'},
+ {n:'ES · Enganche',faz:'O camisa 10 raiz: fica mais central, concentra a criação e participa menos da pressão/movimentação. (Tarefa: Apoio)',a:['Passes','Visão de Jogo','Técnica'],ok:'alas e pontas velozes ao redor dele',no:'contra-ataque e sufoco (ele não corre)'},
+ {n:'SS · Segundo Atacante',faz:'Parte de trás e ataca a área, chegando pra finalizar. O meia que vira 9. (Tarefa: Ataque)',a:['Finalização','Decisões'],ok:'F9 recuando e abrindo o corredor central',no:'outro armador ocupando o mesmo espaço'},
+ {n:'TQ · Trequartista',faz:'Muito livre pra se movimentar e receber a bola; prioriza criatividade e ataque. (Tarefa: Ataque)',a:['Passe','Drible','Tomada de Dec.'],ok:'elenco com craque diferenciado',no:'time operário (vive de esforço coletivo)'}
 ]},
-{s:'🎯 Meias Centrais',items:[
- {n:'Box-to-Box',faz:'Da área à área: desarma lá atrás e aparece pra finalizar na frente.',a:['Resistência','Esforço','Desarme','Finalização'],ok:'quase qualquer esquema (o coringa)',no:'times que exigem um meia especialista fixo'},
- {n:'Meia Central',faz:'O obediente: executa com equilíbrio o que a instrução geral mandar.',a:['Passe','Tomada de Decisão','Trabalho de Equipe'],ok:'táticas balanceadas e rotações',no:'papéis criativos exigindo improviso constante'},
- {n:'Carrilero',faz:'Leva-e-traz do corredor: cobre o lado que a formação não ocupa naturalmente.',a:['Resistência','Passe','Trabalho de Equipe'],ok:'meios estreitos (losango, 4-3-1-2)',no:'meio-campo que já tem amplitude natural'},
- {n:'Mezzala',faz:'Ataca o espaço entre lateral e zagueiro (half-space) trocando posição com o ponta.',a:['Drible','Primeiro Toque','Mov. sem Bola','Passe'],ok:'pontas abertos + laterais que sobem',no:'meio-campo congestionado de armadores'},
- {n:'Armador (Organizador)',faz:'O cérebro do time: recebe em qualquer lugar, gira e decide o jogo.',a:['Visão','Passe','Tomada de Decisão','Criatividade'],ok:'atacantes móveis que atacam espaço',no:'jogo direto (a bola literalmente pula ele)'}
+{s:'💨 Jogadores de Lado',img:'img/papeis-lado.jpg',items:[
+ {n:'EI/ED · Extremo',faz:'Fica aberto pela linha lateral, dribla e cruza pra área. (Tarefa: Ataque)',a:['Velocidade','Drible','Cruzamentos'],ok:'PPL ou JA (Jogador Alvo) na área',no:'Falso 9 (cruza pra ninguém)'},
+ {n:'AI · Avançado Interior',faz:'Parte aberto, mas corta pra dentro procurando finalizar ou criar. O famoso "ponta que corta". (Tarefa: Ataque)',a:['Finalização','Técnica','Drible'],ok:'Falso 9 + Lateral Ofensivo sobrepujando por fora',no:'plano de jogo baseado em cruzamento'},
+ {n:'MA · Médio Ala',faz:'Atua aberto, mais como um meia de lado; ajuda na construção e nos cruzamentos. (Tarefa: Apoio)',a:['Passes','Cruzamentos'],ok:'equilíbrio em linha de 4 meias',no:'exigir dele decisão individual de ponta'},
+ {n:'AD/AE · Extremo Ofensivo / Avançado Exterior',faz:'Jogador de lado com comportamento mais ofensivo e direto. (Tarefa: Ataque)',a:['Velocidade','Drible'],ok:'contra-ataques explorando o corredor',no:'posse paciente demais (impacienta ele)'}
 ]},
-{s:'🎩 Meia-Atacantes',items:[
- {n:'Meia-Atacante (Clássico)',faz:'Vive nas costas dos volantes adversários: arma e também finaliza.',a:['Visão','Passe','Criatividade','Chutes de Longe'],ok:'esquemas com um 9 fixo referenciando',no:'times sem movimentação à frente dele'},
- {n:'Enganche',faz:'Para entre as linhas e o jogo gira em torno dele. Zero velocidade permitida.',a:['Visão','Passe','Técnica','Tomada de Decisão'],ok:'alas e pontas velozes ao redor',no:'contra-ataque e gegenpress (ele não corre)'},
- {n:'Atacante Sombra',faz:'Meia que ataca a área como um segundo camisa 9, sem a marcação de um.',a:['Mov. sem Bola','Finalização','Antecipação','Aceleração'],ok:'Falso 9 abrindo o corredor central',no:'meia-armador no mesmo espaço (duplo engarrafamento)'}
-]},
-{s:'💨 Pontas / Extremos',items:[
- {n:'Extremo (Ponta Clássico)',faz:'Busca a linha de fundo e cruza. Alegria de centroavante de área.',a:['Velocidade','Drible','Cruzamento'],ok:'Referência ou Finalizador na área',no:'Falso 9 (cruza pra ninguém)'},
- {n:'Extremo Invertido',faz:'Pé trocado: corta pra dentro pra finalizar ou enfiar passes.',a:['Drible','Finalização','Passe','Mov. sem Bola'],ok:'Falso 9 + lateral que sobrepuja por fora',no:'plano de jogo baseado em cruzamento'},
- {n:'Avançado Interior',faz:'Mais atacante do que ponta: ataca o espaço e decide com finalizações.',a:['Velocidade','Finalização','Mov. sem Bola'],ok:'referência que segura + meia que alimenta',no:'exigir dele construção pelos lados'}
-]},
-{s:'⚽ Atacantes',items:[
- {n:'Avançado',faz:'O 9 completo: corre atrás, recebe, gira e finaliza de todo jeito.',a:['Velocidade','Finalização','Primeiro Toque','Trabalho de Equipe'],ok:'contra-ataque e posse com mobilidade',no:'jogo direto sem ninguém por perto'},
- {n:'Finalizador (Poacher)',faz:'Mora na área e só existe pro último toque. Texto de linha de impedimento.',a:['Finalização','Antecipação','Sangue Frio'],ok:'extremos cruzando em volume',no:'posse paciente (fica assistindo o jogo)'},
- {n:'Referência (Pivot)',faz:'O caminhão: segura de costas, ganha no alto e alimenta quem vem de trás.',a:['Força','Impulsão','Cabeceamento','Primeiro Toque'],ok:'jogo direto + chuva de cruzamentos',no:'tiki-taka rasteiro sem bola aérea'},
- {n:'Falso 9',faz:'Recua pro meio, arrasta o zagueiro e abre avenida pros pontas.',a:['Primeiro Toque','Criatividade','Passe','Drible'],ok:'pontas cortando pra dentro + sombra',no:'cruzamento como plano principal'},
- {n:'Nove e Meio',faz:'Híbrido de armador e 9: recua, combina e chega pra finalizar.',a:['Primeiro Toque','Passe','Finalização','Visão'],ok:'duplas de ataque móveis',no:'time estático sem movimentação ao redor'},
- {n:'Atacante de Pressão',faz:'O primeiro zagueiro do time: não deixa o adversário sair jogando em paz.',a:['Esforço','Resistência','Agressividade','Aceleração'],ok:'gegenpress e bloco alto',no:'bloco baixo (pressiona sozinho e morre)'}
+{s:'⚽ Atacantes',img:'img/papeis-atacantes.jpg',items:[
+ {n:'F9 · Falso 9',faz:'Recua pro meio, participa da criação e abre espaço pros companheiros entrarem na área. (Tarefa: Apoio)',a:['Passes','Visão de Jogo','Técnica'],ok:'pontas AI cortando + SS chegando',no:'cruzamento como plano principal'},
+ {n:'PL · Ponta-de-Lança',faz:'Atacante de área que vive pra finalizar e atacar os espaços. (Tarefa: Ataque)',a:['Finalização','Velocidade'],ok:'contra-ataque e posse com mobilidade',no:'pedir dele pivô e jogo aéreo'},
+ {n:'PPL · Ponta-de-Lança Fixo',faz:'Fica mais fixo na linha, esperando a bola certa pro último toque. (Tarefa: Ataque)',a:['Finalização','Composto'],ok:'extremos cruzando em volume',no:'posse paciente (fica assistindo o jogo)'},
+ {n:'AP · Avançado Pressionante',faz:'Pressiona os zagueiros e tenta atrapalhar a saída de bola do adversário. O primeiro marcador. (Tarefa: Ataque)',a:['Índice de Trabalho','Pressão','Velocidade'],ok:'sufoco e bloco alto',no:'bloco baixo (pressiona sozinho e morre)'},
+ {n:'AC · Avançado Completo',faz:'Faz praticamente tudo: finaliza, cria, segura a bola, cai pelos lados e ataca espaços. (Tarefa: Ataque)',a:['Técnica','Finalização','Passes'],ok:'qualquer estilo — SE o jogador for completo',no:'atacante comum (sem atributo, vira nada)'},
+ {n:'JA · Jogador Alvo',faz:'O pivô: recebe bolas longas, disputa pelo alto e segura a bola pros companheiros. (Tarefa: Ataque)',a:['Força','Cabeceio','Posicionamento'],ok:'jogo direto + chuva de cruzamentos',no:'tiki-taka rasteiro sem bola aérea'}
 ]}];
 function renderRoles(){
   document.getElementById('rolesBox').innerHTML=ROLES.map(g=>`
    <details><summary>${g.s}</summary><div class="in" style="padding-top:12px">
+    ${g.img?`<img class="gimg" loading="lazy" src="${g.img}" alt="Guia visual — ${g.s}" onclick="zoomT('${g.img}')"><div class="gcap">👆 toca na imagem pra ampliar e ver o campinho de cada função em movimento</div>`:''}
     ${g.items.map(r=>`<div class="role">
       <b>${r.n}</b>
       <p>${r.faz}</p>
@@ -2937,7 +2979,12 @@ function renderRoles(){
       <div class="rline">✔ <b>Combina com:</b> ${r.ok}</div>
       <div class="rline bad">✖ <b>Evite:</b> ${r.no}</div>
     </div>`).join('')}
-   </div></details>`).join('');
+   </div></details>`).join('')
+  +`<details><summary>⚖️ Diferenças entre funções parecidas + Tarefas</summary><div class="in" style="padding-top:12px">
+    <img class="gimg" loading="lazy" src="img/papeis-diferencas.jpg" alt="Extremo x AI x Mezzala x Carrilero" onclick="zoomT('img/papeis-diferencas.jpg')"><div class="gcap">👆 Extremo (fica aberto) x Avançado Interior (corta pra dentro) x Mezzala (meio-espaço) x Carrilero (corredor)</div>
+    <img class="gimg" loading="lazy" src="img/papeis-tarefas.jpg" alt="Sobre as tarefas D/S/A" onclick="zoomT('img/papeis-tarefas.jpg')"><div class="gcap">👆 Função + Tarefa (Defesa/Apoio/Ataque) = o comportamento completo do jogador!</div>
+    <div class="role"><b>💡 Regra de ouro</b><p>Não existe função "melhor" que outra. O segredo é escolher as funções certas pro SEU estilo de jogo e pros jogadores que você tem no elenco. Depois: <b>ADAPTE • TESTE • EVOLUA</b> 🔁</p></div>
+   </div></details>`;
 }
 
 /* ============ QUIZ DE ESTILO ============ */
