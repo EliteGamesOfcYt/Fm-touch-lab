@@ -272,7 +272,8 @@ var CLUBES = [
   {id:'brasil',n:'Seleção Brasileira',c1:'#ffd200',c2:'#009a44',d:'cbf.com.br'}
 ];
 
-function escUrl(c){ return 'https://www.google.com/s2/favicons?domain='+c.d+'&sz=128'; }
+function escUrl(c){ return 'https://favicon.im/'+c.d+'?larger=true'; }
+function escUrl2(c){ return 'https://www.google.com/s2/favicons?domain='+c.d+'&sz=128'; }
 
 /* ---------- cor: utilidades de contraste ---------- */
 function hx2rgb(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(function(x){return x+x;}).join('');return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)];}
@@ -321,14 +322,16 @@ function applyTheme(c){
 function initials(n){var w=(n||'').replace(/[^A-Za-zÀ-ÿ ]/g,'').split(' ').filter(Boolean);var s=((w[0]||'?')[0]+(w[1]?w[1][0]:''));return s.toUpperCase();}
 function crest(c,size,extra){
   size=size||26;
-  return '<span class="lbcrest'+(extra||'')+'" data-i="'+initials(c.n)+'" style="width:'+size+'px;height:'+size+'px;background:'+c.c1+';color:'+textOn(c.c1)+'"><img alt="" loading="lazy" src="'+escUrl(c)+'" onerror="this.parentNode.classList.add(\'noi\');this.remove()"></span>';
+  return '<span class="lbcrest'+(extra||'')+'" data-i="'+initials(c.n)+'" title="'+c.n+'" style="width:'+size+'px;height:'+size+'px;background:'+c.c1+';color:'+textOn(c.c1)+'"><i class="cbg"></i><img alt="" loading="lazy" src="'+escUrl(c)+'" onerror="if(!this.dataset.f){this.dataset.f=\'1\';this.src=\''+escUrl2(c)+'\'}else{this.parentNode.classList.add(\'noi\');this.remove()}"></span>';
 }
 
 /* ---------- CSS do módulo ---------- */
 var CSS=''+
 '.lbcrest{display:inline-flex;align-items:center;justify-content:center;border-radius:32%;overflow:hidden;border:1.5px solid #ffffff2e;flex:none;position:relative}'+
-'.lbcrest img{width:78%;height:78%;object-fit:contain}'+
-'.lbcrest.noi::before{content:attr(data-i);font-weight:900;font-size:.62em}'+
+'.lbcrest img{width:78%;height:78%;object-fit:contain;position:relative}'+
+'.lbcrest .cbg{position:absolute;inset:6%;border-radius:30%;background:#f4f6f9}'+
+'.lbcrest.noi .cbg{display:none}'+
+'.lbcrest.noi::before{content:attr(data-i);font-weight:900;font-size:.62em;position:relative}'+
 '.labchip{display:inline-flex;align-items:center;gap:7px;margin-left:4px;padding:4px 10px 4px 5px;border:1px solid var(--line);border-radius:99px;background:#ffffff08;cursor:pointer;max-width:170px;overflow:hidden}'+
 '.labchip:hover{border-color:var(--neon)}'+
 '.labchip-n{font-size:11.5px;font-weight:800;color:var(--txt);white-space:nowrap;text-overflow:ellipsis;overflow:hidden}'+
