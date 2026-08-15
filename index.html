@@ -600,7 +600,7 @@ PAGES.forEach(([id,label,desc])=>{
 });
 function go(id){
   if(id==='updates'){location.href='updates.html';return;}
-  if(id==='managerlab'){location.href='manager-lab.html';return;}
+  
   if(!validPages.includes(id)) id='home';
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id===id));
   document.querySelectorAll('[data-go]').forEach(b=>b.classList.toggle('on',b.dataset.go===id));
