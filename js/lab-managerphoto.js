@@ -3,6 +3,12 @@
    Foto própria → treinador de futebol com IA (identidade preservada).
    IA roda SÓ no backend (Edge Function do Supabase) — chave nunca aqui!
    Export: 260×310 PNG (padrão Football Manager).
+
+   Integração com o sistema de clubes existente:
+   - a fonte oficial do clube é LAB.getClub();
+   - o escudo visual é sempre produzido por LAB.crest();
+   - não existe uma segunda base nem uma segunda URL de escudos;
+   - se o escudo externo não permitir canvas, a exportação usa monograma.
    ============================================================ */
 (function () {
 window.LAB = window.LAB || {};
@@ -32,12 +38,15 @@ var DAILY_LIMIT = 10; /* por aparelho (proteção de custo) */
 /* ---------- estado ---------- */
 var sb = null;
 var photo = { orig: null, send: null };    /* orig p/ prévia; send = jpeg ≤1024 p/ IA */
-var club = null;                            /* objeto da base LAB.CLUBES */
+var club = null;                            /* SEMPRE o objeto retornado por LAB.getClub() */
 var role = 'manager', style = 'oficial', bg = 'neutro';
 var gen = { url: null, title: '' };         /* resultado da IA */
 var busy = false;
 var crop = { on: false, x: 0, y: 0, z: 1 }; /* enquadramento manual */
 var ROOT = null;
+var clubWatchTimer = null;
+var imEl = null;
+var crestCanvasAsset = { clubId: '', image: null, ready: false, token: 0 };
 
 /* ---------- CSS ---------- */
 var CSS = '' +
@@ -58,6 +67,10 @@ var CSS = '' +
 '.mpclub .lbcrest{width:22px;height:22px;border:none;flex:none}' +
 '.mpclub span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
 '.mpsel{display:flex;align-items:center;gap:10px;background:#0d1526;border:1.5px dashed var(--neon);border-radius:12px;padding:9px 11px;margin-bottom:8px;font-weight:800;font-size:13.5px}' +
+'.mpclubempty{display:flex;align-items:center;gap:10px;background:#0d1526;border:1.5px dashed var(--line);border-radius:12px;padding:12px 11px;margin-bottom:2px}' +
+'.mpclubempty .mpclubemptytext{flex:1;min-width:0}' +
+'.mpclubempty .mpclubemptytext strong{display:block;color:var(--txt);font-size:13.5px}' +
+'.mpclubempty .mpclubemptytext span{display:block;color:var(--sub);font-size:11.5px;line-height:1.4;margin-top:3px}' +
 '.mpbtn{background:var(--neon);color:#04160c;border:none;border-radius:12px;padding:13px 16px;font-size:15px;font-weight:900;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:8px}' +
 '.mpbtn:disabled{opacity:.55;cursor:wait}' +
 '.mpbtn.ghost{background:var(--card);border:1px solid var(--line);color:var(--txt);font-weight:800}' +
@@ -66,7 +79,12 @@ var CSS = '' +
 '@keyframes mpblink{50%{opacity:.45}}' +
 '.mperr{background:#2b1218;border:1px solid var(--bad);color:#ffd7dc;border-radius:12px;padding:11px 12px;font-size:13px;line-height:1.5;margin-top:8px}' +
 '.mpframe{position:relative;overflow:hidden;border-radius:14px;border:1.5px solid var(--neon2);margin:0 auto;touch-action:none;background:repeating-conic-gradient(#10182a 0% 25%,#0b1322 0% 50%) 0 0/20px 20px;user-select:none}' +
-'.mpframe img{position:absolute;transform-origin:0 0;max-width:none;-webkit-user-drag:none}' +
+'.mpframe>img{position:absolute;z-index:1;transform-origin:0 0;max-width:none;-webkit-user-drag:none}' +
+'.mpcrest-overlay{position:absolute;z-index:5;right:15%;top:61%;width:52px;height:52px;padding:4px;display:flex;align-items:center;justify-content:center;pointer-events:none;border-radius:34%;background:linear-gradient(145deg,var(--mpc1,#2eff8f),var(--mpc2,#111827));border:1px solid #ffffff80;box-shadow:0 3px 12px #000b,0 0 0 2px #0005}' +
+'.mpcrest-overlay:after{content:"";position:absolute;inset:3px;border-radius:29%;border:1px solid #ffffff44;pointer-events:none}' +
+'.mpcrest-overlay .lbcrest{position:relative;z-index:1;width:42px!important;height:42px!important;border:1px solid #ffffff70;box-shadow:0 1px 4px #0007}' +
+'.mpcrest-overlay .lbcrest img{position:relative;width:78%;height:78%;max-width:none;object-fit:contain}' +
+'.mpcrest-overlay .lbcrest .cbg{position:absolute}' +
 '.mpmeta{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:12px 0}' +
 '.mpmeta i{font-style:normal;background:#0d1526;border:1px solid var(--line);border-radius:99px;padding:5px 11px;font-size:11.5px;font-weight:800}' +
 '.mprow{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}' +
@@ -86,6 +104,81 @@ function dayCounter() {
   return o;
 }
 function bumpCounter(o) { try { localStorage.setItem('fmtl.mp_day', JSON.stringify(o)); } catch (e) {} }
+function clubKey(c) { return c && c.id ? String(c.id) : ''; }
+function safeColor(v, fallback) { return /^#[0-9a-f]{6}$/i.test(v || '') ? v : fallback; }
+function getLabClub() {
+  try { return typeof LAB.getClub === 'function' ? LAB.getClub() : null; } catch (e) { return null; }
+}
+function resetGenerated() {
+  gen.url = null;
+  gen.title = '';
+  crop = { on: false, x: 0, y: 0, z: 1 };
+  imEl = null;
+  crestCanvasAsset = { clubId: '', image: null, ready: false, token: crestCanvasAsset.token + 1 };
+}
+function syncClubFromLab(redraw) {
+  var next = getLabClub();
+  if (clubKey(next) === clubKey(club)) return false;
+  club = next;
+  /* resultado antigo não pode continuar identificado como o clube novo */
+  resetGenerated();
+  if (redraw && ROOT && !busy) { paint(); paintResult(); }
+  return true;
+}
+
+/*
+   LAB.crest() é a única fonte do escudo. Como a API existente devolve o HTML
+   pronto, estes helpers apenas leem as URLs que a própria LAB.crest() gerou;
+   nenhuma URL é inventada aqui.
+*/
+function crestSources(c) {
+  var out = { primary: '', fallback: '' };
+  if (!c || typeof LAB.crest !== 'function') return out;
+  try {
+    var holder = document.createElement('div');
+    holder.innerHTML = LAB.crest(c, 48);
+    var img = holder.querySelector('img');
+    if (!img) return out;
+    out.primary = img.getAttribute('src') || img.src || '';
+    var handler = img.getAttribute('onerror') || '';
+    var match = handler.match(/this\.src\s*=\s*'([^']+)'/);
+    if (match) out.fallback = match[1];
+  } catch (e) {}
+  return out;
+}
+function crestMarkup(c, size, extra) {
+  if (!c || typeof LAB.crest !== 'function') return '';
+  try { return LAB.crest(c, size, extra || ''); } catch (e) { return ''; }
+}
+function initials(c) {
+  var words = (c && c.n ? c.n : '').replace(/[^A-Za-zÀ-ÿ0-9 ]/g, '').split(' ').filter(Boolean);
+  return ((words[0] || '?').charAt(0) + (words[1] ? words[1].charAt(0) : '')).toUpperCase();
+}
+function openClubPicker() {
+  if (typeof LAB.openClubPicker !== 'function') {
+    alert('O seletor oficial de clubes ainda está carregando. Tenta novamente em um instante.');
+    return;
+  }
+  LAB.openClubPicker(function () {
+    /* LAB.setClub() já salvou o clube; a leitura oficial continua sendo LAB.getClub(). */
+    syncClubFromLab(true);
+  });
+}
+function startClubWatcher() {
+  if (clubWatchTimer) return;
+  clubWatchTimer = setInterval(function () {
+    if (ROOT) syncClubFromLab(true);
+  }, 500);
+  if (window.addEventListener) {
+    window.addEventListener('storage', function (e) {
+      if (!e || e.key === 'fmtl.club') syncClubFromLab(true);
+    });
+    window.addEventListener('focus', function () { syncClubFromLab(true); });
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) syncClubFromLab(true);
+    });
+  }
+}
 
 /* ---------- prepara foto p/ IA (≤1024px, jpeg — original NUNCA é alterada) ---------- */
 function prepPhoto(file) {
@@ -105,21 +198,23 @@ function prepPhoto(file) {
       };
       img.onerror = rej;
       img.src = rd.result;
-    };
+           };
     rd.readAsDataURL(file);
   });
 }
 
 /* ---------- render ---------- */
-function gridHTML(q) {
-  q = (q || '').toLowerCase().trim();
-  return clubList().filter(function (c) { return !q || c.n.toLowerCase().indexOf(q) > -1; }).map(function (c) {
-    return '<button class="mpclub' + (club && club.id === c.id ? ' sel' : '') + '" data-club="' + c.id + '">' + LAB.crest(c, 22) + '<span>' + esc(c.n) + '</span></button>';
-  }).join('') || '<div style="grid-column:1/3;text-align:center;color:var(--sub);font-size:12.5px;padding:12px">Nenhum clube encontrado 😕</div>';
+function clubPanelHTML() {
+  if (club) {
+    return '<div class="mpsel">' + crestMarkup(club, 30) + '<div style="min-width:0"><div>' + esc(club.n) + '</div>' +
+      '<div style="display:flex;gap:5px;margin-top:3px"><i style="width:15px;height:15px;border-radius:50%;background:' + safeColor(club.c1, '#2eff8f') + ';border:1px solid #ffffff33;display:block"></i><i style="width:15px;height:15px;border-radius:50%;background:' + safeColor(club.c2, '#f2f2f2') + ';border:1px solid #ffffff33;display:block"></i></div></div>' +
+      '<button class="mpbtn ghost mini" id="mpClubChg" style="flex:none;margin-left:auto">Trocar</button></div>';
+  }
+  return '<div class="mpclubempty"><div class="mpclubemptytext"><strong>Nenhum clube selecionado</strong><span>Opcional: sem clube também dá para gerar a foto normalmente.</span></div><button class="mpbtn ghost mini" id="mpClubPick" style="flex:none">Escolher</button></div>';
 }
-
 function paint() {
   if (!ROOT) return;
+  syncClubFromLab(false);
   var dc = dayCounter();
   ROOT.innerHTML =
   '<div class="uchero" style="margin-bottom:14px">👔<h2 style="font-size:22px;font-weight:900;letter-spacing:.5px">MANAGER PHOTO LAB</h2>' +
@@ -133,13 +228,10 @@ function paint() {
     '<div class="mptips">💡 Funciona melhor com: <b>rosto visível</b> · de frente ou levemente de lado · cabeça + parte de cima do corpo · boa luz</div>' +
   '</div>' +
 
-  /* 2 · CLUBE */
-  '<div class="mpcard"><h3>🏟️ 2 · Clube da comissão</h3>' +
-    (club ? '<div class="mpsel">' + LAB.crest(club, 30) + '<div><div>' + esc(club.n) + '</div>' +
-      '<div style="display:flex;gap:5px;margin-top:3px"><i style="width:15px;height:15px;border-radius:50%;background:' + club.c1 + ';border:1px solid #ffffff33;display:block"></i><i style="width:15px;height:15px;border-radius:50%;background:' + club.c2 + ';border:1px solid #ffffff33;display:block"></i></div></div>' +
-      '<button class="mpbtn ghost mini" id="mpClubChg" style="flex:none;margin-left:auto">Trocar</button></div>' : '') +
-    (club ? '' : '<input class="ucinp" id="mpQ" style="width:100%;margin-bottom:8px" placeholder="🔎 Pesquisar clube...">' +
-    '<div class="mpgrid" id="mpGrid">' + gridHTML('') + '</div>') +
+  /* 2 · CLUBE — usa o mesmo seletor do sistema principal */
+  '<div class="mpcard"><h3>🏟️ 2 · Meu Clube</h3>' +
+    clubPanelHTML() +
+    '<div style="font-size:11.5px;color:var(--sub);line-height:1.45;margin-top:7px">A seleção é compartilhada com o Meu Clube do Lab e atualiza na hora.</div>' +
   '</div>' +
 
   /* 3 · FUNÇÃO */
@@ -183,14 +275,16 @@ function paint() {
 
 function paintResult() {
   var box = $('mpResult'); if (!box) return;
-  if (!gen.url) { box.innerHTML = ''; return; }
+  if (!gen.url) { box.innerHTML = ''; crestCanvasAsset = { clubId: '', image: null, ready: false, token: crestCanvasAsset.token + 1 }; return; }
+  var badge = club ?
+    '<div class="mpcrest-overlay" id="mpCrestOverlay" aria-label="Escudo de ' + esc(club.n) + '" style="--mpc1:' + safeColor(club.c1, '#2eff8f') + ';--mpc2:' + safeColor(club.c2, '#111827') + '">' + crestMarkup(club, 42, ' mp-result-crest') + '</div>' : '';
   box.innerHTML =
   '<div class="mpcard" style="margin-top:14px;border-color:var(--neon2)"><h3 style="text-align:center">🏆 TEU TREINADOR TÁ PRONTO!</h3>' +
-    '<div class="mpframe" id="mpFrame" style="width:' + VIEW_W + 'px;height:' + VIEW_H + 'px"></div>' +
-    '<div class="mpratio">📐 ' + OUT_W + ' × ' + OUT_H + ' — proporção oficial do FM</div>' +
+    '<div class="mpframe" id="mpFrame" style="width:' + VIEW_W + 'px;height:' + VIEW_H + 'px">' + badge + '</div>' +
+    '<div class="mpratio">📐 ' + OUT_W + ' × ' + OUT_H + ' — proporção oficial do FM' + (club ? ' · escudo real do clube' : '') + '</div>' +
     '<div class="mpzoom" id="mpZoomRow" style="display:' + (crop.on ? 'flex' : 'none') + '">🔍 <input type="range" id="mpZoom" min="100" max="320" value="' + Math.round(crop.z * 100) + '"></div>' +
     '<div class="mpmeta">' +
-      '<i>🏟️ ' + esc(club ? club.n : '—') + '</i><i>' + roleOf(role).ic + ' ' + roleOf(role).n + '</i>' +
+      '<i>🏟️ ' + esc(club ? club.n : 'Sem clube') + '</i><i>' + roleOf(role).ic + ' ' + roleOf(role).n + '</i>' +
       '<i>' + styleOf(style).ic + ' ' + styleOf(style).n + '</i><i>🖼️ PNG</i>' +
     '</div>' +
     '<div class="mprow">' +
@@ -206,22 +300,28 @@ function paintResult() {
 
 /* ---------- interações ---------- */
 function bind() {
-  $('mpUp').addEventListener('click', function () { $('mpFile').click(); });
-  $('mpFile').addEventListener('change', function () {
-    var f = this.files && this.files[0]; if (!f) return;
-    if (!/^image\/(jpeg|jpg|png)$/.test(f.type)) { alert('Aceito só JPG e PNG! 😅'); return; }
-    prepPhoto(f).then(function (p) {
-      photo = p; gen.url = null;
-      var pv = $('mpPrev'); pv.src = p.orig; pv.style.display = 'block';
-      $('mpUp').querySelector('div:nth-child(2)').innerHTML = '✅ Foto carregada! <span style="color:var(--sub);font-weight:700">(toca pra trocar)</span>';
-      paintResult();
-    }).catch(function () { alert('Não consegui ler essa foto 😕 tenta outra!'); });
-  });
-  var q = $('mpQ');
-  if (q) q.addEventListener('input', function () { $('mpGrid').innerHTML = gridHTML(this.value); bindGrid(); });
-  bindGrid();
+  var up = $('mpUp');
+  var fileInput = $('mpFile');
+  if (up && fileInput) {
+    up.addEventListener('click', function () { fileInput.click(); });
+    fileInput.addEventListener('change', function () {
+      var f = this.files && this.files[0]; if (!f) return;
+      if (!/^image\/(jpeg|jpg|png)$/.test(f.type)) { alert('Aceito só JPG e PNG! 😅'); return; }
+      prepPhoto(f).then(function (p) {
+        photo = p; gen.url = null; gen.title = '';
+        var pv = $('mpPrev'); if (pv) { pv.src = p.orig; pv.style.display = 'block'; }
+        var label = $('mpUp') && $('mpUp').querySelector('div:nth-child(2)');
+        if (label) label.innerHTML = '✅ Foto carregada! <span style="color:var(--sub);font-weight:700">(toca pra trocar)</span>';
+        paintResult();
+      }).catch(function () { alert('Não consegui ler essa foto 😕 tenta outra!'); });
+    });
+  }
+
   var chg = $('mpClubChg');
-  if (chg) chg.addEventListener('click', function () { club = null; paint(); });
+  if (chg) chg.addEventListener('click', openClubPicker);
+  var pick = $('mpClubPick');
+  if (pick) pick.addEventListener('click', openClubPicker);
+
   document.querySelectorAll('#mpRoles .mpop').forEach(function (b) {
     b.addEventListener('click', function () { role = b.dataset.role; paint(); paintResult(); });
   });
@@ -231,92 +331,160 @@ function bind() {
   document.querySelectorAll('#mpBg .mpop').forEach(function (b) {
     b.addEventListener('click', function () { bg = b.dataset.bg; paint(); paintResult(); });
   });
-  $('mpGo').addEventListener('click', generate);
-}
-function bindGrid() {
-  document.querySelectorAll('#mpGrid .mpclub').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var list = clubList();
-      for (var i = 0; i < list.length; i++) if (list[i].id === b.dataset.club) { club = list[i]; break; }
-      paint(); paintResult();
-    });
-  });
+  var go = $('mpGo');
+  if (go) go.addEventListener('click', generate);
 }
 
 /* ---------- geração ---------- */
 var STAGE_MSGS = ['🧠 Preparando seu Manager...', '🎨 Aplicando identidade do clube...', '📐 Finalizando imagem para FM...'];
 var stageTimer = null, stageIx = 0;
 function stageStart() {
+  var stage = $('mpStage');
+  if (!stage) return;
   stageIx = 0;
-  $('mpStage').innerHTML = '<div class="mpstatus">' + STAGE_MSGS[0] + '</div>';
+  stage.innerHTML = '<div class="mpstatus">' + STAGE_MSGS[0] + '</div>';
   stageTimer = setInterval(function () {
     stageIx = (stageIx + 1) % STAGE_MSGS.length;
     var s = $('mpStage'); if (s) s.innerHTML = '<div class="mpstatus">' + STAGE_MSGS[stageIx] + '</div>';
   }, 3200);
 }
 function stageStop() { clearInterval(stageTimer); var s = $('mpStage'); if (s) s.innerHTML = ''; }
-
+function clubPayload(c) {
+  var src = c ? crestSources(c) : { primary: '' };
+  var c1 = c ? safeColor(c.c1, '') : '';
+  var c2 = c ? safeColor(c.c2, '') : '';
+  return {
+    image: photo.send,
+     /* campos novos, com os nomes solicitados */
+    clubId: c ? c.id : null,
+    clubName: c ? c.n : '',
+    crestUrl: c ? (src.primary || '') : '',
+    clubColor1: c1,
+    clubColor2: c2,
+    /* aliases antigos: mantêm compatibilidade com qualquer backend/cache antigo */
+    c1: c1,
+    c2: c2,
+    role: role,
+    style: style,
+    bg: bg
+  };
+}
+function showGenerationError(m) {
+  var stage = $('mpStage');
+  if (stage) stage.innerHTML = '<div class="mperr">😵 Deu ruim na geração:<br><b>' + esc(m || 'erro desconhecido') + '</b><br><span style="font-size:11.5px;opacity:.8">Tenta de novo — se repetir, fala com o chefe no Update Center 📰</span></div>';
+}
 function generate() {
   if (busy) return;
   if (!photo.send) { alert('Primeiro envia tua foto 📷 (passo 1)!'); return; }
-  if (!club) { alert('Escolhe o clube 🏟️ (passo 2)!'); return; }
+  /* clube é opcional: sem seleção a IA continua funcionando sem escudo */
+  syncClubFromLab(false);
+  var requestClub = club;
+  var requestClubId = clubKey(requestClub);
   var dc = dayCounter();
   if (dc.n >= DAILY_LIMIT) { alert('Limite de hoje nesse aparelho (' + DAILY_LIMIT + ') 😴 amanhã libera de novo!'); return; }
   if (!sb) { alert('Sistema ainda inicializando… tenta de novo em 2 segundinhos!'); return; }
 
-  busy = true; var btn = $('mpGo'); btn.disabled = true; btn.textContent = '⏳ GERANDO...';
+  busy = true;
+  var btn = $('mpGo');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ GERANDO...'; }
   stageStart();
 
   sb.functions.invoke('manager-photo', {
-    body: { image: photo.send, clubName: club.n, c1: club.c1, c2: club.c2, role: role, style: style, bg: bg }
+    body: clubPayload(requestClub)
   }).then(function (r) {
-    stageStop(); busy = false;
-    btn.disabled = false; btn.textContent = '✨ GERAR TREINADOR';
+    stageStop();
+    busy = false;
+    if (btn) { btn.disabled = false; btn.textContent = '✨ GERAR TREINADOR'; }
+
+    /* Se o usuário trocou de clube durante a IA, não etiqueta a imagem velha com o novo clube. */
+    var liveClub = getLabClub();
+    if (clubKey(liveClub) !== requestClubId) club = liveClub;
+    if (clubKey(club) !== requestClubId) {
+      resetGenerated();
+      paint(); paintResult();
+      return;
+    }
+
     if (r.error) {
-      var say = function (m) {
-        $('mpStage').innerHTML = '<div class="mperr">😵 Deu ruim na geração:<br><b>' + esc(m || 'erro desconhecido') + '</b><br><span style="font-size:11.5px;opacity:.8">Tenta de novo — se repetir, fala com o chefe no Update Center 📰</span></div>';
-      };
-      if (r.data && r.data.error) { say(r.data.error); return; }
+      if (r.data && r.data.error) { showGenerationError(r.data.error); return; }
       /* erro HTTP genérico: tenta ler a MENSAGEM REAL do corpo da resposta */
       if (r.error && r.error.context && r.error.context.json) {
         r.error.context.json()
-          .then(function (t) { say((t && t.error) || r.error.message); })
-          .catch(function () { say(r.error.message); });
+          .then(function (t) { showGenerationError((t && t.error) || r.error.message); })
+          .catch(function () { showGenerationError(r.error.message); });
         return;
       }
-      say(r.error && r.error.message); return;
+      showGenerationError(r.error && r.error.message); return;
     }
     if (!r.data || !r.data.image) {
-      $('mpStage').innerHTML = '<div class="mperr">😵 A IA não devolveu imagem. Repete o pedido!</div>';
+      var stage = $('mpStage');
+      if (stage) stage.innerHTML = '<div class="mperr">😵 A IA não devolveu imagem. Repete o pedido!</div>';
       return;
     }
     dc.n++; bumpCounter(dc);
     gen.url = r.data.image;
-    gen.title = 'manager_' + club.id;
-    crop = { on: false, x: 0, y: 0, z: 1 };
+    gen.title = 'manager' + (requestClub ? '_' + requestClub.id : '');
+           crop = { on: false, x: 0, y: 0, z: 1 };
     paint(); paintResult();
     /* rola até o resultado */
     var el = $('mpResult'); if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }).catch(function (e) {
     stageStop(); busy = false;
-    btn.disabled = false; btn.textContent = '✨ GERAR TREINADOR';
-    $('mpStage').innerHTML = '<div class="mperr">😵 Falhou: ' + esc(e && e.message ? e.message : 'erro de rede') + '<br>Verifica a internet e tenta de novo.</div>';
+    if (btn) { btn.disabled = false; btn.textContent = '✨ GERAR TREINADOR'; }
+    var stage = $('mpStage');
+    if (stage) stage.innerHTML = '<div class="mperr">😵 Falhou: ' + esc(e && e.message ? e.message : 'erro de rede') + '<br>Verifica a internet e tenta de novo.</div>';
   });
 }
 
+/* ---------- escudo para exportação ---------- */
+function prepareCrestForCanvas(c) {
+  var token = crestCanvasAsset.token + 1;
+  crestCanvasAsset = { clubId: clubKey(c), image: null, ready: false, token: token };
+  if (!c) return;
+  var sources = crestSources(c);
+  if (!sources.primary) return;
+  var img = new Image();
+  var triedFallback = false;
+  img.crossOrigin = 'anonymous';
+  img.onload = function () {
+    if (crestCanvasAsset.token !== token) return;
+    crestCanvasAsset.image = img;
+    crestCanvasAsset.ready = true;
+  };
+  img.onerror = function () {
+    if (!triedFallback && sources.fallback) {
+      triedFallback = true;
+      img.src = sources.fallback;
+      return;
+    }
+    if (crestCanvasAsset.token === token) {
+      crestCanvasAsset.image = null;
+      crestCanvasAsset.ready = false;
+    }
+  };
+  img.src = sources.primary;
+}
+
 /* ---------- enquadramento (drag + zoom sobre a moldura 260×310) ---------- */
-var imEl = null;
 function bindResult() {
   var fr = $('mpFrame'); if (!fr || !gen.url) return;
+  prepareCrestForCanvas(club);
+
   imEl = new Image();
+  imEl.crossOrigin = 'anonymous';
   imEl.onload = function () {
-    /* verta a imagem CENTRALIZADA por padrão (cabeça no meio do retrato) */
+    /* centraliza a imagem por padrão */
     if (crop.z === 1 && crop.x === 0 && crop.y === 0) {
       var s = coverScale();
       crop.x = (VIEW_W - imEl.naturalWidth * s) / 2;
       crop.y = (VIEW_H - imEl.naturalHeight * s) / 2;
     }
     clampCrop(); applyCrop();
+  };
+  imEl.onerror = function () {
+    /* backend normalmente devolve data URL; este aviso evita imagem quebrada se uma integração antiga devolver URL inválida */
+    var stage = $('mpStage');
+    if (stage) stage.innerHTML = '<div class="mperr">😵 A imagem do resultado não pôde ser carregada. Tenta gerar novamente.</div>';
   };
   imEl.src = gen.url;
   fr.appendChild(imEl);
@@ -339,20 +507,24 @@ function bindResult() {
   var zm = $('mpZoom');
   if (zm) zm.addEventListener('input', function () { crop.z = this.value / 100; clampCrop(); applyCrop(); });
 
-  $('mpAgain').addEventListener('click', function () {
+  var again = $('mpAgain');
+  if (again) again.addEventListener('click', function () {
     crop = { on: false, x: 0, y: 0, z: 1 }; generate();
   });
-  $('mpCrop').addEventListener('click', function () {
+     var cropBtn = $('mpCrop');
+  if (cropBtn) cropBtn.addEventListener('click', function () {
     crop.on = !crop.on;
-    $('mpZoomRow').style.display = crop.on ? 'flex' : 'none';
+    var row = $('mpZoomRow'); if (row) row.style.display = crop.on ? 'flex' : 'none';
     this.textContent = crop.on ? '✅ Aplicar enquadramento' : '✂️ Ajustar enquadramento';
   });
-  $('mpBgSw').addEventListener('click', function () {
+  var bgSw = $('mpBgSw');
+  if (bgSw) bgSw.addEventListener('click', function () {
     bg = (bg === 'neutro') ? 'clube' : 'neutro';
     paint(); paintResult();
     crop = { on: false, x: 0, y: 0, z: 1 }; generate();
   });
-  $('mpDl').addEventListener('click', exportPNG);
+  var dl = $('mpDl');
+  if (dl) dl.addEventListener('click', exportPNG);
 }
 
 function coverScale() {
@@ -373,19 +545,104 @@ function applyCrop() {
 }
 function placeCrop() { clampCrop(); applyCrop(); }
 
+/* ---------- desenho seguro do escudo/fallback no canvas ---------- */
+function roundedPath(ctx, x, y, w, h, r) {
+  r = Math.max(0, Math.min(r, Math.min(w, h) / 2));
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+function crestExportBox() {
+  var overlay = $('mpCrestOverlay'), frame = $('mpFrame');
+  if (!overlay || !frame || !club) return null;
+  var fr = frame.getBoundingClientRect();
+  var b = overlay.getBoundingClientRect();
+  var k = OUT_W / VIEW_W;
+  return { x: (b.left - fr.left) * k, y: (b.top - fr.top) * k, w: b.width * k, h: b.height * k };
+}
+function drawCrestOnCanvas(ctx, c, box) {
+  if (!c || !box) return;
+  var c1 = safeColor(c.c1, '#2eff8f');
+  var c2 = safeColor(c.c2, '#111827');
+  var radius = Math.min(box.w, box.h) * .26;
+  ctx.save();
+  roundedPath(ctx, box.x, box.y, box.w, box.h, radius);
+  var grad = ctx.createLinearGradient(box.x, box.y, box.x + box.w, box.y + box.h);
+  grad.addColorStop(0, c1); grad.addColorStop(1, c2);
+  ctx.fillStyle = grad; ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,.50)'; ctx.lineWidth = Math.max(1, box.w * .018); ctx.stroke();
+
+  var inset = Math.max(4, box.w * .11);
+  var ix = box.x + inset, iy = box.y + inset, iw = box.w - inset * 2, ih = box.h - inset * 2;
+  roundedPath(ctx, ix, iy, iw, ih, radius * .78);
+  ctx.fillStyle = '#f4f6f9'; ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,.45)'; ctx.stroke();
+
+  var drawn = false;
+  if (crestCanvasAsset.clubId === clubKey(c) && crestCanvasAsset.ready && crestCanvasAsset.image) {
+    try {
+      ctx.drawImage(crestCanvasAsset.image, ix + iw * .11, iy + ih * .11, iw * .78, ih * .78);
+      drawn = true;
+    } catch (e) { drawn = false; }
+  }
+  if (!drawn) {
+    ctx.fillStyle = c1;
+    ctx.font = '900 ' + Math.max(10, Math.round(Math.min(iw, ih) * .34)) + 'px Arial, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(initials(c), ix + iw / 2, iy + ih / 2);
+  }
+  ctx.restore();
+}
+function drawExportFallback(ctx, c) {
+  ctx.fillStyle = '#11151d'; ctx.fillRect(0, 0, OUT_W, OUT_H);
+  ctx.strokeStyle = safeColor(c && c.c1, '#2eff8f'); ctx.lineWidth = 2; ctx.strokeRect(9, 9, OUT_W - 18, OUT_H - 18);
+  ctx.fillStyle = '#dce6f3'; ctx.font = '900 15px Arial, sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('MANAGER PHOTO', OUT_W / 2, OUT_H / 2 - 10);
+  ctx.fillStyle = '#8fa0b8'; ctx.font = '12px Arial, sans-serif';
+  ctx.fillText('imagem indisponível para canvas', OUT_W / 2, OUT_H / 2 + 12);
+}
+
 /* ---------- export PNG 260×310 ---------- */
 function exportPNG() {
   if (!imEl || !imEl.naturalWidth || !gen.url) return;
-  var k = OUT_W / VIEW_W;                 /* tela → 260px */
+  var k = OUT_W / VIEW_W;
   var s = coverScale() * crop.z * k;
   var cv = document.createElement('canvas'); cv.width = OUT_W; cv.height = OUT_H;
   var cx = cv.getContext('2d');
+  var mainDrawn = true;
   cx.fillStyle = '#11151d'; cx.fillRect(0, 0, OUT_W, OUT_H);
-  cx.drawImage(imEl, crop.x * k, crop.y * k, imEl.naturalWidth * s, imEl.naturalHeight * s);
+  try {
+    cx.drawImage(imEl, crop.x * k, crop.y * k, imEl.naturalWidth * s, imEl.naturalHeight * s);
+  } catch (e) {
+    mainDrawn = false;
+    drawExportFallback(cx, club);
+  }
+  if (club) drawCrestOnCanvas(cx, club, crestExportBox());
+
+  var href = '';
+  try { href = cv.toDataURL('image/png'); } catch (e) {
+    /* origem sem CORS: gera um PNG limpo de fallback para o botão nunca quebrar */
+    var clean = document.createElement('canvas'); clean.width = OUT_W; clean.height = OUT_H;
+    var cleanCx = clean.getContext('2d');
+    drawExportFallback(cleanCx, club);
+    if (club) drawCrestOnCanvas(cleanCx, club, { x: OUT_W - 68, y: 22, w: 48, h: 48 });
+    try { href = clean.toDataURL('image/png'); } catch (ignore) { href = ''; }
+  }
+  if (!href) { alert('Não consegui preparar o PNG agora. Tenta novamente.'); return; }
   var a = document.createElement('a');
   a.download = (gen.title || 'manager') + '.png';
-  a.href = cv.toDataURL('image/png');
+  a.href = href;
   document.body.appendChild(a); a.click(); a.remove();
+  /* evita lint/alerta de variável não usada em browsers antigos */
+  if (!mainDrawn) { /* fallback já foi exportado */ }
 }
 
 /* ---------- boot ---------- */
@@ -398,11 +655,15 @@ function bootPage() {
       ROOT.innerHTML = '<div style="text-align:center;color:var(--sub);padding:26px 10px;line-height:1.7">🔧 O Manager Photo Lab tá sendo ligado pelo dono do site.<br>Volta já!</div>';
       return;
     }
+    club = getLabClub();
     paint();
+    startClubWatcher();
+  }).catch(function () {
+    ROOT.innerHTML = '<div style="text-align:center;color:var(--sub);padding:26px 10px;line-height:1.7">🔧 Não consegui inicializar o Manager Photo Lab agora.<br>Atualiza a página e tenta novamente.</div>';
   });
 }
 function boot() {
-  ROOT = $('mpRoot');
+                                       ROOT = $('mpRoot');
   if (ROOT) bootPage();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
