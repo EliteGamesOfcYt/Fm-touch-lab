@@ -158,6 +158,7 @@ header{border-bottom:1px solid var(--line);background:rgba(10,15,28,.92);positio
     <div class="f"><label class="lab">FORMAÇÃO</label>
       <select class="inp" id="tForm"></select></div>
     <div class="f"><label class="lab">DESCRIÇÃO (opcional)</label><textarea class="inp" id="tDesc" rows="3" maxlength="280" placeholder="Conta o estilo: posse, contra-ataque, gegenpress…"></textarea></div>
+    <div class="f"><label class="lab">ARQUIVO DA TÁTICA (.FMF)</label><input class="inp" id="tFile" type="file" accept=".fmf,application/octet-stream"><div id="tFileInfo" style="font-size:11.5px;color:var(--sub);margin-top:6px">Opcional · máximo 10 MB · o arquivo ficará disponível para baixar no teu perfil.</div></div>
     <button class="btn p big" id="tacSend">Publicar no meu perfil 🚀</button>
     <div class="hint" style="font-size:12px;color:var(--sub);margin-top:8px">Aparece no teu Manager Card e, se o perfil for público, todo mundo vê e avalia. ⭐</div>
   </div>
@@ -303,7 +304,7 @@ function trowHTML(t,own,p,c){
    '<div style="min-width:0"><div class="nm">'+esc(t.nome)+'</div>'+
    '<div class="mt">'+(hasClub?(crestOf(p,c,15)+' '+esc(c.n)+' · '):'')+'👤 '+esc(p.nome)+'<br>'+
    (avg?('⭐ '+avg+' · ❤️ '+t.votes_n+' favorito'+(t.votes_n>1?'s':'')):'sem favoritos ainda')+' · 📅 '+relTime(t.criado)+
-   (t.descricao?('<br>'+esc(t.descricao)):'')+'</div></div>'+right+'</div>';
+   (t.descricao?('<br>'+esc(t.descricao)):'')+(t.arquivo_url?('<br><a class=\"btn mini\" style=\"margin-top:7px\" href=\"'+esc(t.arquivo_url)+'\" download=\"'+esc(t.arquivo_nome||'tactica.fmf')+'\" target=\"_blank\" rel=\"noopener\">⬇️ Baixar .fmf</a>'):'')+'</div></div>'+right+'</div>';
 }
 
 /* ⭐ clubes acompanhados (Update Center) — separado do "Meu Clube" */
@@ -443,11 +444,35 @@ function bind(){
     if(tf&&!tf.options.length)tf.innerHTML=FORMS.map(function(f){return '<option>'+f+'</option>';}).join('');
     $('tacNew').addEventListener('click',function(){$('tacModal').classList.add('on');});
     $('tacClose').addEventListener('click',function(){$('tacModal').classList.remove('on');});
+    var tacticFile=$('tFile');
+    if(tacticFile)tacticFile.addEventListener('change',function(){
+      var f=this.files&&this.files[0],info=$('tFileInfo');
+      if(!info)return;
+      if(!f){info.textContent='Opcional · máximo 10 MB · o arquivo ficará disponível para baixar no teu perfil.';return;}
+      info.textContent='📎 '+f.name+' · '+Math.ceil(f.size/1024)+' KB';
+    });
+    function safeFileName(n){return String(n||'tactica.fmf').replace(/[^A-Za-z0-9._-]+/g,'_').slice(-100)||'tactica.fmf';}
+    function uploadTacticFile(file){
+      if(!file)return Promise.resolve({url:null,name:null});
+      if(!/\.fmf$/i.test(file.name))return Promise.reject(new Error('Escolhe um arquivo .fmf do FM Touch.'));
+      if(file.size>10*1024*1024)return Promise.reject(new Error('O arquivo .fmf precisa ter no máximo 10 MB.'));
+      var path=me.id+'/'+Date.now()+'_'+safeFileName(file.name);
+      return sb.storage.from('tactics').upload(path,file,{cacheControl:'3600',upsert:false,contentType:'application/octet-stream'})
+       .then(function(r){if(r.error)throw r.error;var u=sb.storage.from('tactics').getPublicUrl(path);return {url:u.data&&u.data.publicUrl?u.data.publicUrl:null,name:file.name};});
+    }
     $('tacSend').addEventListener('click',function(){
       var n=$('tNome').value.trim();if(n.length<3){$('tNome').focus();return;}
-      var b=this;b.disabled=true;
-      sb.from('tactics').insert({owner:me.id,nome:n,formacao:$('tForm').value,descricao:$('tDesc').value.trim()})
-       .then(function(r){b.disabled=false;if(r.error){alert(r.error.message);return;}$('tNome').value='';$('tDesc').value='';$('tacModal').classList.remove('on');render();});
+      var b=this,file=tacticFile&&tacticFile.files?tacticFile.files[0]:null;
+      b.disabled=true;b.textContent='⏳ enviando…';
+      uploadTacticFile(file).then(function(asset){
+        return sb.from('tactics').insert({owner:me.id,nome:n,formacao:$('tForm').value,descricao:$('tDesc').value.trim(),arquivo_url:asset.url,arquivo_nome:asset.name});
+      }).then(function(r){
+        b.disabled=false;b.textContent='Publicar no meu perfil 🚀';
+        if(r.error){alert(r.error.message);return;}
+        $('tNome').value='';$('tDesc').value='';if(tacticFile)tacticFile.value='';
+        var info=$('tFileInfo');if(info)info.textContent='Opcional · máximo 10 MB · o arquivo ficará disponível para baixar no teu perfil.';
+        $('tacModal').classList.remove('on');render();
+      }).catch(function(e){b.disabled=false;b.textContent='Publicar no meu perfil 🚀';alert('Não consegui enviar o .fmf: '+(e&&e.message?e.message:'erro desconhecido'));});
     });
     document.querySelectorAll('[data-del]').forEach(function(b){
       b.addEventListener('click',function(){
@@ -517,5 +542,5 @@ A.ready().then(function(sess){
 });
 })();
 </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2bb758d798ee003',t:'MTc4NjgzMTA5MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
