@@ -389,7 +389,7 @@ function generate() {
   if (btn) { btn.disabled = true; btn.textContent = '⏳ GERANDO...'; }
   stageStart();
 
-  sb.functions.invoke('manager-photo', {
+  sb.functions.invoke('super-worker', {
     body: clubPayload(requestClub)
   }).then(function (r) {
     stageStop();
