@@ -117,6 +117,7 @@ label.lab{display:block;font-size:12px;font-weight:700;color:var(--sub);margin:0
 .tcard .row{display:flex;gap:8px;margin-top:12px}
 .tcard .row .btn{flex:1;justify-content:center;padding:10px 8px;font-size:13px}
 .sendcard{border:1.5px dashed #2eff8f55;background:#2eff8f0a;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;min-height:240px}
+.gallery-rate{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px;padding-top:9px;border-top:1px solid #ffffff0d;color:var(--sub);font-size:12px;font-weight:800}.gallery-rate button{background:none;border:none;color:#71819a;cursor:pointer;font-size:19px;padding:1px 2px;line-height:1}.gallery-rate button.on,.gallery-rate button:hover{color:var(--warn)}.gallery-rate small{color:var(--sub);font-size:11px;font-weight:600}.community-wrap{grid-column:1/-1}.community-wrap>.slab{margin-bottom:8px}
 .sendcard b{font-size:16px}
 .sendcard p{font-size:13px;color:var(--sub)}
 /* ===== ANALYZER ===== */
@@ -844,6 +845,40 @@ function dlLink(u){
   }
   return u;
 }
+var galleryVotes={};
+var galleryVotesDb=false;
+function staticTacticKey(i){return 'static_'+i;}
+function loadGalleryVotes(){
+  var sb=window.LAB&&window.LAB.sb;if(!sb)return Promise.resolve();
+  return sb.from('gallery_votes').select('tactic_key,stars,voter').then(function(r){
+    if(r.error){galleryVotesDb=false;return;}
+    galleryVotesDb=true;galleryVotes={};
+    var me=window.LAB.auth&&window.LAB.auth.user?window.LAB.auth.user():null;
+    (r.data||[]).forEach(function(v){
+      var x=galleryVotes[v.tactic_key]||(galleryVotes[v.tactic_key]={sum:0,n:0,mine:0});
+      x.sum+=v.stars;x.n++;if(me&&v.voter===me.id)x.mine=v.stars;
+    });
+    renderTactics();
+  });
+}
+function staticTacticRating(i){
+  var key=staticTacticKey(i),db=galleryVotes[key]||{sum:0,n:0,mine:0},v=db.mine||0;
+  var avg=db.n?(db.sum/db.n).toFixed(1):'';
+  return '<div class="gallery-rate"><span>⭐ Avaliar:</span>'+[1,2,3,4,5].map(function(n){return '<button class="'+(v>=n?'on':'')+'" onclick="rateStaticTactic('+i+','+n+')" aria-label="'+n+' estrelas">★</button>';}).join('')+(avg?'<small>média '+avg+'/5 · '+db.n+' voto'+(db.n===1?'':'s')+'</small>':'<small>seja o primeiro a avaliar</small>')+'</div>';
+}
+function rateStaticTactic(i,v){
+  var u=window.LAB.auth&&window.LAB.auth.user?window.LAB.auth.user():null;
+  if(!u){alert('Entra na tua conta para avaliar uma tática.');return;}
+  var sb=window.LAB&&window.LAB.sb;
+  if(!sb){alert('O sistema de avaliações ainda está carregando.');return;}
+  sb.from('gallery_votes').upsert({tactic_key:staticTacticKey(i),voter:u.id,stars:v},{onConflict:'tactic_key,voter'}).then(function(r){
+    if(r.error){alert(r.error.message);return;}
+    loadGalleryVotes();
+  });
+}
+window.rateStaticTactic=rateStaticTactic;
+function escGallery(v){return String(v||'').replace(/[&<>\"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c];});}
+
 function renderTactics(){
   const q=(document.getElementById('tSearch').value||'').toLowerCase();
   const g=document.getElementById('tGrid');
@@ -860,6 +895,7 @@ function renderTactics(){
       <div class="pitch">${pitchSVG(tc.form,false,tc.kit)}</div>
       <p style="font-size:13.5px;color:var(--sub)">${tc.nota}</p>
       <div class="tags">${tags}</div>
+      ${staticTacticRating(i)}
       <div class="row">
         ${tc.link&&tc.link!=='#'?`<a class="btn p" href="${dlLink(tc.link)}">⬇️ Baixar .fmf</a>`:`<button class="btn p" onclick="dlGuide(${i})">📄 Baixar guia (.txt)</button>`}
         <button class="btn g" onclick="copyTactic(${i})">📋 Resumo</button>
@@ -873,7 +909,45 @@ function renderTactics(){
     <a class="btn p" href="${CONFIG.formsUrl}" target="_blank" rel="noopener">Enviar minha tática</a>
   </div>`;
   g.innerHTML=html;
+  renderCommunityTactics();
 }
+function renderCommunityTactics(){
+  var grid=document.getElementById('tGrid');if(!grid)return;
+  var old=document.getElementById('communityTactics');if(old)old.remove();
+  var sb=window.LAB&&window.LAB.sb;if(!sb)return;
+  Promise.all([
+    sb.from('tactics').select('*').order('criado',{ascending:false}),
+    sb.from('profiles').select('id,username,nome,publico'),
+    sb.from('tactic_votes').select('tactic,stars,voter')
+  ]).then(function(rs){
+    var tacs=rs[0].data||[],profiles=rs[1].data||[],votes=rs[2].data||[];
+    var byId={};profiles.forEach(function(p){byId[p.id]=p;});
+    var q=(document.getElementById('tSearch').value||'').toLowerCase().trim();
+    var rows=tacs.filter(function(t){
+      var p=byId[t.owner];if(!p||!p.publico)return false;
+      var hay=(t.nome+' '+(t.descricao||'')+' '+(p.nome||'')+' '+(p.username||'')).toLowerCase();
+      return !q||hay.indexOf(q)>-1;
+    });
+    if(!rows.length)return;
+    var me=window.LAB.auth&&window.LAB.auth.user?window.LAB.auth.user():null;
+    var wrap=document.createElement('div');wrap.id='communityTactics';wrap.className='community-wrap';
+    wrap.innerHTML='<div class="slab">🌟 TÁTICAS PUBLICADAS PELA COMUNIDADE</div>'+rows.map(function(t){
+      var p=byId[t.owner],vv=votes.filter(function(v){return v.tactic===t.id;}),sum=vv.reduce(function(a,v){return a+v.stars;},0),avg=vv.length?(sum/vv.length).toFixed(1):'';
+      var mine=me&&vv.find(function(v){return v.voter===me.id;});
+      var stars=[1,2,3,4,5].map(function(n){return '<button class="'+(mine&&mine.stars>=n?'on':'')+'" data-db-tactic="'+t.id+'" data-db-stars="'+n+'" aria-label="'+n+' estrelas">★</button>';}).join('');
+      var file=t.arquivo_url?'<a class="btn g" style="margin-top:8px" href="'+escGallery(t.arquivo_url)+'" download="'+escGallery(t.arquivo_nome||'tactica.fmf')+'" target="_blank" rel="noopener">⬇️ Baixar .fmf</a>':'';
+      return '<div class="card tcard"><span class="tag g" style="margin-bottom:5px">🌟 COMUNIDADE</span><h3>'+escGallery(t.nome)+'</h3><div class="by">'+escGallery(t.formacao)+' · por <a href="manager.html?u='+encodeURIComponent(p.username)+'"><b>'+escGallery(p.nome||p.username)+'</b></a></div>'+(t.descricao?'<p style="font-size:13.5px;color:var(--sub);margin-top:9px">'+escGallery(t.descricao)+'</p>':'')+file+'<div class="gallery-rate"><span>⭐ Avaliar:</span>'+stars+(avg?'<small>média '+avg+'/5 · '+vv.length+' voto'+(vv.length===1?'':'s')+'</small>':'<small>seja o primeiro a avaliar</small>')+'</div></div>';
+    }).join('');
+    var send=grid.querySelector('.sendcard');if(send)grid.insertBefore(wrap,send);else grid.appendChild(wrap);
+    wrap.querySelectorAll('[data-db-stars]').forEach(function(b){b.addEventListener('click',function(){
+      var u=window.LAB.auth&&window.LAB.auth.user?window.LAB.auth.user():null;
+      if(!u){alert('Entra na tua conta para avaliar uma tática.');return;}
+      b.disabled=true;
+      sb.from('tactic_votes').upsert({tactic:+b.dataset.dbTactic,voter:u.id,stars:+b.dataset.dbStars},{onConflict:'tactic,voter'}).then(function(r){if(r.error)alert(r.error.message);renderCommunityTactics();});
+    });});
+  }).catch(function(){/* galeria estática continua funcionando mesmo sem a tabela comunitária */});
+}
+
 function copyTactic(i){
   const tc=TACTICS[i];
   copyText(`⚽ TÁTICA — ${tc.t}\n📐 Formação: ${FORMS[tc.form].label}\n🏷️ Estilo: ${tc.estilos.join(', ')}\n📝 ${tc.nota}\n⚙️ Instruções: ${tc.inst.join(' · ')}\n👤 Autor: ${tc.autor}\nvia FM Touch Lab`);
@@ -4027,8 +4101,9 @@ function parsePrintData(slotTexts){
 /* init */
 renderTactics();
 renderScout();
+if(window.LAB&&LAB.auth&&LAB.auth.ready)LAB.auth.ready().then(function(){loadGalleryVotes().then(function(){renderCommunityTactics();});});
 renderFreeList();
 renderRoles();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2ba4ec2dfd4f63a',t:'MTc4NjgxOTAxNg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2bb08a05f0d181b',t:'MTc4NjgyNjYyOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2ba4ec2dfd4f63a',t:'MTc4NjgxOTAxNg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2c33776de569e06',t:'MTc4NjkxMjQzMw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
