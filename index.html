@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="img/elite-games-logo.png">
 <title>FM Touch Lab | Ferramentas para FM Touch 21 (base 2026)</title>
 <style>
 :root{
@@ -14,6 +15,7 @@ html{scroll-behavior:smooth}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--txt);line-height:1.5;padding-bottom:72px}
 a{color:var(--neon2);text-decoration:none}
 button{font-family:inherit}
+.eg-logo{width:58px;height:38px;object-fit:cover;border-radius:9px;border:1px solid #ffffff2b;box-shadow:0 2px 12px #0008;flex:none}.eg-brand{display:flex;align-items:center;justify-content:center;gap:14px;margin:28px auto 0;padding:14px 16px;max-width:760px;border:1px solid #ffffff18;border-radius:16px;background:#08111d}.eg-brand img{width:100px;height:64px;object-fit:cover;border-radius:8px}.eg-brand b{color:var(--txt);display:block;font-size:14px}.eg-brand span{color:var(--sub);display:block;font-size:11.5px;margin-top:3px}.legal-note{font-size:11px;color:var(--sub);line-height:1.55;margin-top:10px}.legal-note b{color:var(--txt)}
 /* ===== HEADER / NAV ===== */
 header{position:sticky;top:0;z-index:60;background:rgba(10,15,28,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .nav{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:10px 16px}
@@ -201,7 +203,7 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
 <header>
   <nav class="nav">
     <div class="logo" data-go="home">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#2eff8f" stroke-width="2"/><path d="M12 7l3 2.2-1.2 3.6h-3.6L9 9.2 12 7z" fill="#2eff8f"/><path d="M12 2v5M21.6 9l-4.6 1.4M17.8 20l-3-3.6M6.2 20l3-3.6M2.4 9L7 10.4" stroke="#2eff8f" stroke-width="1.4"/></svg>
+      <img class="eg-logo" src="img/elite-games-logo.png" alt="Elite Games">
       <span>FM Touch <b>Lab</b></span>
     </div>
     <div id="labChip" class="labchip" data-go="personal" style="display:none" title="Meu clube"></div>
@@ -237,7 +239,6 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
     <button class="mcard" data-go="personal"><span class="ic">⚙️</span><b>Clube &amp; Perfil<span class="novo">NOVO</span></b><span>Escolha teu clube do coração, deixe o Lab com a tua cara e crie teu perfil de manager estilo FM.</span><span class="go">Abrir →</span></button>
     <button class="mcard" data-go="updates"><span class="ic">📰</span><b>Update Center<span class="novo">NOVO</span></b><span>Tudo que mudou no update: transferências, jogadores, clubes e mais — filtrado pelos TEUS clubes favoritos.</span><span class="go">Abrir →</span></button>
     
-    <button class="mcard" data-go="ideias"><span class="ic">🚀</span><b>Novidades</b><span>O que vem por aí: tática da semana, comunidade e IA visual completa.</span><span class="go">Abrir →</span></button>
   </div>
 </main>
 
@@ -538,25 +539,11 @@ footer{max-width:1100px;margin:34px auto 0;padding:22px 16px;color:var(--sub);fo
   </div>
 </main>
 
-<!-- ============ NOVIDADES ============ -->
-<main class="page" id="ideias">
-  <button class="crumb" data-go="home">← Menu</button>
-  <div class="h2"><span class="dot"></span> Próximas Novidades</div>
-  <p class="lead">O que estamos preparando pro Lab (da comunidade pra comunidade):</p>
-  <div class="grid">
-    <div class="card rcard" data-go="quiz"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Ferramenta</div><h3>🎭 Quiz de Estilo</h3><p>Descubra sua alma tática em 6 perguntas e saia com instruções prontas. Já disponível!</p></div>
-    <div class="card rcard" data-go="papeis"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Conteúdo</div><h3>📚 Guia de Papéis</h3><p>As 33 funções do guia oficial FT21: siglas, atributos-chave e imagens ilustradas. Já disponível!</p></div>
-    <div class="card rcard" data-go="desafios"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ No ar</span><div class="num">Conteúdo</div><h3>💪 Saves Desafio</h3><p>Seis desafios com nível de dificuldade pra zerar o jogo. Já disponível!</p></div>
-    <div class="card rcard" data-go="analisador"><span class="pill" style="background:#2eff8f1a;color:var(--neon)">✅ TURBINADO</span><div class="num">Fase 2A</div><h3>📸 Raio-X por Print</h3><p>Leitura turbinada e relatório COMPLETO: DNA tático, raio-x em texto, plano de ajuste passo a passo, papéis certos e matchups do seu estilo. Sem cadastro, sem chave, sem custo!</p></div>
-    <div class="card rcard soon"><span class="pill">Em breve</span><div class="num">Fase 2B</div><h3>🤖 IA visual completa</h3><p>Uma IA que literalmente ENXERGA o print (posições, setas e papéis desenhados) e dá conselhos em texto. Essa precisa de um servidorzinho — chega em breve.</p></div>
-    <div class="card rcard"><div class="num">Comunidade</div><h3>🏆 Tática da semana</h3><p>Votação aberta na melhor tática enviada, com destaque na página inicial e badge pro autor.</p></div>
-    <div class="card rcard"><div class="num">Comunidade</div><h3>💬 Grupo da comunidade</h3><p>Espaço pra trocar save, tática e dica — comentários nas táticas e grupo no WhatsApp/Discord.</p></div>
-  </div>
-</main>
-
 <footer>
-  <p><b style="color:var(--txt)">FM Touch Lab</b> — feito com 💚 pela comunidade FM Touch 21.<br>
+  <div class="eg-brand"><img src="img/elite-games-logo.png" alt="Elite Games"><div><b>Elite Games · FM Touch Lab</b><span>Projeto independente da comunidade.</span></div></div>
+  <p style="margin-top:14px"><b style="color:var(--txt)">FM Touch Lab</b> — feito com 💚 pela comunidade FM Touch 21.<br>
   Projeto de fãs, sem vínculo com a Sports Interactive/SEGA.</p>
+  <p class="legal-note"><b>Conteúdo independente:</b> código, textos, curadoria, layout e ferramentas são do Elite Games/FM Touch Lab. Reprodução integral sem autorização poderá gerar pedido de remoção, denúncia à plataforma/host e outras medidas cabíveis. Marcas e elementos do jogo pertencem aos seus respectivos titulares.</p>
 </footer>
 
 <div id="toast"></div>
@@ -586,9 +573,7 @@ const PAGES=[
  ['desafios','💪 Desafios','Saves pra zerar o jogo'],
  ['guias','📖 Guias','Tutoriais e dicas'],
  ['personal','⚙️ Clube & Perfil','Personalização e sua conta'],
- ['updates','📰 Update Center','O que mudou no update'],
-  
- ['ideias','🚀 Novidades','Roadmap do Lab']
+ ['updates','📰 Update Center','O que mudou no update']
 ];
 const validPages=PAGES.map(p=>p[0]);
 const tabwrap=document.getElementById('tabwrap'), drop=document.getElementById('drop'), menuBtn=document.getElementById('menuBtn');
